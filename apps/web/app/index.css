@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --black-gradient: linear-gradient(
+            144.39deg,
+            #ffffff -278.56%,
+            #6d6d6d -78.47%,
+            #11101d 91.61%
+    );
+    --card-shadow: 0px 20px 100px -10px rgba(66, 71, 91, 0.1);
+}
+
+* {
+    scroll-behavior: smooth;
+}
+
+.text-gradient {
+    background: radial-gradient(
+            64.18% 64.18% at 71.16% 35.69%,
+            #def9fa 0.89%,
+            #bef3f5 17.23%,
+            #9dedf0 42.04%,
+            #7de7eb 55.12%,
+            #5ce1e6 71.54%,
+            #33bbcf 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.bg-blue-gradient {
+    background: linear-gradient(
+            157.81deg,
+            #def9fa -43.27%,
+            #bef3f5 -21.24%,
+            #9dedf0 12.19%,
+            #7de7eb 29.82%,
+            #5ce1e6 51.94%,
+            #33bbcf 90.29%
+    );
+}
+
+.bg-black-gradient {
+    background: linear-gradient(
+            -168.39deg,
+            #ffffff -278.56%,
+            #6d6d6d -78.47%,
+            #11101d 91.61%
+    );
+}
+
+.bg-discount-gradient {
+    background: linear-gradient(125.17deg, #272727 0%, #11101d 100%);
+}
+
+.box-shadow {
+    box-shadow: 0 20px 100px -10px rgba(66, 71, 91, 0.1);
+}
+
+.features {
+    transition: all 1s ease;
+}
+
+.features:hover {
+    background: var(--black-gradient);
+    box-shadow: var(--card-shadow);
+    transform: scale(1.15);
+}
+
+.blue__gradient {
+    background: linear-gradient(180deg, rgba(188, 165, 255, 0) 0%, #214d76 100%);
+    filter: blur(123px);
+}
+
+.pink__gradient {
+    background: linear-gradient(90deg, #f4c4f3 0%, #fc67fa 100%);
+    filter: blur(900px);
+}
+
+.white__gradient {
+    background: rgba(255, 255, 255, 0.6);
+    filter: blur(750px);
+}
+
+@keyframes scaleLogo {
+    0% {
+        transform: scale(1); /* Start at normal size */
+    }
+    50% {
+        transform: scale(1.2); /* Grow by 10% at the halfway point */
+    }
+    100% {
+        transform: scale(1); /* Return to normal size by the end */
+    }
+}
+
+.logo {
+    animation: scaleLogo 3s infinite; /* Apply the animation, lasting 2 seconds per cycle, and repeat infinitely */
+}
+
+.quoteButton{
+    transition: all 0.7s ease;
+}
+
+.quoteButton:hover{
+    transform: scale(1.15);
+}
+
+textarea {
+    resize: none;
+}
