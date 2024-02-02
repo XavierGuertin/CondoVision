@@ -5,12 +5,10 @@
 @tailwind utilities;
 
 :root {
-    --black-gradient: linear-gradient(
-            144.39deg,
+    --black-gradient: linear-gradient(144.39deg,
             #ffffff -278.56%,
             #6d6d6d -78.47%,
-            #11101d 91.61%
-    );
+            #11101d 91.61%);
     --card-shadow: 0px 20px 100px -10px rgba(66, 71, 91, 0.1);
 }
 
@@ -19,39 +17,33 @@
 }
 
 .text-gradient {
-    background: radial-gradient(
-            64.18% 64.18% at 71.16% 35.69%,
+    background: radial-gradient(64.18% 64.18% at 71.16% 35.69%,
             #def9fa 0.89%,
             #bef3f5 17.23%,
             #9dedf0 42.04%,
             #7de7eb 55.12%,
             #5ce1e6 71.54%,
-            #33bbcf 100%
-    );
+            #33bbcf 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
 }
 
 .bg-blue-gradient {
-    background: linear-gradient(
-            157.81deg,
+    background: linear-gradient(157.81deg,
             #def9fa -43.27%,
             #bef3f5 -21.24%,
             #9dedf0 12.19%,
             #7de7eb 29.82%,
             #5ce1e6 51.94%,
-            #33bbcf 90.29%
-    );
+            #33bbcf 90.29%);
 }
 
 .bg-black-gradient {
-    background: linear-gradient(
-            -168.39deg,
+    background: linear-gradient(-168.39deg,
             #ffffff -278.56%,
             #6d6d6d -78.47%,
-            #11101d 91.61%
-    );
+            #11101d 91.61%);
 }
 
 .bg-discount-gradient {
@@ -89,25 +81,31 @@
 
 @keyframes scaleLogo {
     0% {
-        transform: scale(1); /* Start at normal size */
+        transform: scale(1);
+        /* Start at normal size */
     }
+
     50% {
-        transform: scale(1.2); /* Grow by 10% at the halfway point */
+        transform: scale(1.2);
+        /* Grow by 10% at the halfway point */
     }
+
     100% {
-        transform: scale(1); /* Return to normal size by the end */
+        transform: scale(1);
+        /* Return to normal size by the end */
     }
 }
 
 .logo {
-    animation: scaleLogo 3s infinite; /* Apply the animation, lasting 2 seconds per cycle, and repeat infinitely */
+    animation: scaleLogo 3s infinite;
+    /* Apply the animation, lasting 2 seconds per cycle, and repeat infinitely */
 }
 
-.quoteButton{
+.quoteButton {
     transition: all 0.7s ease;
 }
 
-.quoteButton:hover{
+.quoteButton:hover {
     transform: scale(1.15);
 }
 
