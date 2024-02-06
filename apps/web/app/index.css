@@ -96,10 +96,44 @@
     }
 }
 
+@keyframes scaleAbstract {
+    0% {
+        transform: scale(1)
+        rotate(90deg);
+        /* Start at normal size */
+    }
+
+    50% {
+        transform: scale(1.2)
+        rotate(90deg);
+        /* Grow by 10% at the halfway point */
+    }
+
+    100% {
+        transform: scale(1)
+        rotate(90deg);
+        /* Return to normal size by the end */
+    }
+}
+
+.front {
+    z-index: 5;
+}
+
+.behind {
+    z-index: 0;
+}
+
 .logo {
     animation: scaleLogo 3s infinite;
     /* Apply the animation, lasting 2 seconds per cycle, and repeat infinitely */
 }
+
+.abstract {
+    animation: scaleAbstract 6s infinite;
+    /* Apply the animation, lasting 2 seconds per cycle, and repeat infinitely */
+}
+
 
 .quoteButton {
     transition: all 0.7s ease;

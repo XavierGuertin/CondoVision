@@ -1,6 +1,7 @@
 # Condo Vision
-<img src="./public/logo.png" alt="drawing"/>
-[Official Website](https:///condo-vision.vercel.app/)
+<img src="./public/logoBright.png" alt="drawing" width="300"/>
+
+[Official Website](https://condo-vision.vercel.app/)
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](link_to_build_status)
 [![License](https://img.shields.io/badge/license-MIT-blue)](link_to_license)

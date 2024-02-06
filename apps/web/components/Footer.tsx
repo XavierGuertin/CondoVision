@@ -1,13 +1,19 @@
 'use client';
-import {footerLinks, socialMedia} from "../constants";
-// @ts-ignore
+import {footerLinks, socialMedia} from "@/constants";
 import styles from "../styles/style";
-import React from "react";
+import Image from "next/image";
 
 const Footer = () => (
     <section id="contact" className={`${styles.flexCenter} ${styles.paddingY} flex-col`}>
         <div className={`${styles.flexStart} md:flex-row flex-col mb-8 w-full`}>
             <div className="flex-[1] flex flex-col justify-start mr-10">
+                <Image
+                    width={175}
+                    height={200}
+                    src="/logoBright.png"
+                    alt="CondoVision Logo"
+                    className="object-contain"
+                />
             </div>
 
             <div className="flex-[1.5] w-full flex flex-row justify-between flex-wrap md:mt-0 mt-10">
@@ -45,11 +51,13 @@ const Footer = () => (
 
             <div className="flex flex-row md:mt-0 mt-6">
                 {socialMedia.map((social, index) => (
-                    <img
+                    <Image
                         key={social.id}
                         src={social.icon}
                         alt={social.id}
-                        className={`w-[21px] h-[21px] object-contain cursor-pointer ${
+                        width={21}
+                        height={21}
+                        className={`object-contain cursor-pointer ${
                             index !== socialMedia.length - 1 ? "mr-6" : "mr-0"
                         }`}
                         onClick={() => window.open(social.link)}

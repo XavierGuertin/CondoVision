@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {signOut} from "firebase/auth";
-import {auth} from "../firebase";
-import {navLinks} from "../constants";
+import {auth} from "@/firebase";
+import {navLinks} from "@/constants";
+import Image from "next/image";
 
 const Navbar = () => {
     const [active, setActive] = useState("Home");
@@ -47,6 +48,7 @@ const Navbar = () => {
 
     return (
         <nav className="w-full flex py-6 justify-between items-center navbar">
+            <a href="/"><Image src="/logoBright.png" alt="CondoVision Logo" width={150} height={75} className="logo"/></a>
 
             <ul className="list-none sm:flex hidden justify-end items-center flex-1">
                 {navLinks.map((nav) => (
@@ -75,10 +77,12 @@ const Navbar = () => {
             </ul>
 
             <div className="sm:hidden flex flex-1 justify-end items-center">
-                <img
+                <Image
                     src={toggle ? "/close.svg" : "/menu.svg"}
                     alt="menu"
-                    className="w-[28px] h-[28px] object-contain"
+                    width={28}
+                    height={28}
+                    className="object-contain"
                     onClick={() => setToggle(!toggle)}
                 />
 
