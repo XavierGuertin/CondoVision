@@ -10,6 +10,10 @@ const Response = ({success, message}) => {
             const timer = setTimeout(() => {
                 setShow(false);
             }, 3000); // The message box will disappear after 3 seconds
+
+            // setTimeout(() => {
+            //     window.location.href = "/";
+            // }, 2000);
             return () => clearTimeout(timer);
         }
     }, [message]);

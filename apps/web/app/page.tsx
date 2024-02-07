@@ -16,9 +16,9 @@ const Page = () => (
                 <MainSection/>
             </div>
         </div>
-
+        <br/><br/>
         <div className={`bg-primary ${styles.paddingX} ${styles.flexCenter}`}>
-            <div className={`${styles.boxWidth}`}>
+            <div className={`${styles.boxWidth} front`}>
                 <Footer/>
             </div>
         </div>
