@@ -3,17 +3,11 @@ import {Footer, SignIn, SignUp, Navbar, Response} from "../../components/index";
 import './auth.css';
 import styles from "../../styles/style";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {auth} from "../../firebase";
+import {auth} from "@/firebase";
 import React from "react";
 
 const Page = () => {
     const [authUser] = useAuthState(auth);
-
-    const sendBackHome = () => {
-        setTimeout(() => {
-            window.location.href = "/";
-        }, 1750);
-    }
 
     return (
         <div className="App bg-primary">
@@ -41,9 +35,7 @@ const Page = () => {
                     <Footer/>
                 </div>
             </div>
-            {authUser ? <Response success={true} message={"You are logged in: Redirecting you Home"}
-                // @ts-ignore
-                onLoad={sendBackHome}/> : <></>}
+            {authUser ? <Response success={true} message={"You are logged in"}/> : <></>}
 
         </div>
     );
