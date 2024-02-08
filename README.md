@@ -85,3 +85,14 @@ Thanks to all contributors and supporters of Condo Vision!
 ---
 
 Condo Vision - Bringing clarity and ease to condo management.
+
+
+
+
+Here are the links to all of our artifacts and code:
+SCRUM Board with all our sprint planning and user stories:
+https://soen390-capstone.atlassian.net/jira/software/projects/CV/boards/1
+Documentation:
+https://soen390-capstone.atlassian.net/wiki/spaces/SOEN390/overview?homepageId=65754
+Github:
+https://github.com/TheOneWithTheShot/CondoVision
