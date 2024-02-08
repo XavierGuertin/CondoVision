@@ -29,9 +29,16 @@ jobs:
       - name: Install Cypress
         run: npm install cypress
 
+      - name: Start Server
+        run: npm run start &
+        working-directory: apps/web
+
+
       - name: Run Cypress Tests
         run: npx cypress run
-        # Optionally, add environment variables or other configuration as needed
+        working-directory: apps/web
+        env:
+          CI_BASE_URL: 'http://localhost:3000'
 
     # Optional: Configure Cypress Dashboard Integration
     # - name: Cypress run
