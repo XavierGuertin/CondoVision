@@ -29,9 +29,16 @@ jobs:
       - name: Install Cypress
         run: npm install cypress
 
+      - name: Start Server
+        run: npm run start &
+        working-directory: apps/web
+
+
       - name: Run Cypress Tests
         run: npx cypress run
         working-directory: apps/web
+        env:
+          CI_BASE_URL: 'https://condo-vision.vercel.app/'
 
     # Optional: Configure Cypress Dashboard Integration
     # - name: Cypress run
