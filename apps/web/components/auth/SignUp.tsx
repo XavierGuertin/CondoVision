@@ -93,15 +93,14 @@ const SignUp = () => {
 
                             {connectionStatus === "success" ?
                                 <Alert variant="success">
-                                    <Alert.Heading>
+                                    <Alert.Heading className={"successSignUp"}>
                                         <strong>Success! </strong> The account has been created.<br/>You are logged in
                                         successfully.<br/>
-                                        You will be redirected to the main page.<br/><br/><br/>
                                     </Alert.Heading>
                                 </Alert> : null}
                             {connectionStatus === "error" ?
                                 <Alert variant="danger">
-                                    <Alert.Heading>
+                                    <Alert.Heading className={"SignUpError"}>
                                         <strong>Error! </strong>{errorMessage}<br/><br/>
                                     </Alert.Heading>
                                 </Alert> : null}
@@ -112,6 +111,7 @@ const SignUp = () => {
                                 <p>Profile Picture</p>
                                 <div className="px-14">
                                     <SingleImageDropzone
+                                        className={"profilePicture"}
                                         width={200}
                                         height={200}
                                         value={file}
@@ -125,13 +125,14 @@ const SignUp = () => {
                             {
                                 file ? null :
                                     <div>
-                                        <p className="text-red-600 font-extrabold">* Profile Picture is required *</p>
+                                        <p className="text-red-600 font-extrabold missingProfilePicture">* Profile Picture is required *</p>
                                     </div>
                             }
 
                             <br/>
                             <input
                                 type="text"
+                                name={"username"}
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
@@ -141,6 +142,7 @@ const SignUp = () => {
                             <input
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
                                 type="email"
+                                name={"email"}
                                 placeholder="Enter your email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -151,6 +153,7 @@ const SignUp = () => {
                                 type="text"
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
                                 value={phoneNumber}
+                                name={"phoneNumber"}
                                 onChange={(e) => setPhoneNumber(e.target.value)}
                                 placeholder="Phone Number"
                                 required={true}/>
@@ -158,6 +161,7 @@ const SignUp = () => {
                             <input
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
                                 type="password"
+                                name={"password"}
                                 placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -167,6 +171,7 @@ const SignUp = () => {
                                 <label>
                                     <select
                                         className="block border border-grey-light w-full p-3 rounded mb-4"
+                                        name={"role"}
                                         value={role}
                                         onChange={(e) => setRole(e.target.value)}
                                     >
@@ -177,6 +182,7 @@ const SignUp = () => {
                             </div>
                             <button
                                 type="submit"
+                                name={"createAccountButton"}
                                 className="w-full text-center py-3 rounded bg-blue-gradient text-white focus:outline-none my-1"
                             >Create Account
                             </button>
