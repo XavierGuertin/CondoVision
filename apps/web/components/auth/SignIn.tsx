@@ -65,14 +65,13 @@ const SignIn = () => {
                             <h1 className="mb-8 text-3xl text-center">Log in</h1>
                             {connectionStatus === "success" ?
                                 <Alert variant="success">
-                                    <Alert.Heading>
+                                    <Alert.Heading className={"SignInSuccess"}>
                                         <strong>Success! </strong>You are logged in successfully.<br/>
-                                        You will be redirected to the main page.<br/>
                                     </Alert.Heading>
                                 </Alert> : null}
                             {connectionStatus === "error" ?
                                 <Alert variant="danger">
-                                    <Alert.Heading>
+                                    <Alert.Heading className={"SignInError"}>
                                         <strong>Error! </strong>Invalid email or password. Please try again.<br/>
                                     </Alert.Heading>
                                 </Alert> : null}
@@ -80,6 +79,7 @@ const SignIn = () => {
                             <input
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
                                 type="email"
+                                name={"emailSignIn"}
                                 placeholder="Enter your email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -87,12 +87,14 @@ const SignIn = () => {
                             <input
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
                                 type="password"
+                                name={"passwordSignIn"}
                                 placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <button
                                 type="submit"
+                                name={"submitSignIn"}
                                 className="w-full text-center py-3 rounded bg-blue-gradient text-white focus:outline-none my-1"
                             >Log In
                             </button>

@@ -16,7 +16,7 @@ const Navbar = () => {
         signOut(auth)
             .then(() => {
                 console.log("sign out successful");
-                window.localStorage.setItem('userUID', "");
+                window.localStorage.setItem('``userUID``', "");
                 window.localStorage.setItem('userRole', "");
                 window.localStorage.setItem('username', "Portal");
             })
@@ -67,11 +67,11 @@ const Navbar = () => {
                     {authUser ? (
                         <>
                             <a href={getPortalLink()} className="mr-10">{username}</a>
-                            <button onClick={userSignOut}>Sign Out</button>
+                            <button name={"signOutButton"} onClick={userSignOut}>Sign Out</button>
                         </>
 
                     ) : (
-                        <a href="/login">{loginTitle}</a>
+                        <a className="loginButton" href="/login">{loginTitle}</a>
                     )}
                 </li>
             </ul>
