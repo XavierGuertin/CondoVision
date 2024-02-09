@@ -1,10 +1,11 @@
 'use client';
-import {footerLinks, socialMedia} from "@/constants";
-import styles from "../styles/style";
+import {footerLinks, socialMedia} from "./constants";
+import styles from "@web/styles/style";
 import Image from "next/image";
+import React from "react";
 
 const Footer = () => (
-    <section id="contact" className={`${styles.flexCenter} ${styles.paddingY} flex-col`}>
+    <section id="contactFooter" className={`${styles.flexCenter} ${styles.paddingY} flex-col`}>
         <div className={`${styles.flexStart} md:flex-row flex-col mb-8 w-full`}>
             <div className="flex-[1] flex flex-col justify-start mr-10">
                 <Image
@@ -45,7 +46,7 @@ const Footer = () => (
                 Copyright Ⓒ 2023 CondoVision. All Rights Reserved.
             </p>
 
-            <a href="/customerSupport" id="contact" className="font-poppins font-normal text-center text-[18px] leading-[27px] text-white">
+            <a href="/customerSupport" id="contactUs" className="font-poppins font-normal text-center text-[18px] leading-[27px] text-white">
                 Contact Us
             </a>
 

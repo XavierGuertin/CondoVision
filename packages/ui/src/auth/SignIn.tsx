@@ -1,7 +1,7 @@
 'use client';
 import {signInWithEmailAndPassword} from "firebase/auth";
 import React, {useState} from "react";
-import {auth, db} from "../../firebase";
+import {auth, db} from "@web/firebase";
 import Alert from 'react-bootstrap/Alert';
 import {doc, getDoc} from "firebase/firestore";
 

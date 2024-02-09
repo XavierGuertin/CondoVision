@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { Button } from "@repo/ui";
+import { Button } from "@ui/index";
 
 export default function Native() {
   return (
@@ -11,7 +11,7 @@ export default function Native() {
           console.log("Pressed!");
           alert("Pressed!");
         }}
-        text="Boop"
+        text="Click Here"
       />
       <StatusBar style="auto" />
     </View>
