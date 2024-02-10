@@ -6,8 +6,8 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@web/*": ["../../../apps/web/*"],
-      "@native/*": ["../../../apps/native/*"]
+      "@web/*": ["../../apps/web/*"],
+      "@native/*": ["../../apps/native/*"]
 
     }
   }
