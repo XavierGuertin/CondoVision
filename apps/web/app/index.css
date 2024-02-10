@@ -146,3 +146,8 @@
 textarea {
     resize: none;
 }
+
+.imageCss {
+    width: auto;
+    height: auto;
+}

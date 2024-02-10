@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {signOut} from "firebase/auth";
-import {auth} from "@/firebase";
-import {navLinks} from "@/constants";
+import {auth} from "@web/firebase";
+import {navLinks} from "./constants";
 import Image from "next/image";
 
 const Navbar = () => {
@@ -48,8 +48,16 @@ const Navbar = () => {
 
     return (
         <nav className="w-full flex py-6 justify-between items-center navbar">
-            <a href="/"><Image src="/logoBright.png" alt="CondoVision Logo" width={150} height={75} className="logo"/></a>
-
+            <a href="/">
+                <Image
+                    src="/logoBright.png"
+                    alt="CondoVision Logo"
+                    width={150}
+                    height={75}
+                    className="logo"
+                    priority
+                />
+            </a>
             <ul className="list-none sm:flex hidden justify-end items-center flex-1">
                 {navLinks.map((nav) => (
                     <li

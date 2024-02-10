@@ -2,7 +2,7 @@
 module.exports = {
   content: [
     './app/**/*.{html,js,ts,tsx,jsx}',
-    './components/**/*.{html,js,ts,tsx,jsx}',
+    '../../packages/ui/src/**/*.{html,js,ts,tsx,jsx}',
   ],
   mode: "jit",
   theme: {

@@ -1,8 +1,6 @@
 'use client'
-import styles from "../styles/style";
-import {MainSection, Navbar} from "../components/index";
-import {Footer} from "@/components";
-
+import styles from "@/styles/style";
+import {MainSection, Navbar, Footer} from "@ui/index";
 const Page = () => (
     <div className="bg-primary w-full overflow-hidden">
         <div className={`${styles.paddingX} ${styles.flexCenter}`}>

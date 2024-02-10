@@ -1,7 +1,7 @@
-import styles from "../styles/style";
+import styles from "@web/styles/style";
 import React from "react";
-import Button from "./Button";
 import Image from "next/image";
+import LandingPageButton from "./LandingPageButton";
 const MainSection = () => {
     return (
         <section id="home" className={`flex md:flex-row flex-col ${styles.paddingY}`}>
@@ -26,11 +26,11 @@ const MainSection = () => {
                     <br />Condo Vision is a comprehensive condo management system designed for the modern era
                 </p>
 
-                <Button styles={`mt-10`} />
+                <LandingPageButton styles={`mt-10`} />
             </div>
 
             <div className={`z-0 flex-1 flex ${styles.flexCenter} md:my-0 my-10 relative behind`}>
-                <Image src="/abstract.png" alt="billing" width={1000} height={1000} className="relative z-[0] mr-[-50%] abstract"/>
+                <Image src="/abstract.png" alt="billing" width={1000} height={1000} className="relative z-[0] mr-[-50%] abstract imageCss"/>
 
                 {/* gradient start */}
                 <div className="absolute z-[0] w-[40%] h-[35%] top-0 pink__gradient"/>

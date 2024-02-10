@@ -1,9 +1,9 @@
 'use client';
 import React from "react";
 import {useAuthState} from "react-firebase-hooks/auth";
-import {auth} from "@/firebase";
+import {auth} from "@web/firebase";
 
-const Button = ({styles} : any) => {
+const LandingPageButton = ({styles} : any) => {
     const [user] = useAuthState(auth);
     return (
         <button onClick={(e) => {
@@ -18,4 +18,4 @@ const Button = ({styles} : any) => {
     );
 };
 
-export default Button;
+export default LandingPageButton;
