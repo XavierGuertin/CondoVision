@@ -1,7 +1,7 @@
 'use client';
-import {Footer, SignIn, SignUp, Navbar, Response} from "../../components/index";
+import {Footer, SignIn, SignUp, Navbar, Response} from "@ui/index";
 import './auth.css';
-import styles from "../../styles/style";
+import styles from "@/styles/style";
 import {useAuthState} from "react-firebase-hooks/auth";
 import {auth} from "@/firebase";
 import React from "react";

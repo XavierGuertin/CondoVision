@@ -1,11 +1,11 @@
 'use client';
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import React, {useState} from "react";
-import {auth, db, storage} from "@/firebase";
+import {auth, db, storage} from "@web/firebase";
 import Alert from "react-bootstrap/Alert";
 import {doc, setDoc} from "firebase/firestore";
 import {getDownloadURL, ref, uploadBytesResumable, UploadTaskSnapshot} from "firebase/storage";
-import {SingleImageDropzone} from "@/components/SingleImageDropzone";
+import {SingleImageDropzone} from "../index";
 
 const SignUp = () => {
     const [email, setEmail] = useState("");
