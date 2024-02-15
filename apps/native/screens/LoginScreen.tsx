@@ -1,3 +1,6 @@
+import { auth, db } from '@native/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import {
     Image,
@@ -18,9 +21,51 @@ const LoginScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [connectionStatus, setConnectionStatus] = useState("");
+
+    async function returnRole(uid : string) {
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            return docSnap.data().role;
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!");
+            return "notFound";
+        }
+    }
+
+    async function returnUsername(uid : string) {
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            return docSnap.data().username;
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!");
+            return "notFound";
+        }
+    }
 
     const handleLogin = () => {
         // Implement login logic
+        signInWithEmailAndPassword(auth, email, password)            
+        .then(async (userCredential) => {
+            console.log(userCredential);
+            window.localStorage.setItem('userUID', userCredential.user.uid);
+            window.localStorage.setItem('userRole', await returnRole(userCredential.user.uid));
+            window.localStorage.setItem('username', await returnUsername(userCredential.user.uid));
+            setConnectionStatus("success");
+        })
+        .catch((error) => {
+            console.log(error);
+            // @ts-ignore
+            setConnectionStatus("error");
+        });
         console.log('Login with:', email, password);
     };
 

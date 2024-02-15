@@ -18,11 +18,12 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
 
 const SignupScreen = ({ navigation }: any) => {
-    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [errorMessage, setError] = useState("");
+    const [connectionStatus, setConnectionStatus] = useState("");
 
     const handleSignup = () => {
         createUserWithEmailAndPassword(auth, email, password)
@@ -39,8 +40,9 @@ const SignupScreen = ({ navigation }: any) => {
                 }
 
                 console.error(error);
+                setError("Firestore: " + error)
             });
-        console.log('Signup with:', username, email, password);
+        console.log('Signup with:', email, password);
     };
 
     return (
@@ -65,6 +67,9 @@ const SignupScreen = ({ navigation }: any) => {
                             style={styles.logo}
                             resizeMode="contain"
                         />
+                    </View>
+                    <View style={styles.centeredContent}>
+                        <Text>{errorMessage}</Text>
                     </View>
                     <View style={styles.centeredContent}>
                         <View style={styles.inputContainer}>
