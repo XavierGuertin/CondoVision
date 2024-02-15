@@ -11,17 +11,36 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
+
+import { auth } from '../firebase';
 // @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { createUserWithEmailAndPassword } from '@firebase/auth';
 
-const LoginScreen = ({ navigation }: any) => {
+const SignupScreen = ({ navigation }: any) => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
 
-    const handleLogin = () => {
-        // Implement login logic
-        console.log('Login with:', email, password);
+    const handleSignup = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                console.log('User account created & signed in!');
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    console.log('That email address is already in use!');
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    console.log('That email address is invalid!');
+                }
+
+                console.error(error);
+            });
+        console.log('Signup with:', username, email, password);
     };
 
     return (
@@ -35,9 +54,9 @@ const LoginScreen = ({ navigation }: any) => {
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
                             <FontAwesome5 name="times" solid size={24} color="#000" />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Login</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Signup')} style={styles.headerRightText}>
-                            <Text style={styles.headerText}>Sign Up</Text>
+                        <Text style={styles.headerTitle}>Signup</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.headerRightText}>
+                            <Text style={styles.headerText}>Log In</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.logoContainer}>
@@ -73,13 +92,27 @@ const LoginScreen = ({ navigation }: any) => {
                                     <Text style={styles.showButtonText}>{passwordVisible ? 'Hide' : 'Show'}</Text>
                                 </TouchableOpacity>
                             </View>
+                            <View style={styles.passwordContainer}>
+                                <TextInput
+                                    style={styles.passwordInput}
+                                    placeholder="Confirm Password"
+                                    value={confirmPassword}
+                                    onChangeText={setConfirmPassword}
+                                    secureTextEntry={!passwordVisible}
+                                    autoCapitalize="none"
+                                />
+                                <TouchableOpacity
+                                    onPress={() => setPasswordVisible(!passwordVisible)}
+                                    style={styles.showButton}
+                                >
+                                    <Text style={styles.showButtonText}>{passwordVisible ? 'Hide' : 'Show'}</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                            <Text style={styles.buttonText}>Log In</Text>
+                        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+                            <Text style={styles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { /* Implement forgot password logic */ }}>
-                            <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
-                        </TouchableOpacity>
+
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -103,7 +136,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: 20,
-        marginTop: Platform.OS === 'android' ? 60 : 60
+        marginTop: 60,
     },
     centeredContent: {
         flex: 1,
@@ -205,4 +238,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginScreen;
+export default SignupScreen;
