@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
-export default function HomeScreen({ navigation } : any) {
+export default function HomeScreen({ navigation }: any) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.hero}>
@@ -18,6 +18,14 @@ export default function HomeScreen({ navigation } : any) {
                     resizeMode="contain"
                 />
             </View>
+            {/* <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('PropertyManagement');
+                }}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Property Management</Text>
+                </View>
+            </TouchableOpacity> */}
             <View style={styles.content}>
                 <View style={styles.contentHeader}>
                     <Text style={styles.title}>
