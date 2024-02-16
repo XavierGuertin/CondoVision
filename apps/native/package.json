@@ -14,6 +14,7 @@
     "@fortawesome/react-fontawesome": "github:fortawesome/react-fontawesome",
     "@react-native-firebase/app": "^18.8.0",
     "@react-native-firebase/auth": "^18.8.0",
+    "@react-native-picker/picker": "^2.6.1",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
     "@repo/ui": "*",

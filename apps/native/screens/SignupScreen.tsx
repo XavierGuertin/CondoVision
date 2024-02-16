@@ -12,37 +12,65 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-import { auth } from '../firebase';
+import { Picker } from '@react-native-picker/picker';
+
+import { auth, db } from '../firebase';
 // @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const SignupScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [errorMessage, setError] = useState("");
+    const [role, setRole] = useState("User");
     const [connectionStatus, setConnectionStatus] = useState("");
 
     const handleSignup = () => {
+
+        async function returnRole(uid: string) {
+            const docRef = doc(db, "users", uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+                return docSnap.data().role;
+            } else {
+                // docSnap.data() will be undefined in this case
+                console.log("No such document!");
+                return "notFound";
+            }
+        }
+
+
         createUserWithEmailAndPassword(auth, email, password)
-            .then(() => {
-                console.log('User account created & signed in!');
+            .then((userCredential) => {
+                const user = userCredential.user;
+                setDoc(doc(db, "users", user.uid), {
+                    email: email,
+                    role: role,
+                })
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then(async (userCredential) => {
+                        console.log(userCredential);
+                        window.localStorage.setItem('userUID', userCredential.user.uid);
+                        window.localStorage.setItem('userRole', await returnRole(userCredential.user.uid));
+                        setConnectionStatus("success");
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        // @ts-ignore
+                        setConnectionStatus("error");
+                    });
             })
             .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                }
-
-                console.error(error);
                 setError("Firestore: " + error)
             });
-        console.log('Signup with:', email, password);
+
     };
 
     return (
@@ -70,8 +98,6 @@ const SignupScreen = ({ navigation }: any) => {
                     </View>
                     <View style={styles.centeredContent}>
                         <Text>{errorMessage}</Text>
-                    </View>
-                    <View style={styles.centeredContent}>
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
@@ -81,6 +107,15 @@ const SignupScreen = ({ navigation }: any) => {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                             />
+                            <Picker
+                                selectedValue={role}
+                                style={styles.input}
+                                onValueChange={(itemValue) => setRole(itemValue)}
+                            >
+                                <Picker.Item label="User" value="User" />
+                                <Picker.Item label="Condo Management Company" value="Condo Management Company" />
+                                {/* Add more options as needed */}
+                            </Picker>
                             <View style={styles.passwordContainer}>
                                 <TextInput
                                     style={styles.passwordInput}
@@ -97,27 +132,10 @@ const SignupScreen = ({ navigation }: any) => {
                                     <Text style={styles.showButtonText}>{passwordVisible ? 'Hide' : 'Show'}</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={styles.passwordContainer}>
-                                <TextInput
-                                    style={styles.passwordInput}
-                                    placeholder="Confirm Password"
-                                    value={confirmPassword}
-                                    onChangeText={setConfirmPassword}
-                                    secureTextEntry={!passwordVisible}
-                                    autoCapitalize="none"
-                                />
-                                <TouchableOpacity
-                                    onPress={() => setPasswordVisible(!passwordVisible)}
-                                    style={styles.showButton}
-                                >
-                                    <Text style={styles.showButtonText}>{passwordVisible ? 'Hide' : 'Show'}</Text>
-                                </TouchableOpacity>
-                            </View>
                         </View>
                         <TouchableOpacity style={styles.button} onPress={handleSignup}>
                             <Text style={styles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
-
                     </View>
                 </View>
             </TouchableWithoutFeedback>
@@ -141,7 +159,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         paddingHorizontal: 20,
-        marginTop: 60,
+        marginTop: Platform.OS === 'android' ? 60 : 60
     },
     centeredContent: {
         flex: 1,
