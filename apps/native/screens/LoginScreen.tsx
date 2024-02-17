@@ -14,8 +14,10 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
+
 // @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
@@ -52,22 +54,18 @@ const LoginScreen = ({ navigation }: any) => {
         }
     }
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         // Implement login logic
-        signInWithEmailAndPassword(auth, email, password)
-            .then(async (userCredential) => {
-                console.log(userCredential);
-                window.localStorage.setItem('userUID', userCredential.user.uid);
-                window.localStorage.setItem('userRole', await returnRole(userCredential.user.uid));
-                window.localStorage.setItem('username', await returnUsername(userCredential.user.uid));
-                setConnectionStatus("success");
-            })
-            .catch((error) => {
-                console.log(error);
-                // @ts-ignore
-                setConnectionStatus("error");
-            });
-        console.log('Login with:', email, password);
+        try {
+            const signInCredential = await signInWithEmailAndPassword(auth, email, password);
+            await AsyncStorage.setItem('userUID', signInCredential.user.uid);
+            await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
+            setConnectionStatus("success");
+        } catch (error) {
+            setConnectionStatus("error");
+            setError("Firestore: " + error);
+        }
+
     };
 
     return (

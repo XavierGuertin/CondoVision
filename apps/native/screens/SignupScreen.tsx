@@ -12,7 +12,8 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 import { auth, db } from '../firebase';
 // @ts-ignore
@@ -28,9 +29,9 @@ const SignupScreen = ({ navigation }: any) => {
     const [errorMessage, setError] = useState("");
     const [role, setRole] = useState("User");
     const [connectionStatus, setConnectionStatus] = useState("");
+    const [open, setOpen] = useState(false);
 
-    const handleSignup = () => {
-
+    const handleSignup = async () => {
         async function returnRole(uid: string) {
             const docRef = doc(db, "users", uid);
             const docSnap = await getDoc(docRef);
@@ -40,37 +41,27 @@ const SignupScreen = ({ navigation }: any) => {
                 return docSnap.data().role;
             } else {
                 // docSnap.data() will be undefined in this case
-                console.log("No such document!");
                 return "notFound";
             }
         }
 
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                setDoc(doc(db, "users", user.uid), {
-                    email: email,
-                    role: role,
-                })
-
-                signInWithEmailAndPassword(auth, email, password)
-                    .then(async (userCredential) => {
-                        console.log(userCredential);
-                        window.localStorage.setItem('userUID', userCredential.user.uid);
-                        window.localStorage.setItem('userRole', await returnRole(userCredential.user.uid));
-                        setConnectionStatus("success");
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                        // @ts-ignore
-                        setConnectionStatus("error");
-                    });
-            })
-            .catch(error => {
-                setError("Firestore: " + error)
+            await setDoc(doc(db, "users", user.uid), {
+                email: email,
+                role: role,
             });
 
+            const signInCredential = await signInWithEmailAndPassword(auth, email, password);
+            await AsyncStorage.setItem('userUID', signInCredential.user.uid);
+            await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
+            setConnectionStatus("success");
+        } catch (error) {
+            setConnectionStatus("error");
+            setError("Firestore: " + error);
+        }
     };
 
     return (
@@ -107,15 +98,17 @@ const SignupScreen = ({ navigation }: any) => {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                             />
-                            <Picker
-                                selectedValue={role}
+
+                            <DropDownPicker
+                                open={open}
+                                setOpen={setOpen}
+                                value={role}
                                 style={styles.input}
-                                onValueChange={(itemValue) => setRole(itemValue)}
+                                setValue={(itemValue) => setRole(itemValue)}
+                                items={[{ label: "User", value: "User" }, { label: "Condo Management Company", value: "Condo Management Company" }]}
                             >
-                                <Picker.Item label="User" value="User" />
-                                <Picker.Item label="Condo Management Company" value="Condo Management Company" />
-                                {/* Add more options as needed */}
-                            </Picker>
+                            </DropDownPicker>
+
                             <View style={styles.passwordContainer}>
                                 <TextInput
                                     style={styles.passwordInput}
@@ -139,7 +132,7 @@ const SignupScreen = ({ navigation }: any) => {
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 };
 
