@@ -18,6 +18,14 @@ export default function HomeScreen({ navigation }: any) {
                     resizeMode="contain"
                 />
             </View>
+            {/* <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('PropertyManagement');
+                }}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>Property Management</Text>
+                </View>
+            </TouchableOpacity> */}
             <View style={styles.content}>
                 <View style={styles.contentHeader}>
                     <Text style={styles.title}>

@@ -8,7 +8,9 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\" --ignore-path .gitignore",
+    "android": "cd apps/native && npm run android",
+    "ios": "cd apps/native && npm run ios"
   },
   "devDependencies": {
     "@types/web": " ^0.0.137",
