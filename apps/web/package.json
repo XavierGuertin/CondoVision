@@ -11,7 +11,7 @@
   "dependencies": {
     "@cypress/code-coverage": "^3.12.20",
     "@repo/ui": "*",
-    "firebase": "^10.7.1",
+    "firebase": "^10.7.2",
     "lucide-react": "^0.323.0",
     "next": "^14.0.4",
     "react": "^18.2.0",
