@@ -1,6 +1,3 @@
-import { auth, db } from '../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
 import React, { useState } from 'react';
 import {
     Image,
@@ -15,48 +12,48 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DropDownPicker from 'react-native-dropdown-picker';
+
+import { auth, db } from '../firebase';
 // @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createUserWithEmailAndPassword } from '@firebase/auth';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const LoginScreen = ({ navigation }: any) => {
+const SignupScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [errorMessage, setError] = useState("");
+    const [role, setRole] = useState("User");
     const [connectionStatus, setConnectionStatus] = useState("");
+    const [open, setOpen] = useState(false);
 
-    async function returnRole(uid: string) {
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
+    const handleSignup = async () => {
+        async function returnRole(uid: string) {
+            const docRef = doc(db, "users", uid);
+            const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            return docSnap.data().role;
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-            return "notFound";
+            if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+                return docSnap.data().role;
+            } else {
+                // docSnap.data() will be undefined in this case
+                return "notFound";
+            }
         }
-    }
 
-    async function returnUsername(uid: string) {
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            return docSnap.data().username;
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-            return "notFound";
-        }
-    }
-
-    const handleLogin = async () => {
-        // Implement login logic
         try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            await setDoc(doc(db, "users", user.uid), {
+                email: email,
+                role: role,
+            });
+
             const signInCredential = await signInWithEmailAndPassword(auth, email, password);
             await AsyncStorage.setItem('userUID', signInCredential.user.uid);
             await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
@@ -65,7 +62,6 @@ const LoginScreen = ({ navigation }: any) => {
             setConnectionStatus("error");
             setError("Firestore: " + error);
         }
-
     };
 
     return (
@@ -79,9 +75,9 @@ const LoginScreen = ({ navigation }: any) => {
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
                             <FontAwesome5 name="times" solid size={24} color="#000" />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Login</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Signup')} style={styles.headerRightText}>
-                            <Text style={styles.headerText}>Sign Up</Text>
+                        <Text style={styles.headerTitle}>Signup</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.headerRightText}>
+                            <Text style={styles.headerText}>Log In</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.logoContainer}>
@@ -102,6 +98,17 @@ const LoginScreen = ({ navigation }: any) => {
                                 keyboardType="email-address"
                                 autoCapitalize="none"
                             />
+
+                            <DropDownPicker
+                                open={open}
+                                setOpen={setOpen}
+                                value={role}
+                                style={styles.input}
+                                setValue={(itemValue) => setRole(itemValue)}
+                                items={[{ label: "User", value: "User" }, { label: "Condo Management Company", value: "Condo Management Company" }]}
+                            >
+                            </DropDownPicker>
+
                             <View style={styles.passwordContainer}>
                                 <TextInput
                                     style={styles.passwordInput}
@@ -119,16 +126,13 @@ const LoginScreen = ({ navigation }: any) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                            <Text style={styles.buttonText}>Log In</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { /* Implement forgot password logic */ }}>
-                            <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+                        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+                            <Text style={styles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 };
 
@@ -250,4 +254,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginScreen;
+export default SignupScreen;
