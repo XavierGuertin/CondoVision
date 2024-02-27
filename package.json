@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.17",
-    "firebase": "^10.7.2",
+    "firebase": "^10.7.1",
     "postcss": "^8.4.33",
     "react-bootstrap": "^2.10.0",
     "react-firebase-hooks": "^5.1.1",
