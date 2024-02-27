@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen, LoginScreen, PropertyManagementScreen, OwnerMapScreen } from './screens/index';
+
+import { HomeScreen, LoginScreen, SignupScreen, PropertyManagementScreen, OwnerMapScreen } from './screens/index'; // screens
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,7 @@ function App() {
             >
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Signup" component={SignupScreen} />
                 <Stack.Screen name="PropertyManagement" component={PropertyManagementScreen} />
                 <Stack.Screen name="OwnerMap" component={OwnerMapScreen} />
             </Stack.Navigator>

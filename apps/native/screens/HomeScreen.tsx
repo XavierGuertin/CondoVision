@@ -54,6 +54,7 @@ export default function HomeScreen({ navigation }: any) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        overflow: 'scroll'
     },
     title: {
         fontSize: 28,
@@ -78,13 +79,12 @@ const styles = StyleSheet.create({
     },
     heroImage: {
         width: '100%',
-        height: 400,
+        height: 300,
     },
     /** Content */
     content: {
         flex: 1,
         justifyContent: 'space-between',
-        paddingVertical: 24,
         paddingHorizontal: 24,
     },
     contentHeader: {
