@@ -1,4 +1,9 @@
 {
-  "compilerOptions": {},
-  "extends": "expo/tsconfig.base"
+  "compilerOptions": {
+    "types": ["jest", "node"]
+  },
+  "extends": "expo/tsconfig.base",
+  "exclude": [
+    "**/*.spec.ts"
+  ]
 }

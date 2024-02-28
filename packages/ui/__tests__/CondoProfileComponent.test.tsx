@@ -1,10 +1,28 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import CondoProfileComponent from '../CondoProfileComponent'; // Adjust the import path as necessary
+import CondoProfileComponent from '../src/CondoProfileComponent'; // Adjust the import path as necessary
+
+// Dummy data for the condo
+const condoData = {
+  images: [
+    require('../../../public/logoWhiteBG.png'), // Adjust the path as necessary
+    require('../../../public/logoBright.png'), // Adjust the path as necessary
+  ],
+  address: '123 Condo Lane, Condo City, CC 12345',
+  unitID: 'Unit 101',
+  unitOwner: 'John Doe',
+  parkingSpot: 'Spot 12',
+  financialRate: '5.5%',
+  fee: '$300/month',
+  rooms: 3,
+  bathrooms: 2,
+  lockerCount: 1,
+  generalInfo: 'This condo offers great views, modern amenities, and is conveniently located near downtown.',
+};
 
 describe('CondoProfileComponent', () => {
   it('renders the collapsed state correctly', () => {
-    const { getByText, queryByText } = render(<CondoProfileComponent />);
+    const { getByText, queryByText } = render(<CondoProfileComponent data={condoData} />);
 
     expect(getByText('$300/month')).toBeTruthy();
     expect(getByText('Condo City')).toBeTruthy();
@@ -12,7 +30,7 @@ describe('CondoProfileComponent', () => {
   });
 
   it('expands to show additional details when pressed', () => {
-    const { getByText, queryByText } = render(<CondoProfileComponent />);
+    const { getByText, queryByText } = render(<CondoProfileComponent data={condoData} />);
 
     // Initially, Condo Details should not be visible
     expect(queryByText('Condo Details')).toBeNull();
@@ -25,7 +43,7 @@ describe('CondoProfileComponent', () => {
   });
 
   it('renders the correct number of images', () => {
-    const { getByText, getAllByProps } = render(<CondoProfileComponent />);
+    const { getByText, getAllByProps } = render(<CondoProfileComponent data={condoData} />);
 
     // Expand the component to see images
     fireEvent.press(getByText('$300/month'));
@@ -36,7 +54,7 @@ describe('CondoProfileComponent', () => {
   });
 
   it('renders all the detailed information when expanded', () => {
-    const { getByText } = render(<CondoProfileComponent />);
+    const { getByText } = render(<CondoProfileComponent data={condoData} />);
 
     // Expand the component to check for all details
     fireEvent.press(getByText('$300/month'));

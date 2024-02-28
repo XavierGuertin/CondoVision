@@ -1,3 +1,10 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  projects: ['<rootDir>/apps/native', '<rootDir>/apps/web', '<rootDir>/packages'],
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  transform: {
+        "^.+\\.(ts|tsx)$": "ts-jest",
+        "^.+\\.js$": "babel-jest",
+      },
 };
+
