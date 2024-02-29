@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator();
 function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="OwnerMap"
+            <Stack.Navigator initialRouteName="Home"
                 screenOptions={{
                     headerShown: false, // This line hides the header globally
                 }}
