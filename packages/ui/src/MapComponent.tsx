@@ -17,6 +17,8 @@ export const MapComponent = ({ data }) => {
         longitudeDelta: 0.4,
     }
 
+    {/* Adding all properties passed in prop
+    (HERE) Have to change the navigate so that it brings you to the property profile !!! */}
     const handlePress = () => {
         navigation.navigate("PropertyManagement");
     }
@@ -249,11 +251,9 @@ export const MapComponent = ({ data }) => {
         <MapView
             initialRegion={montrealCoord}
             customMapStyle={mapStyle}
-            style={StyleSheet.absoluteFill}
+            style={styles.mapView}
             provider={PROVIDER_GOOGLE}>
 
-            {/* Adding all properties passed in prop
-            (HERE) Have to change the navigate so that it brings you to the property profile !!! */}
             {data.map((item, index) => {
                 return <Marker
                     key={index}
@@ -265,4 +265,24 @@ export const MapComponent = ({ data }) => {
         </MapView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 25,
+        fontWeight: '500',
+    },
+    mapView: {
+        height: '100%',
+        width: '100%',
+        minHeight: '80%',
+        minWidth: '100%'
+    },
+});
+
+export default MapComponent;
 
