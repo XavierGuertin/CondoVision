@@ -6,6 +6,8 @@ import SignUp from "./auth/SignUp";
 import Response from "./Response";
 import {SingleImageDropzone} from "./SingleImageDropzone";
 import {Button} from "./button";
+import AddCondoPropertyForm from "./AddCondoProfileProperty";
+import AddCondoUnitForm from "./AddCondoUnitInformation";
 
 export {
     Navbar,
@@ -15,5 +17,7 @@ export {
     SignUp,
     Response,
     SingleImageDropzone,
-    Button
+    Button,
+    AddCondoPropertyForm,
+    AddCondoUnitForm
 };

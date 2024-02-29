@@ -8,15 +8,14 @@ const condoData = {
     require('../../../public/logoBright.png'), // Adjust the path as necessary
   ],
   address: '123 Condo Lane, Condo City, CC 12345',
-  unitID: 'Unit 101',
+  unitCount: 20,
   unitOwner: 'John Doe',
-  parkingSpot: 'Spot 12',
+  parkingCount: 12,
   financialRate: '5.5%',
   fee: '$300/month',
-  rooms: 3,
-  bathrooms: 2,
-  lockerCount: 1,
+  lockerCount: 10,
   generalInfo: 'This condo offers great views, modern amenities, and is conveniently located near downtown.',
+  id: '12345',
 };
 
 
@@ -28,9 +27,9 @@ export const CondoProfileComponent = ({ data = condoData }) => {
   return (
 
     <TouchableOpacity onPress={() => setExpanded(!expanded)} style={styles.container}>
-      <View style={styles.toggleContainer}>
+      <View>
         {!expanded && (
-          <View style={styles.collapsedInfo}>
+          <View>
             <Image source={data.images[0]} style={styles.image} />
             <View style={styles.infoContainer}>
               <Text style={styles.infoText}>{data.fee}</Text>
@@ -40,7 +39,7 @@ export const CondoProfileComponent = ({ data = condoData }) => {
         )}
       </View>
       {expanded && (
-        <ScrollView style={styles.expandedScrollView} contentContainerStyle={styles.expandedContent}>
+        <ScrollView style={styles.expandedScrollView}>
 
           <View style={styles.imageContainer}>
             {data.images.map((image, index) => (
@@ -53,28 +52,16 @@ export const CondoProfileComponent = ({ data = condoData }) => {
             <Text style={styles.infoText}>{data.address}</Text>
           </View>
           <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Unit ID:</Text>
-            <Text style={styles.infoText}>{data.unitID}</Text>
+            <Text style={styles.infoTitle}>Property ID:</Text>
+            <Text style={styles.infoText}>{data.id}</Text>
           </View>
           <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Unit Owner:</Text>
-            <Text style={styles.infoText}>{data.unitOwner}</Text>
+            <Text style={styles.infoTitle}>Unit Count:</Text>
+            <Text style={styles.infoText}>{data.unitCount}</Text>
           </View>
           <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Parking Spot:</Text>
-            <Text style={styles.infoText}>{data.parkingSpot}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Financial Rate:</Text>
-            <Text style={styles.infoText}>{data.financialRate}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Rooms:</Text>
-            <Text style={styles.infoText}>{data.rooms}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Bathrooms:</Text>
-            <Text style={styles.infoText}>{data.bathrooms}</Text>
+            <Text style={styles.infoTitle}>Parking Count:</Text>
+            <Text style={styles.infoText}>{data.parkingCount}</Text>
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>Locker Count:</Text>

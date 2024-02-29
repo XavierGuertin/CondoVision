@@ -8,12 +8,11 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; 
-import CondoProfileComponent from '@ui/CondoProfileComponent'; 
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import CondoProfileComponent from '@ui/CondoProfileComponent';
+import { Button } from '@ui/button';
 
-const CondoProfileScreen = () => {
-  const navigation = useNavigation();
+const PropertyManagementScreen = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
@@ -21,7 +20,13 @@ const CondoProfileScreen = () => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
           <FontAwesome5 name="times" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Condo Profiles</Text>
+        <View style={styles.headerContent}>
+        <Text style={styles.headerTitle}>Condo Property Profiles</Text>
+        <Button
+          text="Add New Property"
+          onClick={() => navigation.navigate('AddCondoProfile')}
+          />
+          </View>
       </View>
       <ScrollView style={styles.flexibleContainer}>
         <CondoProfileComponent />
@@ -41,6 +46,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
+  headerContent: {
+    alignItems: 'center',
+    width: '100%',
+    flexDirection: 'column'
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -59,4 +69,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CondoProfileScreen;
+export default PropertyManagementScreen;
