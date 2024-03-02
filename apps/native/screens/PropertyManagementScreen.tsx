@@ -3,14 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ScrollView,
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; 
-import CondoProfileComponent from '@ui/CondoProfileComponent'; 
+// @ts-ignore
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import CondoProfileComponent from '../components/CondoProfileComponent';
 
 const CondoProfileScreen = () => {
   const navigation = useNavigation();
