@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, Button, TouchableOpacity } fr
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { ref, getDownloadURL } from 'firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth, db, storage } from '../firebase'; // Ensure these are correctly imported
+import { auth, db, storage } from '../firebase';
 
 const UserProfile = ({ navigation }: any) => {
     const [userProfile, setUserProfile] = useState({
@@ -19,7 +19,6 @@ const UserProfile = ({ navigation }: any) => {
         const fetchUserProfileAndAuthData = async () => {
             const user = auth.currentUser;
             if (user) {
-                // Authenticated user's information
                 const { uid, email, displayName, photoURL } = user;
                 // Attempt to fetch user profile picture URL from Firebase Storage if available
                 if (photoURL) {
@@ -35,7 +34,6 @@ const UserProfile = ({ navigation }: any) => {
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
-                    // Firestore document data
                     const userData = docSnap.data();
                     setUserProfile(prevState => ({
                         ...prevState,
@@ -46,7 +44,6 @@ const UserProfile = ({ navigation }: any) => {
                     }));
                 } else {
                     console.log("No Firestore document for user!");
-                    // Fallback to using only Auth data if Firestore document doesn't exist
                     // @ts-ignore
                     setUserProfile(prevState => ({
                         ...prevState,
@@ -150,6 +147,8 @@ const styles = StyleSheet.create({
         padding: 0,
         marginRight: -130,
         marginLeft: 130,
+        marginBottom: 150,
+        marginTop: -150,
     },
     logoutButtonText: {
         fontSize: 18,
