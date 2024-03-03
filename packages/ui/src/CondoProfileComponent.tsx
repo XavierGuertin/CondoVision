@@ -86,9 +86,6 @@ export const CondoProfileComponent = ({ data = condoData }) => {
             <Text style={styles.infoTitle}>General Info:</Text>
             <Text style={styles.infoText}>{data.generalInfo}</Text>
           </View>
-          <TouchableOpacity onPress={() => console.log('PDF Upload')} style={styles.uploadButton}>
-            <Text style={styles.buttonText}>Upload PDF</Text>
-          </TouchableOpacity>
           <PdfUploadButton propertyId={data.unitID} />
 
         </ScrollView>
