@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import PdfUploadButton from './PdfUploadButton';
+import {auth, db, storage} from "@native/firebase";
 
 // Dummy data for the condo
 const condoData = {
@@ -87,6 +89,7 @@ export const CondoProfileComponent = ({ data = condoData }) => {
           <TouchableOpacity onPress={() => console.log('PDF Upload')} style={styles.uploadButton}>
             <Text style={styles.buttonText}>Upload PDF</Text>
           </TouchableOpacity>
+          <PdfUploadButton propertyId={data.unitID} />
 
         </ScrollView>
       )}
@@ -112,8 +115,14 @@ const styles = StyleSheet.create({
   collapsedContainer: {
     height: 100,
   },
+  collapsedInfo: {
+
+  },
   expandedContainer: {
     height: 'auto',
+  },
+  expandedContent: {
+
   },
   expandedScrollView: {
     paddingBottom: 20,
@@ -181,6 +190,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
 
   },
+  toggleContainer: {
+
+  }
 });
 
 export default CondoProfileComponent;
