@@ -86,9 +86,6 @@ const UserProfile = ({ navigation }: any) => {
             alert('Failed to log out');
         }
     };
-    const handlephotoupdate = async () =>{
-
-    };
 
     return (
         <View style={styles.container}>
@@ -103,10 +100,8 @@ const UserProfile = ({ navigation }: any) => {
             {editMode ? (
                 <>
                     <TextInput style={styles.input} value={userProfile.username} onChangeText={value => setUserProfile(prevState => ({...prevState, username: value}))} placeholder="Username" />
-                    <TextInput style={styles.input} value={userProfile.email} onChangeText={value => setUserProfile(prevState => ({...prevState, email: value}))} placeholder="Email" />
                     <TextInput style={styles.input} value={userProfile.phoneNumber} onChangeText={value => setUserProfile(prevState => ({...prevState, phoneNumber: value}))} placeholder="Phone Number" />
                     <Button title="Save Changes" onPress={handleUpdate} />
-                    <Button title="Update Profile Picture" onPress={handlephotoupdate} />
                     <Button title="Cancel" onPress={() => setEditMode(false)} />
                 </>
             ) : (
