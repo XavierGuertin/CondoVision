@@ -10,7 +10,7 @@ import {
 import { useNavigation } from '@react-navigation/native'; 
 // @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import CondoProfileComponent from '../components/CondoProfileComponent';
+import CondoProfileComponent from '../../../packages/ui/src/CondoProfileComponent';
 
 const CondoProfileScreen = () => {
   const navigation = useNavigation();
