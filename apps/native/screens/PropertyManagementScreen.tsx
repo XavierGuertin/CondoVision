@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import CondoProfileComponent from "@ui/CondoProfileComponent";
+import CondoProfileComponent from "../components/CondoProfileComponent";
 import { db } from "../../web/firebase";
 import { getDocs, collection, query } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -28,13 +28,13 @@ const CondoProfileScreen = () => {
       const propertyList: Object[] = [];
       try {
         const propertiesCollectionSnapshot = await getDocs(
-          collection(db, "properties"),
+          collection(db, "properties")
         );
 
         propertiesCollectionSnapshot.forEach(async (propertyDoc) => {
           const unitList: Object[] = [];
           const condoUnitsSnapshot = await getDocs(
-            collection(db, "properties", propertyDoc.id, "condoUnits"),
+            collection(db, "properties", propertyDoc.id, "condoUnits")
           );
           const userUID = await AsyncStorage.getItem("userUID");
           var stopper = true;
@@ -58,7 +58,7 @@ const CondoProfileScreen = () => {
                 condoData.owner,
                 condoData.parkingSpotId,
                 condoData.size,
-                condoData.unitId,
+                condoData.unitId
               );
               unitList.push(condoUnit.toJSON());
               stopper = false;
@@ -73,7 +73,7 @@ const CondoProfileScreen = () => {
               propertyData.parkingCount,
               propertyData.propertyName,
               propertyData.unitCount,
-              unitList,
+              unitList
             );
             propertyList.push(property.toJSON());
             setOwnedProperties(propertyList);
