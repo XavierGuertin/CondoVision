@@ -18,14 +18,14 @@ export default function HomeScreen({ navigation }: any) {
                     resizeMode="contain"
                 />
             </View>
-            {/* <TouchableOpacity
+            { <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('PropertyManagement');
+                    navigation.navigate('AddCondoProfileScreen');
                 }}>
                 <View style={styles.button}>
                     <Text style={styles.buttonText}>Property Management</Text>
                 </View>
-            </TouchableOpacity> */}
+            </TouchableOpacity> }
             <View style={styles.content}>
                 <View style={styles.contentHeader}>
                     <Text style={styles.title}>

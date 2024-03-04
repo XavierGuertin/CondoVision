@@ -42,6 +42,11 @@ const UserProfile = ({ navigation }: any) => {
                         role: userData.role,
                         phoneNumber: userData.phoneNumber,
                     }));
+
+                    if(userData.role == 'Condo Management Company'){
+//                         console.log("CONDO COMPANY")
+                    }
+
                 } else {
                     console.log("No Firestore document for user!");
                     // @ts-ignore
@@ -110,6 +115,11 @@ const UserProfile = ({ navigation }: any) => {
                     <Button title="Edit Profile" onPress={() => setEditMode(true)} />
                 </>
             )}
+            {userProfile.role == 'Condo Management Company'? (
+            <View style={styles.propertyManagementButton}>
+                <Button title="Property Management" onPress={() => navigation.navigate('PropertyManagement')} />
+            </View>
+            ):(console.log("User Page Navigation"))}
         </View>
     );
 };
@@ -154,6 +164,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#2074df',
+    },
+    propertyManagementButton: {
+        margin: 20,
     },
 });
 
