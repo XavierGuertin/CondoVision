@@ -1,7 +1,7 @@
 // AddCondoPropertyForm.tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
-import { db } from '@web/firebase'; // Adjust based on your Firebase config setup
+import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
