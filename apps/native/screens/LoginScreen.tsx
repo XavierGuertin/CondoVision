@@ -93,7 +93,7 @@ const LoginScreen = ({ navigation }: any) => {
                         />
                     </View>
                     <View style={styles.centeredContent}>
-                        <Text>{errorMessage}</Text>
+                        <Text style={connectionStatus == "error" ? styles.errorMessage : null}>{errorMessage}</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
                                 style={styles.input}
@@ -138,6 +138,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
+    },
+    errorMessage: {
+        color: 'red',
+        backgroundColor: '#FFB2B2',
+        padding: 10,
+        borderRadius: 6,
+        textAlign: 'center',
+        overflow: 'hidden',
     },
     flexibleContainer: {
         flex: 1,
