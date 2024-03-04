@@ -14,8 +14,8 @@ import CondoProfileComponent from "../components/CondoProfileComponent";
 import { db } from "../../web/firebase";
 import { getDocs, collection, query } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import PropertyAdapter from "@ui/PropertyAdapter";
-import CondoUnitAdapter from "@ui/CondoUnitAdapter";
+import PropertyAdapter from "@native/components/PropertyAdapter";
+import CondoUnitAdapter from "@native/components/CondoUnitAdapter";
 
 const CondoProfileScreen = () => {
   const navigation = useNavigation();
