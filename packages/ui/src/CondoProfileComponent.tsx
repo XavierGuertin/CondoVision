@@ -106,7 +106,12 @@ export const CondoProfileComponent = ({
               <Text>{unit.unitId}</Text>
             ))}
           </View>
-          <PdfUploadButton propertyId={data.id} />
+          <TouchableOpacity
+            onPress={() => console.log("PDF Upload")}
+            style={styles.uploadButton}
+          >
+            <Text style={styles.buttonText}>Upload PDF</Text>
+          </TouchableOpacity>
         </ScrollView>
       )}
     </TouchableOpacity>
