@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+// @ts-ignore
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CondoProfileComponent from "../components/CondoProfileComponent";
 import { db } from "../../web/firebase";
