@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import PdfUploadButton from "./PdfUploadButton";
 
 // Dummy data for the condo
 const condoData = {
@@ -110,6 +111,7 @@ export const CondoProfileComponent = ({
           >
             <Text style={styles.buttonText}>Upload PDF</Text>
           </TouchableOpacity>
+          <PdfUploadButton propertyId={data.id} />
         </ScrollView>
       )}
     </TouchableOpacity>
