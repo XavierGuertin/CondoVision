@@ -61,6 +61,7 @@ const LoginScreen = ({ navigation }: any) => {
             await AsyncStorage.setItem('userUID', JSON.stringify(signInCredential.user.uid));
             await AsyncStorage.setItem('userRole', JSON.stringify(await returnRole(signInCredential.user.uid)));
             setConnectionStatus("success");
+            navigation.navigate('UserProfile');
         } catch (error) {
             setConnectionStatus("error");
             setError("Firestore: " + error);

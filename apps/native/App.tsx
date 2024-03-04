@@ -1,7 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import { HomeScreen, LoginScreen, SignupScreen, PropertyManagementScreen, OwnerMapScreen } from './screens/index'; // screens
+import { HomeScreen, LoginScreen, SignupScreen, PropertyManagementScreen, OwnerMapScreen, UserProfile } from './screens/index'; // screens
+import React from 'react';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +18,7 @@ function App() {
                 <Stack.Screen name="Signup" component={SignupScreen} />
                 <Stack.Screen name="PropertyManagement" component={PropertyManagementScreen} />
                 <Stack.Screen name="OwnerMap" component={OwnerMapScreen} />
+                <Stack.Screen name="UserProfile" component={UserProfile} />
             </Stack.Navigator>
         </NavigationContainer>
     );

@@ -3,7 +3,7 @@ import LoginScreen from "./LoginScreen";
 import SignupScreen from "./SignupScreen";
 import PropertyManagementScreen from "./PropertyManagementScreen";
 import OwnerMapScreen from "./OwnerMapScreen";
-
+import UserProfile from "./UserProfile";
 
 export {
     HomeScreen,
@@ -11,4 +11,5 @@ export {
     SignupScreen,
     PropertyManagementScreen,
     OwnerMapScreen,
+    UserProfile
 };
