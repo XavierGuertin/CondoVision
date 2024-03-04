@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {MapComponent} from "@ui/MapComponent";
+import {MapComponent} from "../components/MapComponent";
 import {db} from '../../web/firebase.js';
 import {View, StyleSheet, ActivityIndicator, TouchableOpacity, Text} from 'react-native';
 import {collection, getDocs, query} from "firebase/firestore";
