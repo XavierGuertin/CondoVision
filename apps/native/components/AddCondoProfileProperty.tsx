@@ -45,7 +45,8 @@ const AddCondoPropertyForm: React.FC<AddCondoPropertyFormProps> = ({onPropertySa
         alert('Invalid property information!');
         return;
       }
-      handleInputChange('owner', await AsyncStorage.getItem("userUID"))
+      const userId = await AsyncStorage.getItem("userUID")
+      property.owner = userId
       await addDoc(collection(db, 'properties'), property);
       alert('Condo property saved successfully!');
       setProperty({

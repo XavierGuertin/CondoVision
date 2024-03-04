@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
+import { Button } from '@ui/button';
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CondoProfileComponent from "../components/CondoProfileComponent";
@@ -110,6 +111,12 @@ const CondoProfileScreen = () => {
           <CondoProfileComponent data={property} key={property.id} />
         ))}
       </ScrollView>
+            <View style = {styles.footer}>
+            <Button
+              text="Add New Property"
+              onClick={() => navigation.navigate('AddCondoProfileScreen')}
+              />
+              </View>
     </SafeAreaView>
   );
 };
@@ -144,6 +151,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  footer:{
+    margin: 30
   },
 });
 
