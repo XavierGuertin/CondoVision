@@ -133,6 +133,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  collapsedInfo: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  expandedContent: {
+    paddingHorizontal: 10,
+  },
   collapsedContainer: {
     height: 100,
   },
