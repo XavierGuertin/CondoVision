@@ -76,7 +76,6 @@ export const CondoProfileComponent = ({
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>Address:</Text>
             <Text style={styles.infoText}>{data.address}</Text>
-            <Text style={styles.infoText}>{data.id}</Text>
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>Locker Count:</Text>
