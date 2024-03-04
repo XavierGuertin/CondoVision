@@ -1,9 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen, LoginScreen, SignupScreen, PropertyManagementScreen, UserProfileScreen, NotificationsScreen, ReportScreen, SettingsScreen} from './screens/index'; // screens
+import { HomeScreen, LoginScreen, SignupScreen, PropertyManagementScreen, UserProfileScreen, NotificationsScreen, ReportScreen, SettingsScreen, AddCondoProfileScreen} from './screens/index'; // screens
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer, useNavigationState } from '@react-navigation/native';
 import Navbar from "@native/components/Navbar";
 
+//enable to suppress warnings/errors in the Android Studio device simulator -> useful for demo recordings
+// import { LogBox  } from 'react-native';
+// LogBox.ignoreAllLogs(true);
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +33,7 @@ const App = () => {
                 <Stack.Screen name="Notifications" component={NotificationsScreen} />
                 <Stack.Screen name="Report" component={ReportScreen} />
                 <Stack.Screen name="Settings" component={SettingsScreen} />
+                <Stack.Screen name="AddCondoProfileScreen" component={AddCondoProfileScreen} />
             </Stack.Navigator>
             < Navbar/>
         </NavigationContainer>
