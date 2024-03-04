@@ -8,10 +8,10 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { Button } from '@ui/button';
+import { Button } from '@native/components/button';
 import { useNavigation } from "@react-navigation/native";
 import CondoProfileComponent from "../components/CondoProfileComponent";
-import { db } from "../../web/firebase";
+import { db } from '../firebase';
 import { getDocs, collection, query } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PropertyAdapter from "@native/components/PropertyAdapter";

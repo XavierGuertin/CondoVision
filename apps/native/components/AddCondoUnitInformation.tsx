@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '@web/firebase'; // Ensure this import path matches your Firebase config setup
+import { auth, db } from '../firebase'; // Ensure this import path matches your Firebase config setup
 import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 
 // Define your types (if not already defined)
