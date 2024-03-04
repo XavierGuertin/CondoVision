@@ -8,9 +8,10 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
+import { Button } from '@native/components/button';
 import { useNavigation } from "@react-navigation/native";
 import CondoProfileComponent from "../components/CondoProfileComponent";
-import { db } from "../../web/firebase";
+import { db } from '../firebase';
 import { getDocs, collection, query } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PropertyAdapter from "@native/components/PropertyAdapter";
@@ -105,6 +106,9 @@ const CondoProfileScreen = () => {
             <Text style={styles.noCondosText}>No Condos were found.</Text>
         )}
       </ScrollView>
+      <View style = {styles.addPropertyBtn}>
+          <Button text="Add New Property" onClick={() => navigation.navigate('AddCondoProfileScreen')}/>
+      </View>
     </SafeAreaView>
   );
 };
@@ -144,6 +148,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
     fontSize: 18,
+  },
+  addPropertyBtn:{
+    margin: 30,
+    marginBottom: 100
   },
 });
 

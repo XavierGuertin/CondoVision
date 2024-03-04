@@ -9,7 +9,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "unitTests": "jest"
+    "unitTests": "jest",
+    "cypressE2E": "npx cypress run",
+    "cypressE2E:openGUI": "npx cypress open"
   },
   "dependencies": {
     "@fortawesome/react-fontawesome": "github:fortawesome/react-fontawesome",
@@ -38,6 +40,7 @@
     "@babel/core": "^7.23.7",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
+    "@cypress/code-coverage": "^3.12.28",
     "@expo/webpack-config": "^19.0.0",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^12.4.3",

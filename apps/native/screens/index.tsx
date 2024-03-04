@@ -7,6 +7,7 @@ import UserProfileScreen from "./UserProfileScreen";
 import NotificationsScreen from "./NotificationsScreen";
 import ReportScreen from "./ReportScreen";
 import SettingsScreen from "./SettingsScreen";
+import AddCondoProfileScreen from "./AddCondoProfileScreen";
 
 export {
     HomeScreen,
@@ -17,5 +18,6 @@ export {
     UserProfileScreen,
     NotificationsScreen,
     ReportScreen,
-    SettingsScreen
+    SettingsScreen,
+    AddCondoProfileScreen
 };

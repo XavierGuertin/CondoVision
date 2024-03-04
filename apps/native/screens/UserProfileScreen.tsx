@@ -42,6 +42,11 @@ const UserProfileScreen = ({ navigation }: any) => {
                         role: userData.role,
                         phoneNumber: userData.phoneNumber,
                     }));
+
+                    if(userData.role == 'Condo Management Company'){
+//                         console.log("CONDO COMPANY")
+                    }
+
                 } else {
                     console.log("No Firestore document for user!");
                     // @ts-ignore
