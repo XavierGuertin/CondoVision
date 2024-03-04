@@ -16,7 +16,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 import { auth, db } from '../firebase';
-// @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
 import { setDoc, doc, getDoc } from 'firebase/firestore';

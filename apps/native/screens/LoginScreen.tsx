@@ -15,9 +15,9 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-// @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+`import AsyncStorage from '@react-native-async-storage/async-storage';`
 
 const LoginScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');

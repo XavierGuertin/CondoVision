@@ -8,10 +8,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { Button } from '@ui/button';
 import { useNavigation } from "@react-navigation/native";
-// @ts-ignore
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CondoProfileComponent from "../components/CondoProfileComponent";
 import { db } from "../../web/firebase";
 import { getDocs, collection, query } from "firebase/firestore";
@@ -99,25 +96,15 @@ const CondoProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.headerIcon}
-        >
-          <FontAwesome5 name="times" size={24} color="#000" />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Condo Profiles</Text>
       </View>
       <ScrollView style={styles.flexibleContainer}>
-        {ownedProperties.map((property) => (
-          <CondoProfileComponent data={property} key={property.id} />
-        ))}
+        {ownedProperties.length > 0 ? (
+            ownedProperties.map((property) => <CondoProfileComponent data={property} key={property.id} />)
+        ) : (
+            <Text style={styles.noCondosText}>No Condos were found.</Text>
+        )}
       </ScrollView>
-            <View style = {styles.footer}>
-            <Button
-              text="Add New Property"
-              onClick={() => navigation.navigate('AddCondoProfileScreen')}
-              />
-              </View>
     </SafeAreaView>
   );
 };
@@ -153,8 +140,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  footer:{
-    margin: 30
+  noCondosText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 18,
   },
 });
 

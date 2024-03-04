@@ -5,7 +5,7 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, db, storage } from '../firebase';
 
-const UserProfile = ({ navigation }: any) => {
+const UserProfileScreen = ({ navigation }: any) => {
     const [userProfile, setUserProfile] = useState({
         email: '',
         username: '',
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f5f5f5',
+        marginBottom: 60,
     },
     title: {
         fontSize: 24,
@@ -162,4 +163,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserProfile;
+export default UserProfileScreen;
