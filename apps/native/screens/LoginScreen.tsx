@@ -58,8 +58,8 @@ const LoginScreen = ({ navigation }: any) => {
         // Implement login logic
         try {
             const signInCredential = await signInWithEmailAndPassword(auth, email, password);
-            await AsyncStorage.setItem('userUID', JSON.stringify(signInCredential.user.uid));
-            await AsyncStorage.setItem('userRole', JSON.stringify(await returnRole(signInCredential.user.uid)));
+            await AsyncStorage.setItem('userUID', signInCredential.user.uid);
+            await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
             setConnectionStatus("success");
             navigation.navigate('UserProfile');
         } catch (error) {
