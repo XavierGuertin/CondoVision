@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '@web/firebase'; // Ensure this import path matches your Firebase config setup
 import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
@@ -82,9 +82,9 @@ const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSave
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text style={styles.header}>Add New Condo Unit</Text>
-
+        <ScrollView style={styles.flexibleContainer}>
             <View>
               <Text style={styles.label}>Unit ID <Text style = {styles.mandatory}>*</Text></Text>
               <TextInput
@@ -157,9 +157,12 @@ const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSave
                 onChangeText={(text) => handleInputChange('lockerId', text)}
               />
             </View>
-
+            </ScrollView>
+        <View style = {styles.addUnitBtn}>
             <Button title="Save Condo Unit" onPress={saveCondoUnit} />
-        </ScrollView>
+        </View>
+        </SafeAreaView>
+
     );
 };
 
@@ -183,6 +186,10 @@ const styles = StyleSheet.create({
     mandatory:{
       color: 'red',
     },
+  addUnitBtn:{
+    margin: 30,
+    marginBottom: 100
+  },
 });
 
 export default AddCondoUnitForm;

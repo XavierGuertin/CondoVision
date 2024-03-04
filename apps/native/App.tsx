@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer, useNavigationState } from '@react-navigation/native';
 import Navbar from "@native/components/Navbar";
 
+//enable to suppress warnings/errors in the Android Studio device simulator -> useful for demo recordings
+// import { LogBox  } from 'react-native';
+// LogBox.ignoreAllLogs(true);
 
 const Stack = createNativeStackNavigator();
 
