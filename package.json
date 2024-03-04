@@ -38,7 +38,7 @@
     "react-bootstrap": "^2.10.0",
     "react-firebase-hooks": "^5.1.1",
     "react-native-document-picker": "^9.1.1",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "  ^3.4.1",
     "uuid": "^9.0.1"
   }
 }
