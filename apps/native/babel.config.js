@@ -8,6 +8,7 @@ module.exports = function (api) {
       '@babel/preset-react', // Add this line
     ],
     plugins: [
+      'istanbul',
       [
         'module-resolver',
         {
