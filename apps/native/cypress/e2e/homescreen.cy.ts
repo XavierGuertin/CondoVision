@@ -5,7 +5,7 @@ describe('Landing Page Tests', () => {
 
     // Click on the login button
     it('.click() - Log In From Navbar', () => {
-        cy.get('.r-transitionProperty-1i6wzkk > .css-view-175oi2r').click();
-        cy.url().should('include', '/login');
+        cy.get("[id=logInButtonHome]").click();
+        cy.get("[id=loginLabel]").should('have.text', 'Login');
     });
 });

@@ -69,7 +69,7 @@ const SignupScreen = ({ navigation }: any) => {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
         >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <TouchableWithoutFeedback>
                 <View style={styles.flexibleContainer}>
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
@@ -88,9 +88,10 @@ const SignupScreen = ({ navigation }: any) => {
                         />
                     </View>
                     <View style={styles.centeredContent}>
-                        <Text style={connectionStatus == "error" ? styles.errorMessage : null}>{errorMessage}</Text>
+                        <Text id={'SignUpError'} style={connectionStatus == "error" ? styles.errorMessage : null}>{errorMessage}</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
+                                id={'emailSignUp'}
                                 style={styles.input}
                                 placeholder="Email"
                                 value={email}
@@ -111,6 +112,7 @@ const SignupScreen = ({ navigation }: any) => {
 
                             <View style={styles.passwordContainer}>
                                 <TextInput
+                                    id={'passwordSignUp'}
                                     style={styles.passwordInput}
                                     placeholder="Password"
                                     value={password}
@@ -127,7 +129,7 @@ const SignupScreen = ({ navigation }: any) => {
                             </View>
                         </View>
                         <TouchableOpacity style={styles.button} onPress={handleSignup}>
-                            <Text style={styles.buttonText}>Sign Up</Text>
+                            <Text id={'createAccountButton'} style={styles.buttonText}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
