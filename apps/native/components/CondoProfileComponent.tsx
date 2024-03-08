@@ -46,7 +46,7 @@ export const CondoProfileComponent = ({
 }) => {
   const [expanded, setExpanded] = useState(false); // State to toggle expanded/collapsed view
 
-  const city = data.address.split(",").at(1);
+//   const city = data.address.split(",").at(1);
   return (
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
@@ -57,8 +57,8 @@ export const CondoProfileComponent = ({
           <View style={styles.collapsedInfo}>
             <Image source={imageRefs[0]} style={styles.image} />
             <View style={styles.infoContainer}>
-              {/* <Text style={styles.infoText}>{data.fee}</Text>       Ask if fees should be implemented at the property level or the condo level*/}
-              <Text style={styles.infoText}>{city}</Text>
+              <Text style={styles.infoText}>{data.propertyName}</Text>
+               {/*<Text style={styles.infoText}>{city}</Text>*/}
             </View>
           </View>
         )}
@@ -77,7 +77,6 @@ export const CondoProfileComponent = ({
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>Address:</Text>
             <Text style={styles.infoText}>{data.address}</Text>
-            <Text style={styles.infoText}>{data.id}</Text>
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>Locker Count:</Text>

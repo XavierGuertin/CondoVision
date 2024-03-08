@@ -1,7 +1,7 @@
-import { auth, db } from '../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import React, { useState } from 'react';
+import { auth, db } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import React, { useState } from "react";
 import {
     Image,
     KeyboardAvoidingView,
@@ -15,7 +15,6 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 
-// @ts-ignore
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -74,15 +73,15 @@ const LoginScreen = ({ navigation }: any) => {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
             style={styles.container}
         >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <TouchableWithoutFeedback>
                 <View style={styles.flexibleContainer}>
                     <View style={styles.header}>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
                             <FontAwesome5 name="times" solid size={24} color="#000" />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Login</Text>
+                        <Text id="loginLabel" style={styles.headerTitle}>Login</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('Signup')} style={styles.headerRightText}>
-                            <Text style={styles.headerText}>Sign Up</Text>
+                            <Text id='navigateToSignUp' style={styles.headerText}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.logoContainer}>
@@ -93,9 +92,10 @@ const LoginScreen = ({ navigation }: any) => {
                         />
                     </View>
                     <View style={styles.centeredContent}>
-                        <Text>{errorMessage}</Text>
+                        <Text id='SignInError' style={connectionStatus == "error" ? styles.errorMessage : null}>{errorMessage}</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
+                                id={'email'}
                                 style={styles.input}
                                 placeholder="Email"
                                 value={email}
@@ -105,6 +105,7 @@ const LoginScreen = ({ navigation }: any) => {
                             />
                             <View style={styles.passwordContainer}>
                                 <TextInput
+                                    id={'password'}
                                     style={styles.passwordInput}
                                     placeholder="Password"
                                     value={password}
@@ -121,7 +122,7 @@ const LoginScreen = ({ navigation }: any) => {
                             </View>
                         </View>
                         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                            <Text style={styles.buttonText}>Log In</Text>
+                            <Text id='loginBtn' style={styles.buttonText}>Log In</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { /* Implement forgot password logic */ }}>
                             <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
@@ -138,6 +139,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
+    },
+    errorMessage: {
+        color: 'red',
+        backgroundColor: '#FFB2B2',
+        padding: 10,
+        borderRadius: 6,
+        textAlign: 'center',
+        overflow: 'hidden',
     },
     flexibleContainer: {
         flex: 1,

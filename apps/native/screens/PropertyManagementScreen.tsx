@@ -8,11 +8,10 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
+import { Button } from "@native/components/button";
 import { useNavigation } from "@react-navigation/native";
-// @ts-ignore
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import CondoProfileComponent from "../components/CondoProfileComponent";
-import { db } from "../../web/firebase";
+import { db } from "../firebase";
 import { getDocs, collection, query } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PropertyAdapter from "@native/components/PropertyAdapter";
@@ -98,19 +97,23 @@ const CondoProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.headerIcon}
-        >
-          <FontAwesome5 name="times" size={24} color="#000" />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Condo Profiles</Text>
       </View>
-      <ScrollView style={styles.flexibleContainer}>
-        {ownedProperties.map((property) => (
-          <CondoProfileComponent data={property} key={property.id} />
-        ))}
+      <ScrollView id="propertyView" style={styles.flexibleContainer}>
+        {ownedProperties.length > 0 ? (
+          ownedProperties.map((property) => (
+            <CondoProfileComponent data={property} key={property.id} />
+          ))
+        ) : (
+          <Text style={styles.noCondosText}>No Condos were found.</Text>
+        )}
       </ScrollView>
+      <View style={styles.addPropertyBtn}>
+        <Button
+          text="Add New Property"
+          onClick={() => navigation.navigate("AddCondoProfileScreen")}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -145,6 +148,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  noCondosText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 18,
+  },
+  addPropertyBtn: {
+    margin: 30,
+    marginBottom: 100,
   },
 });
 

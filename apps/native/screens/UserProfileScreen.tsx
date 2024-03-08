@@ -5,7 +5,7 @@ import { ref, getDownloadURL } from 'firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { auth, db, storage } from '../firebase';
 
-const UserProfile = ({ navigation }: any) => {
+const UserProfileScreen = ({ navigation }: any) => {
     const [userProfile, setUserProfile] = useState({
         email: '',
         username: '',
@@ -42,6 +42,11 @@ const UserProfile = ({ navigation }: any) => {
                         role: userData.role,
                         phoneNumber: userData.phoneNumber,
                     }));
+
+                    if(userData.role == 'Condo Management Company'){
+//                         console.log("CONDO COMPANY")
+                    }
+
                 } else {
                     console.log("No Firestore document for user!");
                     // @ts-ignore
@@ -87,27 +92,27 @@ const UserProfile = ({ navigation }: any) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text style={styles.logoutButtonText}>Log Out</Text>
+                <Text id="logoutBtn" style={styles.logoutButtonText}>Log Out</Text>
             </TouchableOpacity>
-            <Text style={styles.title}>User Profile</Text>
+            <Text id='userProfileLabel' style={styles.title}>User Profile</Text>
             <Image
                 source={imageUrl ? { uri: imageUrl } : require('../assets/profilepicture.png')}
                 style={styles.profileImage}
             />
             {editMode ? (
                 <>
-                    <TextInput style={styles.input} value={userProfile.username} onChangeText={value => setUserProfile(prevState => ({...prevState, username: value}))} placeholder="Username" />
-                    <TextInput style={styles.input} value={userProfile.phoneNumber} onChangeText={value => setUserProfile(prevState => ({...prevState, phoneNumber: value}))} placeholder="Phone Number" />
-                    <Button title="Save Changes" onPress={handleUpdate} />
-                    <Button title="Cancel" onPress={() => setEditMode(false)} />
+                    <TextInput id="usernameInput" style={styles.input} value={userProfile.username} onChangeText={value => setUserProfile(prevState => ({...prevState, username: value}))} placeholder="Username" />
+                    <TextInput id="phoneNumberInput" style={styles.input} value={userProfile.phoneNumber} onChangeText={value => setUserProfile(prevState => ({...prevState, phoneNumber: value}))} placeholder="Phone Number" />
+                    <Button testID="saveBtn" title="Save Changes" onPress={handleUpdate} />
+                    <Button testID="cancelBtn" title="Cancel" onPress={() => setEditMode(false)} />
                 </>
             ) : (
                 <>
-                    <Text style={styles.info}>Username: {userProfile.username}</Text>
-                    <Text style={styles.info}>Email: {userProfile.email}</Text>
-                    <Text style={styles.info}>Phone Number: {userProfile.phoneNumber}</Text>
-                    <Text style={styles.info}>Role: {userProfile.role}</Text>
-                    <Button title="Edit Profile" onPress={() => setEditMode(true)} />
+                    <Text id="usernameText" style={styles.info}>Username: {userProfile.username}</Text>
+                    <Text id="userEmail" style={styles.info}>Email: {userProfile.email}</Text>
+                    <Text id="phoneNumberText" style={styles.info}>Phone Number: {userProfile.phoneNumber}</Text>
+                    <Text id="roleText" style={styles.info}>Role: {userProfile.role}</Text>
+                    <Button testID="updateBtn" title="Edit Profile" onPress={() => setEditMode(true)} />
                 </>
             )}
         </View>
@@ -120,6 +125,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f5f5f5',
+        marginBottom: 60,
     },
     title: {
         fontSize: 24,
@@ -157,4 +163,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserProfile;
+export default UserProfileScreen;
