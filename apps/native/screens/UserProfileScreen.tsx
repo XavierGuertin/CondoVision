@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, Button, TouchableOpacity } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TextInput,
+    Button,
+    TouchableOpacity,
+    Platform,
+    Alert,
+} from 'react-native';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { ref, getDownloadURL } from 'firebase/storage';
+import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
 import { auth, db, storage } from '../firebase';
 
-const UserProfileScreen = ({ navigation }: any) => {
+const UserProfileScreen = ({ navigation }) => {
     const [userProfile, setUserProfile] = useState({
         email: '',
         username: '',
@@ -20,16 +31,26 @@ const UserProfileScreen = ({ navigation }: any) => {
             const user = auth.currentUser;
             if (user) {
                 const { uid, email, displayName, photoURL } = user;
-                // Attempt to fetch user profile picture URL from Firebase Storage if available
                 if (photoURL) {
                     setImageUrl(photoURL);
                 } else {
-                    // If no photoURL in auth, try fetching from Firebase Storage
                     const imageRef = ref(storage, `users/${uid}/profilePicture.jpg`);
-                    getDownloadURL(imageRef).then(setImageUrl).catch(console.error);
+                    try {
+                        const url = await getDownloadURL(imageRef);
+                        setImageUrl(url);
+                    } catch (error) {
+                        // @ts-ignore
+                        if (error.code === 'storage/object-not-found') {
+                            // Handle the case where the profile picture does not exist
+                            alert('Add your info.');
+                            // Optionally set a default image or leave it blank
+                            // setImageUrl('path_to_default_image_if_desired');
+                        } else {
+                            console.error("Error fetching profile picture: ", error);
+                        }
+                    }
                 }
 
-                // Fetch additional user profile data from Firestore
                 const docRef = doc(db, "users", uid);
                 const docSnap = await getDoc(docRef);
 
@@ -37,23 +58,18 @@ const UserProfileScreen = ({ navigation }: any) => {
                     const userData = docSnap.data();
                     setUserProfile(prevState => ({
                         ...prevState,
-                        email: userData.email || email, // Prefer Firestore email, fallback to Auth if unavailable
+                        email: userData.email || email,
                         username: userData.username || displayName,
                         role: userData.role,
                         phoneNumber: userData.phoneNumber,
                     }));
-
-                    if(userData.role == 'Condo Management Company'){
-//                         console.log("CONDO COMPANY")
-                    }
-
                 } else {
                     console.log("No Firestore document for user!");
-                    // @ts-ignore
                     setUserProfile(prevState => ({
                         ...prevState,
                         email: email,
                         username: displayName,
+
                     }));
                 }
             }
@@ -67,52 +83,105 @@ const UserProfileScreen = ({ navigation }: any) => {
         if (userUID) {
             const userRef = doc(db, 'users', userUID);
             try {
-                await updateDoc(userRef, {
-                    ...userProfile,
-                });
-                alert('Profile updated successfully');
+                await updateDoc(userRef, userProfile);
+                Alert.alert('Profile updated successfully');
                 setEditMode(false);
             } catch (error) {
                 console.error("Error updating document: ", error);
-                alert('Failed to update profile');
+                Alert.alert('Failed to update profile');
             }
         }
     };
+
     const handleLogout = async () => {
         try {
             await auth.signOut();
-            alert('Logged out successfully');
+            Alert.alert('Logged out successfully');
             navigation.navigate('Login');
         } catch (error) {
             console.error("Error signing out: ", error);
-            alert('Failed to log out');
+            Alert.alert('Failed to log out');
         }
     };
+
+    const pickImageAndUpdateProfile = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        if (!result.canceled && result.assets && result.assets.length > 0) {
+            const asset = result.assets[0]; // Access the first selected asset
+            const uri = asset.uri; // Use the uri from the asset
+            const user = auth.currentUser;
+            if (user) {
+                const response = await fetch(uri);
+                const blob = await response.blob();
+                const imageRef = ref(storage, `users/${user.uid}/profilePicture.jpg`);
+
+                uploadBytes(imageRef, blob).then((snapshot) => {
+                    getDownloadURL(snapshot.ref).then((url) => {
+                        setImageUrl(url);
+                        const userRef = doc(db, 'users', user.uid);
+                        updateDoc(userRef, { photoURL: url }).then(() => {
+                            Alert.alert('Profile picture updated successfully');
+                        }).catch((error) => {
+                            console.error("Error updating document: ", error);
+                            Alert.alert('Failed to update profile picture');
+                        });
+                    });
+                }).catch((error) => {
+                    console.error("Error uploading image: ", error);
+                    Alert.alert('Failed to upload image');
+                });
+            }
+        }
+    };
+
 
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <Text id="logoutBtn" style={styles.logoutButtonText}>Log Out</Text>
+                <Text style={styles.logoutButtonText}>Log Out</Text>
             </TouchableOpacity>
-            <Text id='userProfileLabel' style={styles.title}>User Profile</Text>
+            <Text style={styles.title}>User Profile</Text>
             <Image
                 source={imageUrl ? { uri: imageUrl } : require('../assets/profilepicture.png')}
                 style={styles.profileImage}
             />
             {editMode ? (
                 <>
-                    <TextInput id="usernameInput" style={styles.input} value={userProfile.username} onChangeText={value => setUserProfile(prevState => ({...prevState, username: value}))} placeholder="Username" />
-                    <TextInput id="phoneNumberInput" style={styles.input} value={userProfile.phoneNumber} onChangeText={value => setUserProfile(prevState => ({...prevState, phoneNumber: value}))} placeholder="Phone Number" />
-                    <Button testID="saveBtn" title="Save Changes" onPress={handleUpdate} />
-                    <Button testID="cancelBtn" title="Cancel" onPress={() => setEditMode(false)} />
+                    <Button title="Upload Profile Picture" onPress={pickImageAndUpdateProfile} />
+                    <TextInput
+                        style={styles.input}
+                        value={userProfile.username}
+                        onChangeText={value => setUserProfile(prevState => ({...prevState, username: value}))}
+                        placeholder="Username"
+                    />
+                    <TextInput
+                        style={styles.input}
+                        value={userProfile.phoneNumber}
+                        onChangeText={value => setUserProfile(prevState => ({...prevState, phoneNumber: value}))}
+                        placeholder="Phone Number"
+                    />
+                    <Button title="Save Changes" onPress={handleUpdate} />
+                    <Button title="Cancel" onPress={() => setEditMode(false)} />
                 </>
             ) : (
                 <>
-                    <Text id="usernameText" style={styles.info}>Username: {userProfile.username}</Text>
-                    <Text id="userEmail" style={styles.info}>Email: {userProfile.email}</Text>
-                    <Text id="phoneNumberText" style={styles.info}>Phone Number: {userProfile.phoneNumber}</Text>
-                    <Text id="roleText" style={styles.info}>Role: {userProfile.role}</Text>
-                    <Button testID="updateBtn" title="Edit Profile" onPress={() => setEditMode(true)} />
+                    <Text style={styles.info}>Username: {userProfile.username}</Text>
+                    <Text style={styles.info}>Email: {userProfile.email}</Text>
+                    <Text style={styles.info}>Phone Number: {userProfile.phoneNumber}</Text>
+                    <Text style={styles.info}>Role: {userProfile.role}</Text>
+                    <Button title="Edit Profile" onPress={() => setEditMode(true)} />
                 </>
             )}
         </View>
