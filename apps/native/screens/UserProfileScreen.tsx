@@ -30,7 +30,7 @@ const UserProfileScreen = ({ navigation }) => {
         const fetchUserProfileAndAuthData = async () => {
             const user = auth.currentUser;
             if (user) {
-                const { uid, email, displayName, photoURL } = user;
+                const { uid, email, displayName, phoneNumber, photoURL } = user;
                 if (photoURL) {
                     setImageUrl(photoURL);
                 } else {
@@ -70,6 +70,7 @@ const UserProfileScreen = ({ navigation }) => {
                         ...prevState,
                         email: email,
                         username: displayName,
+                        phoneNumber: phoneNumber,
 
                     }));
                 }
