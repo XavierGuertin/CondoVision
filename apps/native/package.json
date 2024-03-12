@@ -26,6 +26,7 @@
     "@repo/ui": "*",
     "@types/react-native-vector-icons": "^6.4.18",
     "expo": "^49.0.21",
+    "expo-image-picker": "~14.3.2",
     "expo-status-bar": "~1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
