@@ -65,6 +65,7 @@ const UserProfileScreen = ({ navigation }) => {
                     }));
                 } else {
                     console.log("No Firestore document for user!");
+                    // @ts-ignore
                     setUserProfile(prevState => ({
                         ...prevState,
                         email: email,
