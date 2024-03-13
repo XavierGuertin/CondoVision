@@ -75,6 +75,8 @@ const SignUp = () => {
                     window.localStorage.setItem('userUID', userCredential.user.uid);
                     window.localStorage.setItem('userRole', role);
                     window.localStorage.setItem('username', username);
+                    window.location.href = "/dashboard";
+
                 })
                 .catch((error) => {
                     console.log(error);

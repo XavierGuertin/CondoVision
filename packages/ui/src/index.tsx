@@ -6,6 +6,8 @@ import SignUp from "./auth/SignUp";
 import Response from "./Response";
 import {SingleImageDropzone} from "./SingleImageDropzone";
 import {Button} from "./button";
+import DashboardNav from "./DashboardNav";
+import DashboardCard from "./dashboard/DashboardCard";
 
 export {
     Navbar,
@@ -15,5 +17,7 @@ export {
     SignUp,
     Response,
     SingleImageDropzone,
-    Button
+    Button,
+    DashboardNav,
+    DashboardCard,
 };
