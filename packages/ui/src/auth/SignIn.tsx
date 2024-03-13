@@ -48,6 +48,7 @@ const SignIn = () => {
                 window.localStorage.setItem('userRole', await returnRole(userCredential.user.uid));
                 window.localStorage.setItem('username', await returnUsername(userCredential.user.uid));
                 setConnectionStatus("success");
+                window.location.href = "/dashboard";
             })
             .catch((error) => {
                 console.log(error);
