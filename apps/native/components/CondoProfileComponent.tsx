@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import EmployeeList from "@native/components/EmployeeList";
 
 // Dummy data for the condo
 const condoData = {
@@ -103,12 +104,17 @@ export const CondoProfileComponent = ({
               <Text>{unit.unitId}</Text>
             ))}
           </View>
-          <TouchableOpacity
-            onPress={() => console.log("PDF Upload")}
-            style={styles.uploadButton}
-          >
-            <Text style={styles.buttonText}>Upload PDF</Text>
-          </TouchableOpacity>
+          <View style={styles.detailSection}>
+            <EmployeeList propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
+            <TouchableOpacity
+              onPress={() => console.log("PDF Upload")}
+              style={styles.uploadButton}
+            >
+              <Text style={styles.buttonText}>Upload PDF</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       )}
     </TouchableOpacity>
@@ -186,7 +192,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     alignItems: "center",
-    marginTop: 20,
   },
   buttonText: {
     color: "#ffffff",
