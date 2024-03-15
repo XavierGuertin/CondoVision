@@ -8,6 +8,8 @@ import {
   ScrollView,
 } from "react-native";
 import EmployeeList from "@native/components/EmployeeList";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Dummy data for the condo
 const condoData = {
@@ -20,6 +22,7 @@ const condoData = {
   unitCount: 1,
   units: [
     {
+      id: "DSJKL:#KD:LJGP",
       condoFees: {
         includes: [],
         monthlyFee: "$300",
@@ -37,7 +40,7 @@ const condoData = {
   ],
 };
 
-export const CondoProfileComponent = ({
+export const PropertyProfileComponent = ({
   data = condoData,
   imageRefs = [
     require("../../../public/logoWhiteBG.png"), // Adjust the path as necessary
@@ -45,8 +48,19 @@ export const CondoProfileComponent = ({
   ],
 }) => {
   const [expanded, setExpanded] = useState(false); // State to toggle expanded/collapsed view
+  const [selectedCondoId, setSelectedCondoId] = useState(Number);
 
-//   const city = data.address.split(",").at(1);
+  const navigation = useNavigation();
+
+  const onCondoClick = async (id: string) => {
+    console.log("Called");
+    await AsyncStorage.setItem("unitId", id);
+    await AsyncStorage.setItem("propertyId", data.id);
+    setTimeout(() => {}, 500);
+    console.log("Unit id saved: ", id);
+    navigation.navigate("CondoUnitDescriptionScreen");
+  };
+
   return (
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
@@ -58,7 +72,6 @@ export const CondoProfileComponent = ({
             <Image source={imageRefs[0]} style={styles.image} />
             <View style={styles.infoContainer}>
               <Text style={styles.infoText}>{data.propertyName}</Text>
-               {/*<Text style={styles.infoText}>{city}</Text>*/}
             </View>
           </View>
         )}
@@ -100,9 +113,19 @@ export const CondoProfileComponent = ({
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>Units:</Text>
-            {data.units.map((unit) => (
-              <Text>{unit.unitId}</Text>
-            ))}
+            <View style={styles.condoDetailSection}>
+              {data.units.map((unit) => (
+                <View key={unit.id} style={styles.condoProfileContainer}>
+                  <Text
+                    onPress={() => {
+                      onCondoClick(unit.id);
+                    }}
+                  >
+                    {unit.id}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
           <View style={styles.detailSection}>
             <EmployeeList propertyId={data.id} />
@@ -206,6 +229,23 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
+  condoProfileContainer: {
+    borderRadius: 3,
+    margin: 10,
+    backgroundColor: "#FFFFFF",
+    elevation: 3,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  condoDetailSection: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 10,
+    paddingHorizontal: 5,
+  },
 });
 
-export default CondoProfileComponent;
+export default PropertyProfileComponent;

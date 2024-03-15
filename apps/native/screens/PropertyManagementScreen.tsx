@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Button } from "@native/components/button";
 import { useNavigation } from "@react-navigation/native";
-import CondoProfileComponent from "../components/CondoProfileComponent";
+import PropertyProfileComponent from "../components/PropertyProfileComponent";
 import { db } from "../firebase";
 import { getDocs, collection, query } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -42,10 +42,11 @@ const CondoProfileScreen = () => {
 
           condoUnitsSnapshot.forEach((condoUnitDoc) => {
             var condoData = condoUnitDoc.data();
+            var condoId = condoUnitDoc.id;
 
             if (condoData.owner === userUID && stopper) {
               const condoUnit = new CondoUnitAdapter(
-                condoData.id,
+                condoId,
                 {
                   includes: condoData.condoFees.includes,
                   monthlyFee: condoData.condoFees.monthlyFee,
@@ -61,6 +62,7 @@ const CondoProfileScreen = () => {
                 condoData.unitId
               );
               unitList.push(condoUnit.toJSON());
+              console.log(unitList);
               stopper = false;
             }
           });
@@ -102,13 +104,13 @@ const CondoProfileScreen = () => {
       <ScrollView id="propertyView" style={styles.flexibleContainer}>
         {ownedProperties.length > 0 ? (
           ownedProperties.map((property) => (
-            <CondoProfileComponent data={property} key={property.id} />
+            <PropertyProfileComponent data={property} key={property.id} />
           ))
         ) : (
           <Text style={styles.noCondosText}>No Condos were found.</Text>
         )}
       </ScrollView>
-      <View style={styles.addPropertyBtn}>
+      <View id="addPropertyBtnView" style={styles.addPropertyBtn}>
         <Button
           text="Add New Property"
           onClick={() => navigation.navigate("AddCondoProfileScreen")}
