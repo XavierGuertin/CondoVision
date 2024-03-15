@@ -16,7 +16,7 @@ class CondoUnitAdapter {
     owner: string,
     parkingSpotId: string,
     size: string,
-    unitId: string,
+    unitId: string
   ) {
     this.id = id;
     this.condoFees = condoFees;
@@ -30,6 +30,7 @@ class CondoUnitAdapter {
 
   toJSON = () => {
     return {
+      id: this.id,
       condoFees: {
         includes: this.condoFees.includes,
         monthlyFee: this.condoFees.monthlyFee,

@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TouchableOpacity,
-  ScrollView, Button, Linking
+  ScrollView,
 } from "react-native";
-import PDFUploader from "@native/components/PDFUploader";
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+import EmployeeList from "@native/components/EmployeeList";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Dummy data for the condo
 const condoData = {
@@ -21,6 +22,7 @@ const condoData = {
   unitCount: 1,
   units: [
     {
+      id: "DSJKL:#KD:LJGP",
       condoFees: {
         includes: [],
         monthlyFee: "$300",
@@ -38,7 +40,7 @@ const condoData = {
   ],
 };
 
-export const CondoProfileComponent = ({
+export const PropertyProfileComponent = ({
   data = condoData,
   imageRefs = [
     require("../../../public/logoWhiteBG.png"), // Adjust the path as necessary
@@ -46,36 +48,18 @@ export const CondoProfileComponent = ({
   ],
 }) => {
   const [expanded, setExpanded] = useState(false); // State to toggle expanded/collapsed view
-  const [pdfUrls, setPdfUrls] = useState([]);
-  const [pdfFiles, setPdfFiles] = useState([]);
+  const [selectedCondoId, setSelectedCondoId] = useState(Number);
 
-  const fetchPDFs = async () => {
-    const storage = getStorage();
-    const listRef = ref(storage, `properties/${data.id}/pdfs/`);
+  const navigation = useNavigation();
 
-    try {
-      const result = await listAll(listRef);
-      const filesData = await Promise.all(
-          result.items.map(async (itemRef) => {
-            const url = await getDownloadURL(itemRef);
-            return { name: itemRef.name, url };
-          })
-      );
-      setPdfFiles(filesData);
-    } catch (error) {
-      console.error("Failed to fetch PDFs:", error);
-    }
+  const onCondoClick = async (id: string) => {
+    console.log("Called");
+    await AsyncStorage.setItem("unitId", id);
+    await AsyncStorage.setItem("propertyId", data.id);
+    setTimeout(() => {}, 500);
+    console.log("Unit id saved: ", id);
+    navigation.navigate("CondoUnitDescriptionScreen");
   };
-
-  useEffect(() => {
-    if (expanded) {
-      fetchPDFs();
-    }
-  }, [expanded]);
-  const handleUploadPDF = () => {
-    PDFUploader.uploadPDF(data.id, data.owner);
-  };
-//   const city = data.address.split(",").at(1);
 
   return (
     <TouchableOpacity
@@ -88,7 +72,6 @@ export const CondoProfileComponent = ({
             <Image source={imageRefs[0]} style={styles.image} />
             <View style={styles.infoContainer}>
               <Text style={styles.infoText}>{data.propertyName}</Text>
-               {/*<Text style={styles.infoText}>{city}</Text>*/}
             </View>
           </View>
         )}
@@ -130,22 +113,31 @@ export const CondoProfileComponent = ({
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>Units:</Text>
-            {data.units.map((unit) => (
-              <Text>{unit.unitId}</Text>
-            ))}
+            <View style={styles.condoDetailSection}>
+              {data.units.map((unit) => (
+                <View key={unit.id} style={styles.condoProfileContainer}>
+                  <Text
+                    onPress={() => {
+                      onCondoClick(unit.id);
+                    }}
+                  >
+                    {unit.id}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
           <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>PDF Files:</Text>
-            {pdfFiles.map((file, index) => (
-                <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
-                  {file.name}
-                </Text>
-            ))}
+            <EmployeeList propertyId={data.id} />
           </View>
-          <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
-            <Text style={styles.buttonText}>Upload PDF</Text>
-          </TouchableOpacity>
-
+          <View style={styles.detailSection}>
+            <TouchableOpacity
+              onPress={() => console.log("PDF Upload")}
+              style={styles.uploadButton}
+            >
+              <Text style={styles.buttonText}>Upload PDF</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       )}
     </TouchableOpacity>
@@ -166,12 +158,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-  },
-  pdfLink: {
-    fontSize: textSize,
-    color: "#2f80ed",
-    marginLeft: 10,
-    marginTop: 5,
   },
   collapsedContainer: {
     height: 100,
@@ -229,7 +215,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     alignItems: "center",
-    marginTop: 20,
   },
   buttonText: {
     color: "#ffffff",
@@ -244,6 +229,23 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
+  condoProfileContainer: {
+    borderRadius: 3,
+    margin: 10,
+    backgroundColor: "#FFFFFF",
+    elevation: 3,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  condoDetailSection: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 10,
+    paddingHorizontal: 5,
+  },
 });
 
-export default CondoProfileComponent;
+export default PropertyProfileComponent;

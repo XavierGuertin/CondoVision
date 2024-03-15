@@ -28,6 +28,7 @@
     "base-64": "^1.0.0",
     "expo": "^49.0.21",
     "expo-document-picker": "^11.10.1",
+    "expo-image-picker": "~14.3.2",
     "expo-status-bar": "~1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
