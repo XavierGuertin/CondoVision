@@ -27,7 +27,7 @@ class PDFUploader {
             const fileName = pickedFile.name || `CondoPDF-${new Date().toISOString()}.pdf`;
 
             const storage = getStorage();
-            const storageRef = ref(storage, `users/${propertyOwner}/properties/${propertyId}/pdfs/${fileName}`);
+            const storageRef = ref(storage, `properties/${propertyId}/pdfs/${fileName}`);
 
             // Use uploadString to upload the file directly
             await uploadBytes(storageRef, blob);

@@ -51,7 +51,7 @@ export const CondoProfileComponent = ({
 
   const fetchPDFs = async () => {
     const storage = getStorage();
-    const listRef = ref(storage, `users/${data.owner}/properties/${data.id}/pdfs/`);
+    const listRef = ref(storage, `properties/${data.id}/pdfs/`);
 
     try {
       const result = await listAll(listRef);
