@@ -1,40 +1,43 @@
 import * as DocumentPicker from 'expo-document-picker';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from 'firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { size } from 'cypress/types/lodash';
 
 class PDFUploader {
-    static async uploadPDF(propertyId) {
-        // Attempt to pick a document
+    static async uploadPDF(propertyId, propertyOwner) {
         const pickerResult = await DocumentPicker.getDocumentAsync({
             type: 'application/pdf',
             copyToCacheDirectory: true
         });
 
-        // Check for cancellation
-        if (pickerResult.type === 'cancel') {
-            console.log('Document picker was canceled');
+        // Check if the operation was canceled
+        if (pickerResult.canceled || !pickerResult.assets || pickerResult.assets.length === 0) {
+            console.log('Document picker was canceled or no file was selected');
             return;
         }
 
+        // Assuming only one file is picked, access the first item in the assets array
+        const pickedFile = pickerResult.assets[0];
 
         try {
-            const uri = pickerResult.uri;
-            const response = await fetch(uri);
+            // Fetch the blob directly from the file URI
+            const response = await fetch(pickedFile.uri);
             const blob = await response.blob();
-            console.log(`Blob size: ${blob.size}`);
-            const fileName = pickerResult.name || `CondoPDF.pdf`;
+
+            
+            const fileName = pickedFile.name || `CondoPDF-${new Date().toISOString()}.pdf`;
 
             const storage = getStorage();
-            const storageRef = ref(storage, `properties/${propertyId}/pdfs/${fileName}`);
+            const storageRef = ref(storage, `users/${propertyOwner}/properties/${propertyId}/pdfs/${fileName}`);
 
-            const snapshot = await uploadBytes(storageRef, blob);
-            const downloadURL = await getDownloadURL(snapshot.ref);
+            // Use uploadString to upload the file directly
+            await uploadBytes(storageRef, blob);
+            const downloadURL = await getDownloadURL(storageRef);
 
             console.log('File available at', downloadURL);
-
+            // Save the download URL using AsyncStorage
             await AsyncStorage.setItem(`pdf_${propertyId}`, downloadURL);
-            alert("File uploaded successfully!")
+
+            alert("File uploaded successfully!");
         } catch (error) {
             console.error("Error uploading file or getting download URL: ", error);
         }

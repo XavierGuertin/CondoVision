@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TouchableOpacity,
-  ScrollView,
+  ScrollView, Button, Linking
 } from "react-native";
+import PDFUploader from "@native/components/PDFUploader";
+import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 
 // Dummy data for the condo
 const condoData = {
@@ -44,8 +46,37 @@ export const CondoProfileComponent = ({
   ],
 }) => {
   const [expanded, setExpanded] = useState(false); // State to toggle expanded/collapsed view
+  const [pdfUrls, setPdfUrls] = useState([]);
+  const [pdfFiles, setPdfFiles] = useState([]);
 
+  const fetchPDFs = async () => {
+    const storage = getStorage();
+    const listRef = ref(storage, `users/${data.owner}/properties/${data.id}/pdfs/`);
+
+    try {
+      const result = await listAll(listRef);
+      const filesData = await Promise.all(
+          result.items.map(async (itemRef) => {
+            const url = await getDownloadURL(itemRef);
+            return { name: itemRef.name, url };
+          })
+      );
+      setPdfFiles(filesData);
+    } catch (error) {
+      console.error("Failed to fetch PDFs:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (expanded) {
+      fetchPDFs();
+    }
+  }, [expanded]);
+  const handleUploadPDF = () => {
+    PDFUploader.uploadPDF(data.id, data.owner);
+  };
 //   const city = data.address.split(",").at(1);
+
   return (
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
@@ -103,12 +134,18 @@ export const CondoProfileComponent = ({
               <Text>{unit.unitId}</Text>
             ))}
           </View>
-          <TouchableOpacity
-            onPress={() => console.log("PDF Upload")}
-            style={styles.uploadButton}
-          >
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>PDF Files:</Text>
+            {pdfFiles.map((file, index) => (
+                <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
+                  {file.name}
+                </Text>
+            ))}
+          </View>
+          <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
             <Text style={styles.buttonText}>Upload PDF</Text>
           </TouchableOpacity>
+
         </ScrollView>
       )}
     </TouchableOpacity>
@@ -129,6 +166,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  pdfLink: {
+    fontSize: textSize,
+    color: "#2f80ed",
+    marginLeft: 10,
+    marginTop: 5,
   },
   collapsedContainer: {
     height: 100,
