@@ -53,13 +53,10 @@ const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSave
         }));
     };
 
-    const handleUploadPDF = () => {
-      PDFUploader.uploadPDF(propertyId);
-    };
+    const validInput = () => {
+      return unit.unitId != "" && unit.size != "" && unit.condoFees.monthlyFee != "";
+    }
 
-      const validInput = () => {
-        return unit.unitId != "" && unit.size != "" && unit.condoFees.monthlyFee != "";
-      }
     const saveCondoUnit = async () => {
         if(!validInput()){
           alert('Invalid unit information!');
@@ -164,7 +161,6 @@ const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSave
             </View>
             </ScrollView>
         <View style = {styles.addUnitBtn}>
-          <Button title="Upload PDF" onPress={handleUploadPDF} />
           <Button title="Save Condo Unit" onPress={saveCondoUnit} />
         </View>
         </SafeAreaView>
