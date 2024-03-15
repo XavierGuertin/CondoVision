@@ -7,7 +7,6 @@ import {
     TextInput,
     Button,
     TouchableOpacity,
-    Platform,
     Alert,
 } from 'react-native';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -16,12 +15,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from 'expo-image-picker';
 import { auth, db, storage } from '../firebase';
 
-const UserProfileScreen = ({ navigation }) => {
+const UserProfileScreen = ({ navigation }: any) => {
     const [userProfile, setUserProfile] = useState({
         email: '',
         username: '',
         role: '',
         phoneNumber: '',
+        photoURL: '',
     });
     const [imageUrl, setImageUrl] = useState('');
     const [editMode, setEditMode] = useState(false);
@@ -61,7 +61,8 @@ const UserProfileScreen = ({ navigation }) => {
                         email: userData.email || email,
                         username: userData.username || displayName,
                         role: userData.role,
-                        phoneNumber: userData.phoneNumber,
+                        phoneNumber: userData.phoneNumber || phoneNumber,
+                        photoURL: userData.photoURL || photoURL,
                     }));
                 } else {
                     console.log("No Firestore document for user!");
@@ -71,6 +72,7 @@ const UserProfileScreen = ({ navigation }) => {
                         email: email,
                         username: displayName,
                         phoneNumber: phoneNumber,
+                        photoURL: photoURL,
 
                     }));
                 }

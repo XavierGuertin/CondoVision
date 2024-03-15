@@ -10,7 +10,7 @@ import {SingleImageDropzone} from "../index";
 const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("Customer");
+    const [role, setRole] = useState("User");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [username, setUsername] = useState("");
     const [connectionStatus, setConnectionStatus] = useState("");

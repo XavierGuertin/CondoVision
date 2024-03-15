@@ -35,7 +35,7 @@ export const dashNavLinks = [
         logo: IoAnalytics
     },
     {
-        id: "profile",
+        id: "userProfile",
         title: "Profile",
         logo: IoPerson
     },
