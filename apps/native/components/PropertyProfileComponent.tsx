@@ -117,6 +117,7 @@ export const PropertyProfileComponent = ({
               {data.units.map((unit) => (
                 <View key={unit.id} style={styles.condoProfileContainer}>
                   <Text
+                    style={styles.condoText}
                     onPress={() => {
                       onCondoClick(unit.id);
                     }}
@@ -230,6 +231,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   condoProfileContainer: {
+    padding: 10,
     borderRadius: 3,
     margin: 10,
     backgroundColor: "#FFFFFF",
@@ -245,6 +247,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginBottom: 10,
     paddingHorizontal: 5,
+  },
+  condoText: {
+    fontSize: textSize,
+    color: "#666",
+    fontFamily: "System",
   },
 });
 

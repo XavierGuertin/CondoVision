@@ -7,15 +7,17 @@ import NotificationsScreen from "./NotificationsScreen";
 import ReportScreen from "./ReportScreen";
 import SettingsScreen from "./SettingsScreen";
 import AddCondoProfileScreen from "./AddCondoProfileScreen";
+import CondoUnitDescriptionScreen from "./CondoUnitDescriptionScreen";
 
 export {
-    HomeScreen,
-    LoginScreen,
-    SignupScreen,
-    PropertyManagementScreen,
-    UserProfileScreen,
-    NotificationsScreen,
-    ReportScreen,
-    SettingsScreen,
-    AddCondoProfileScreen
+  HomeScreen,
+  LoginScreen,
+  SignupScreen,
+  PropertyManagementScreen,
+  UserProfileScreen,
+  NotificationsScreen,
+  ReportScreen,
+  SettingsScreen,
+  AddCondoProfileScreen,
+  CondoUnitDescriptionScreen,
 };
