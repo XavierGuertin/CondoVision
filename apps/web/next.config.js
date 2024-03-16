@@ -1,6 +1,9 @@
 const path = require('path');
 
 module.exports = {
+  images: {
+    domains: ['firebasestorage.googleapis.com'],
+  },
   reactStrictMode: true,
   webpack: (config) => {
     config.resolve.alias = {

@@ -10,7 +10,7 @@ import {SingleImageDropzone} from "../index";
 const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("Customer");
+    const [role, setRole] = useState("User");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [username, setUsername] = useState("");
     const [connectionStatus, setConnectionStatus] = useState("");
@@ -75,6 +75,8 @@ const SignUp = () => {
                     window.localStorage.setItem('userUID', userCredential.user.uid);
                     window.localStorage.setItem('userRole', role);
                     window.localStorage.setItem('username', username);
+                    window.location.href = "/dashboard";
+
                 })
                 .catch((error) => {
                     console.log(error);
