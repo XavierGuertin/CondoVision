@@ -17,6 +17,7 @@ import {
 } from "@react-navigation/native";
 import Navbar from "@native/components/Navbar";
 import CondoUnitDescriptionScreen from "./screens/CondoUnitDescriptionScreen";
+import CondoUnitRegistrationScreen from "./screens/CondoUnitRegistrationScreen";
 
 //enable to suppress warnings/errors in the Android Studio device simulator -> useful for demo recordings
 // import { LogBox  } from 'react-native';
@@ -48,7 +49,7 @@ const App = () => {
           component={PropertyManagementScreen}
         />
         <Stack.Screen name="UserProfile" component={UserProfileScreen} />
-        <Stack.Screen name="Notifications" component={NotificationsScreen} />
+        <Stack.Screen name="Notifications" component={CondoUnitRegistrationScreen} />
         <Stack.Screen name="Report" component={ReportScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen
