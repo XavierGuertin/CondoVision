@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import UserPropertyForm from "./UserPropertyForm";
+import { db } from "../firebase"
+import { collection, addDoc} from "firebase/firestore";
 import {
   View,
   Text,
@@ -93,6 +96,15 @@ export const PropertyProfileComponent = ({
     navigation.navigate("CondoUnitDescriptionScreen");
   };
 
+  const handleFormSubmit = async (formData) => {
+    try {
+      const docRef = await addDoc(collection(db, "RegistrationKeys"), formData);
+      console.log("Document written with ID: ", docRef.id);
+    }catch(e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
   return (
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
@@ -149,6 +161,7 @@ export const PropertyProfileComponent = ({
               {data.units.map((unit) => (
                 <View key={unit.id} style={styles.condoProfileContainer}>
                   <Text
+                    style={styles.condoText}
                     onPress={() => {
                       onCondoClick(unit.id);
                     }}
@@ -159,6 +172,7 @@ export const PropertyProfileComponent = ({
               ))}
             </View>
           </View>
+          <UserPropertyForm onFormSubmit={handleFormSubmit} propertyID={data.id}/> /** This will need to be changed for when the CONDO UNIT SCREENS are added */
           <View style={styles.detailSection}>
             <EmployeeList propertyId={data.id} />
           </View>
@@ -271,6 +285,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   condoProfileContainer: {
+    padding: 10,
     borderRadius: 3,
     margin: 10,
     backgroundColor: "#FFFFFF",
@@ -286,6 +301,11 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginBottom: 10,
     paddingHorizontal: 5,
+  },
+  condoText: {
+    fontSize: textSize,
+    color: "#666",
+    fontFamily: "System",
   },
 });
 
