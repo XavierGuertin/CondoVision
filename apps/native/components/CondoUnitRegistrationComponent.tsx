@@ -2,18 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { collection, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
-import { db } from '@native/firebase'; // Adjust this path
+import { db } from '@native/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CondoUnitRegistration = () => {
     const [registrationKey, setRegistrationKey] = useState('');
     const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (user) {
-            setUserEmail(user.email || '');
-        }
+        const fetchUserEmail = async () => {
+            const storedEmail = await AsyncStorage.getItem('userEmail');
+            if (storedEmail) {
+                setUserEmail(storedEmail);
+            } else {
+                const auth = getAuth();
+                const user = auth.currentUser;
+                if (user) {
+                    setUserEmail(user.email || '');
+                    await AsyncStorage.setItem('userEmail', user.email || '');
+                }
+            }
+        };
+
+        fetchUserEmail();
     }, []);
 
     const handleSubmit = async () => {

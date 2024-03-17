@@ -112,7 +112,7 @@ const CondoProfileScreen = () => {
       </ScrollView>
       <View id="addPropertyBtnView" style={styles.addPropertyBtn}>
         <Button
-          text="Add New Property" 
+          text="Register a New Property" 
           onClick={() => navigation.navigate("AddCondoProfileScreen")}
         />
       </View>
