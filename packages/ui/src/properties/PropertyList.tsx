@@ -1,93 +1,24 @@
-import { db } from "@web/firebase";
-import { getDocs, collection } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import CondoUnitAdapter from "@native/components/CondoUnitAdapter"
-import PropertyAdapter from "@native/components/PropertyAdapter";
+import React, { useState } from "react";
 
-
-const PropertyList = ({ user }: any) => {
-    const [ownedProperties, setOwnedProperties] = useState<Object[]>([]);
-    const [isLoading, setIsLoading] = useState<Boolean>(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const propertyList: Object[] = [];
-            try {
-                const propertiesCollectionSnapshot = await getDocs(
-                    collection(db, "properties")
-                );
-
-                propertiesCollectionSnapshot.forEach(async (propertyDoc) => {
-                    const unitList: Object[] = [];
-                    const condoUnitsSnapshot = await getDocs(
-                        collection(db, "properties", propertyDoc.id, "condoUnits")
-                    );
-                    const userUID = await localStorage.getItem("userUID");
-                    var stopper = true;
-                    var propertyData = propertyDoc.data();
-
-                    condoUnitsSnapshot.forEach((condoUnitDoc) => {
-                        var condoData = condoUnitDoc.data();
-                        var condoId = condoUnitDoc.id;
-
-                        if (condoData.owner === userUID && stopper) {
-                            const condoUnit = new CondoUnitAdapter(
-                                condoId,
-                                {
-                                    includes: condoData.condoFees.includes,
-                                    monthlyFee: condoData.condoFees.monthlyFee,
-                                },
-                                condoData.lockerId,
-                                {
-                                    contact: condoData.occupantInfo.contact,
-                                    name: condoData.occupantInfo.name,
-                                },
-                                condoData.owner,
-                                condoData.parkingSpotId,
-                                condoData.size,
-                                condoData.unitId
-                            );
-                            unitList.push(condoUnit.toJSON());
-                            console.log(unitList);
-                            stopper = false;
-                        }
-                    });
-                    if (propertyData.owner === userUID) {
-                        const property = new PropertyAdapter(
-                            propertyDoc.id,
-                            propertyData.address,
-                            propertyData.lockerCount,
-                            propertyData.owner,
-                            propertyData.parkingCount,
-                            propertyData.propertyName,
-                            propertyData.unitCount,
-                            unitList
-                        );
-                        propertyList.push(property.toJSON());
-                        setOwnedProperties(propertyList);
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setTimeout(() => {
-                    setIsLoading(false);
-                }, 500);
-            }
-        };
-
-        fetchData();
-    }, []);
+const PropertyList = ({ ownedProperties, inView, setSelectedProperty }: any) => {
+    const [selected, setSelected] = useState<string>(ownedProperties?.length > 0 ? ownedProperties[0].id : '');
 
     return (
-        <div className="w-[25vw] h-[30vh] rounded-lg bg-gray-500">
-
+        <div className={`${inView} min-w-36`}>
+            <h1 className="text-2xl font-bold text-white pb-2 pl-2">Properties list</h1>
+            {ownedProperties?.map((property: any) => {
+                return (
+                    <div key={property.id} className={`pl-2 py-4 border-b border-blue-500  ${selected == property.id ? 'bg-blue-500' : 'cursor-pointer'}`} onClick={() => {
+                        setSelected(property.id);
+                        setSelectedProperty(property);
+                    }}>
+                        <h1 className="font-bold text-xl capitalize">{property.propertyName}</h1>
+                        <p>{property.address}</p>
+                    </div>
+                );
+            })}
         </div>
     );
 };
 
 export default PropertyList;
-
-/*
-
-  */
