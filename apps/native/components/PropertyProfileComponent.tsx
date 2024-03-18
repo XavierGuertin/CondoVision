@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import UserPropertyForm from "./UserPropertyForm";
-import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+// PropertyProfileComponent.tsx
+// A component that displays detailed information about a property including unit details and allows uploading of PDF files related to the property.
+
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
   ScrollView,
   Button,
   Linking
-} from "react-native";
-import EmployeeList from "@native/components/EmployeeList";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import PDFUploader from "@native/components/PDFUploader";
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+} from 'react-native';
+import { collection, addDoc } from 'firebase/firestore';
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { db } from '../firebase';
+import UserPropertyForm from './UserPropertyForm';
+import EmployeeListModal from '@native/components/EmployeeListModal';
+import PDFUploader from '@native/components/PDFUploader';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Dummy data for the condo
 const condoData = {
@@ -67,10 +70,10 @@ export const PropertyProfileComponent = ({
     try {
       const result = await listAll(listRef);
       const filesData = await Promise.all(
-          result.items.map(async (itemRef) => {
-            const url = await getDownloadURL(itemRef);
-            return { name: itemRef.name, url };
-          })
+        result.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return { name: itemRef.name, url };
+        })
       );
       setPdfFiles(filesData);
     } catch (error) {
@@ -178,14 +181,14 @@ export const PropertyProfileComponent = ({
           />
           {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
-            <EmployeeList propertyId={data.id} />
+            <EmployeeListModal propertyId={data.id} />
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>PDF Files:</Text>
             {pdfFiles.map((file, index) => (
-                <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
-                  {file.name}
-                </Text>
+              <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
+                {file.name}
+              </Text>
             ))}
           </View>
           <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>

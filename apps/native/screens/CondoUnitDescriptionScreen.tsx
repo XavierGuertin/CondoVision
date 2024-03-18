@@ -87,6 +87,19 @@ export default function CondoUnitDescriptionScreen() {
                 </Text>
                 <Text style={styles.subtitle}>Size: {unit.size}</Text>
                 <Text style={styles.subtitle}>Unit Id: {unit.unitId}</Text>
+                <Button
+                  title="Fees"
+                  onPress={() =>
+                    navigation.navigate("CondoPaymentFeeStatusAndHistoryScreen")
+                  }
+                />
+                <Button
+                  testID="feeCalculationBtn"
+                  title="See Calculated Fees"
+                  onPress={() =>
+                    navigation.navigate("CondoFeeCalculationScreen")
+                  }
+                />
               </View>
             </View>
           </>

@@ -9,6 +9,8 @@ import {
   ReportScreen,
   SettingsScreen,
   AddCondoProfileScreen,
+  CondoPaymentFeeStatusAndHistoryScreen,
+  CondoFeeCalculationScreen,
 } from "./screens/index"; // screens
 import React, { useState, useEffect } from "react";
 import {
@@ -49,7 +51,10 @@ const App = () => {
           component={PropertyManagementScreen}
         />
         <Stack.Screen name="UserProfile" component={UserProfileScreen} />
-        <Stack.Screen name="Notifications" component={CondoUnitRegistrationScreen} />
+        <Stack.Screen
+          name="Notifications"
+          component={CondoUnitRegistrationScreen}
+        />
         <Stack.Screen name="Report" component={ReportScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen
@@ -59,6 +64,14 @@ const App = () => {
         <Stack.Screen
           name="CondoUnitDescriptionScreen"
           component={CondoUnitDescriptionScreen}
+        />
+        <Stack.Screen
+          name="CondoPaymentFeeStatusAndHistoryScreen"
+          component={CondoPaymentFeeStatusAndHistoryScreen}
+        />
+        <Stack.Screen
+          name="CondoFeeCalculationScreen"
+          component={CondoFeeCalculationScreen}
         />
       </Stack.Navigator>
       <Navbar />

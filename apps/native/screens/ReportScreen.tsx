@@ -1,11 +1,10 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const SettingsScreen = ({navigation}: any) => {
+const ReportScreen = ({navigation}: any) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Reports</Text>
-            <Text>Hasn't been developed yet</Text>
         </View>
     );
 };
@@ -54,4 +53,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SettingsScreen
+export default ReportScreen
