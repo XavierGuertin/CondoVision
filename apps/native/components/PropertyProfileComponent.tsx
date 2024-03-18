@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserPropertyForm from "./UserPropertyForm";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
@@ -9,10 +9,14 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Button,
+  Linking
 } from "react-native";
 import EmployeeList from "@native/components/EmployeeList";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PDFUploader from "@native/components/PDFUploader";
+import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 
 // Dummy data for the condo
 const condoData = {
@@ -50,10 +54,38 @@ export const PropertyProfileComponent = ({
     require("../../../public/logoBright.png"), // Adjust the path as necessary
   ],
 }) => {
+  const [pdfUrls, setPdfUrls] = useState([]);
+  const [pdfFiles, setPdfFiles] = useState([]);
   const [expanded, setExpanded] = useState(false); // State to toggle expanded/collapsed view
   const [selectedCondoId, setSelectedCondoId] = useState(Number);
-
   const navigation = useNavigation();
+
+  const fetchPDFs = async () => {
+    const storage = getStorage();
+    const listRef = ref(storage, `properties/${data.id}/pdfs/`);
+
+    try {
+      const result = await listAll(listRef);
+      const filesData = await Promise.all(
+          result.items.map(async (itemRef) => {
+            const url = await getDownloadURL(itemRef);
+            return { name: itemRef.name, url };
+          })
+      );
+      setPdfFiles(filesData);
+    } catch (error) {
+      console.error("Failed to fetch PDFs:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (expanded) {
+      fetchPDFs();
+    }
+  }, [expanded]);
+  const handleUploadPDF = () => {
+    PDFUploader.uploadPDF(data.id, data.owner);
+  };
 
   const onCondoClick = async (id: string) => {
     console.log("Called");
@@ -149,13 +181,16 @@ export const PropertyProfileComponent = ({
             <EmployeeList propertyId={data.id} />
           </View>
           <View style={styles.detailSection}>
-            <TouchableOpacity
-              onPress={() => console.log("PDF Upload")}
-              style={styles.uploadButton}
-            >
-              <Text style={styles.buttonText}>Upload PDF</Text>
-            </TouchableOpacity>
+            <Text style={styles.infoTitle}>PDF Files:</Text>
+            {pdfFiles.map((file, index) => (
+                <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
+                  {file.name}
+                </Text>
+            ))}
           </View>
+          <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
+            <Text style={styles.buttonText}>Upload PDF</Text>
+          </TouchableOpacity>
         </ScrollView>
       )}
     </TouchableOpacity>
@@ -176,6 +211,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  pdfLink: {
+    fontSize: textSize,
+    color: "#2f80ed",
+    marginLeft: 10,
+    marginTop: 5,
   },
   collapsedContainer: {
     height: 100,
