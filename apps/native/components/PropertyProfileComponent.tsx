@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UserPropertyForm from "./UserPropertyForm";
-import { db } from "../firebase"
-import { collection, addDoc} from "firebase/firestore";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 import {
   View,
   Text,
@@ -68,7 +68,7 @@ export const PropertyProfileComponent = ({
     try {
       const docRef = await addDoc(collection(db, "RegistrationKeys"), formData);
       console.log("Document written with ID: ", docRef.id);
-    }catch(e) {
+    } catch (e) {
       console.error("Error adding document: ", e);
     }
   };
@@ -140,7 +140,11 @@ export const PropertyProfileComponent = ({
               ))}
             </View>
           </View>
-          <UserPropertyForm onFormSubmit={handleFormSubmit} propertyID={data.id}/> /** This will need to be changed for when the CONDO UNIT SCREENS are added */
+          <UserPropertyForm
+            onFormSubmit={handleFormSubmit}
+            propertyID={data.id}
+          />
+          {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
             <EmployeeList propertyId={data.id} />
           </View>
