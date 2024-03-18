@@ -1,11 +1,13 @@
+import CondoFeeCalculation from '@native/components/CondoFeeCalculation';
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const SettingsScreen = ({navigation}: any) => {
+const ReportScreen = ({navigation}: any) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Reports</Text>
-            <Text>Hasn't been developed yet</Text>
+            <Text>Reports bruv Hasn't been developed yet</Text>
+            <CondoFeeCalculation />
         </View>
     );
 };
@@ -54,4 +56,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SettingsScreen
+export default ReportScreen
