@@ -1,29 +1,41 @@
 import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from 'firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Button, TextInput, TouchableOpacity } from 'react-native';
 import { collection, addDoc } from "firebase/firestore";
 
 const BoldLabelWithValue = ({ label, value }) => {
     return (
       <View style={styles.row}>
         <Text style={styles.boldLabel}>{label}</Text>
-        <Text style={styles.value}>{value}</Text>
+        <Text>{value}</Text>
       </View>
     );
 };
 
-const FeeCalculationRow = ({label1, value1, label2, value2}) => {
+const FeeCalculationRow = ({ label, value, isExpanded, toggle, details }) => {
     return (
-        <View style={styles.rowWithSymbol}>
-            <BoldLabelWithValue label={label1} value={value1} />
-            <Text style={styles.multiplySymbol}> * </Text>
-            <BoldLabelWithValue label={label2} value={value2} />
+        <View style={styles.itemContainer}>
+          <TouchableOpacity style={styles.itemHeader} onPress={toggle}>
+            <Text style={styles.itemHeaderText}>{label}</Text>
+            <View style={styles.itemHeaderValueContainer}>
+              <Text style={styles.itemHeaderValue}>{value}</Text>
+              <Text style={styles.chevron}>{isExpanded ? '▲' : '▼'}</Text>
+            </View>
+          </TouchableOpacity>
+          {isExpanded && (
+            <View style={styles.itemDetails}>
+              <BoldLabelWithValue label={details.label1} value={details.value1} />
+              <BoldLabelWithValue label={details.label2} value={details.value2} />
+            </View>
+          )}
         </View>
-    );
+      );
 };
   
 const CondoFeeCalculation = () => {
+    const [isUnitFeeExpanded, setUnitFeeExpanded] = useState(false);
+    const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
     // const [condoSize, setCondoSize] = useState('');
     // const [parkingSpots, setParkingSpots] = useState('');
     // const [feePerSqFt, setFeePerSqFt] = useState('');
@@ -75,38 +87,40 @@ const CondoFeeCalculation = () => {
     // }, [condoSize, parkingSpots, feePerSqFt, feePerParkingSpot]);
   
     return (
-      <View style={styles.container}>
+      <ScrollView 
+        style={styles.container}
+        contentContainerStyle={{justifyContent: 'flex-start'}}
+        >
         <Text style={styles.header}>Fee Calculation</Text>
         <View style={styles.section}>
           <FeeCalculationRow
-            label1="Condo Dimensions (ft²) = " 
-            value1={3}
-            label2="Fee per (ft²) = " 
-            value2={3}
+            label="Total Unit Fee ($) = "
+            value="9 $"
+            isExpanded={isUnitFeeExpanded}
+            toggle={() => setUnitFeeExpanded(!isUnitFeeExpanded)}
+            details={{ label1: "Condo Dimensions (ft²) = ", value1: "3", label2: "Fee per ($/ft²) = ", value2: "3" }}
           />
-          <Text style={styles.totalText}>Total Unit Fee ($) = {9} $</Text>
         </View>
         <View style={styles.section}>
             <FeeCalculationRow 
-                label1="Parking Spot(s) = " 
-                value1={1} 
-                label2="Fee per Parking Spot ($) = " 
-                value2={54}
+                label="Parking Spot(s) Fees = " 
+                value="1 $"
+                isExpanded={isParkingFeeExpanded}
+                toggle={() => setParkingFeeExpanded(!isParkingFeeExpanded)}
+                details={{ label1: "Parking Spot(s) = ", value1: "3", label2: "Fee per Parking Spot = ", value2: "3" }}
             />
-          <Text style={styles.totalText}>Total Parking Spot(s) Fee($) = {54} $</Text>
         </View>
         <View style={styles.section}>
           {/* <Text style={styles.grandTotalText}>TOTAL FEES = {grandTotal}</Text> */}
           <Text style={styles.grandTotalText}>TOTAL FEES = 64$</Text>
         </View>
-      </View>
+      </ScrollView>
     );
   };
   
   const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'flex-start',
         backgroundColor: '#f5f5f5',
         paddingHorizontal: '5%',
     },
@@ -121,9 +135,6 @@ const CondoFeeCalculation = () => {
         padding: 20,
         marginVertical: 10,
         alignSelf: 'stretch',
-    },
-    boldLabel: {
-        fontWeight: 'bold',
     },
     totalText: {
         marginTop: 10,
@@ -146,31 +157,65 @@ const CondoFeeCalculation = () => {
         fontWeight: 'bold',
         fontSize: 16,
     },
-    row: {
-        marginTop: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        backgroundColor: 'lightpink',
-        borderRadius: 8,
-        paddingVertical: 5,
-        paddingHorizontal: 20,
-    },
     rowWithSymbol: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
         flexWrap: 'wrap',
         alignItems: 'center', // align items vertically
     },
-    value: {
-        marginRight: 4, // add some spacing before the multiplication symbol
-    },
     multiplySymbol: {
         fontWeight: 'bold',
         fontSize: 18, // size your multiplication symbol
         marginRight: 4, // add some spacing after the multiplication symbol
     },
-    // ... other styles as needed
+    itemContainer: {
+        backgroundColor: 'white',
+        marginBottom: 10,
+        borderRadius: 6,
+        overflow: 'hidden', // This keeps the child views within the rounded border
+    },
+    itemHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20,
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#E0E0E0', // Color for the bottom border
+    },
+    itemHeaderText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    itemHeaderValueContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    itemHeaderValue: {
+        fontSize: 16,
+        color: '#333',
+    },
+    chevron: {
+        marginLeft: 10,
+        fontSize: 16,
+    },
+    itemDetails: {
+        padding: 20,
+        backgroundColor: '#F5F5F5', // Lighter background for the details section
+    },
+    // Adjust the row style for details
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 5, // Less padding for the detail items
+    },
+    boldLabel: {
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    value: {
+        color: '#333',
+    },
 });
 
 
