@@ -1,25 +1,23 @@
-// PropertyProfileComponent.tsx
-// A component that displays detailed information about a property including unit details and allows uploading of PDF files related to the property.
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import UserPropertyForm from "./UserPropertyForm";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  Button,
-  Linking
-} from 'react-native';
-import { collection, addDoc } from 'firebase/firestore';
-import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import { db } from '../firebase';
-import UserPropertyForm from './UserPropertyForm';
-import EmployeeListModal from '@native/components/EmployeeListModal';
-import PDFUploader from '@native/components/PDFUploader';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    ScrollView,
+    Button,
+    Linking,
+} from "react-native";
+import EmployeeListModal from "@native/components/EmployeeListModal";
+import AddFacilities from "@native/components/AddFacilities";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import PDFUploader from "@native/components/PDFUploader";
+import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 
 // Dummy data for the condo
 const condoData = {
