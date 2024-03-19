@@ -13,6 +13,7 @@ import {
   Linking
 } from "react-native";
 import EmployeeList from "@native/components/EmployeeList";
+import AddFacilities from "@native/components/AddFacilities";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PDFUploader from "@native/components/PDFUploader";
@@ -179,6 +180,9 @@ export const PropertyProfileComponent = ({
           {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
             <EmployeeList propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
+            <AddFacilities propertyId={data.id} />
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>PDF Files:</Text>
