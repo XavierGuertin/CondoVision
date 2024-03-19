@@ -117,6 +117,7 @@ export const AddEmployeeModal = (props) => {
                                                     value={job}
                                                     style={styles.input}
                                                     setValue={(itemValue) => setJob(itemValue)}
+                                                    dropDownDirection={"TOP"}
                                                     items={[{ label: "Janitor", value: "Janitor" }, { label: "Pool Boy/Girl/...", value: "Pool Boy/Girl/..." }, { label: "Chef", value: "Chef"}, { label: "Finance", value: "Finance"}, { label: "Custodian", value: "Custodian"}]}
                                                 >
                                                 </DropDownPicker>

@@ -8,16 +8,16 @@ const Navbar = () => {
   const navigation = useNavigation();
   const navigationState = navigation.getState();
 
-  // // Check if navigationState is defined and has routes
-  // if (!navigationState || !navigationState.routes) {
-  //   return null;
-  // }
-  //
-  // const currentRouteName = navigationState.routes[navigationState.index].name;
-  // const hideOnScreens = ["Signup", "Login", "Home"];
-  // if (hideOnScreens.includes(currentRouteName)) {
-  //   return null;
-  // }
+  // Check if navigationState is defined and has routes
+  if (!navigationState || !navigationState.routes) {
+    return null;
+  }
+
+  const currentRouteName = navigationState.routes[navigationState.index].name;
+  const hideOnScreens = ["Signup", "Login", "Home"];
+  if (hideOnScreens.includes(currentRouteName)) {
+    return null;
+  }
 
   return (
     <View style={styles.navbarContainer}>
