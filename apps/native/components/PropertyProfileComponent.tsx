@@ -8,6 +8,7 @@ import {
   ScrollView,
 } from "react-native";
 import EmployeeList from "@native/components/EmployeeList";
+import AddFacilityForm from "@native/components/AddFacilities";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -129,6 +130,9 @@ export const PropertyProfileComponent = ({
           </View>
           <View style={styles.detailSection}>
             <EmployeeList propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
+            <AddFacilityForm propertyId={data.id} />
           </View>
           <View style={styles.detailSection}>
             <TouchableOpacity
