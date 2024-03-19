@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView, SafeAreaView } f
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../firebase'; // Ensure this import path matches your Firebase config setup
 import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
+import PDFUploader from "@native/components/PDFUploader";
 
 // Define your types (if not already defined)
 type OccupantInfo = {
@@ -52,9 +53,10 @@ const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSave
         }));
     };
 
-      const validInput = () => {
-        return unit.unitId != "" && unit.size != "" && unit.condoFees.monthlyFee != "";
-      }
+    const validInput = () => {
+      return unit.unitId != "" && unit.size != "" && unit.condoFees.monthlyFee != "";
+    }
+
     const saveCondoUnit = async () => {
         if(!validInput()){
           alert('Invalid unit information!');
@@ -159,7 +161,7 @@ const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSave
             </View>
             </ScrollView>
         <View style = {styles.addUnitBtn}>
-            <Button title="Save Condo Unit" onPress={saveCondoUnit} />
+          <Button title="Save Condo Unit" onPress={saveCondoUnit} />
         </View>
         </SafeAreaView>
 
