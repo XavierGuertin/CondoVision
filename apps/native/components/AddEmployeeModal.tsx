@@ -14,8 +14,9 @@ import {
 } from 'react-native';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import DropDownPicker from "react-native-dropdown-picker";
+import {useNavigation} from "@react-navigation/native";
 
-export const EmployeeList = ({propertyId}) => {
+export const AddEmployeeModal = (props) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,6 +29,8 @@ export const EmployeeList = ({propertyId}) => {
     const [open, setOpen] = useState(false);
     const show = () => setVisible(true);
     const hide = () => setVisible(false);
+
+    const navigation = useNavigation();
 
     const handleRegistration = async () => {
         async function returnRole(uid: string) {
@@ -52,10 +55,11 @@ export const EmployeeList = ({propertyId}) => {
                 job: job,
             });
 
-            await addDoc(collection(db, `properties/${propertyId}/Employees`), {
-                user: doc(db, "users", user.uid)
+            await addDoc(collection(db, `properties/${props.propertyId}/Employees`), {
+                user: doc(db, "users", user.uid),
+                email: email,
+                job: job
             })
-
             setConnectionStatus("");
             hide();
             setJob("Janitor");
@@ -63,7 +67,7 @@ export const EmployeeList = ({propertyId}) => {
             setPassword('');
             setPasswordVisible(false);
             setError("");
-            //navigation.navigate('UserProfile');
+            alert("Click on View Employees to view Updated List");
         } catch (error) {
             setConnectionStatus("error");
             setError("Firestore: " + error);
@@ -73,7 +77,7 @@ export const EmployeeList = ({propertyId}) => {
     return (
         <>
             <TouchableOpacity style={[styles.modalButton, styles.modalButtonShow]} onPress={show}>
-                <Text style={styles.modalButtonText}>ADD EMPLOYEES</Text>
+                <Text style={styles.modalButtonText}>ADD EMPLOYEE</Text>
             </TouchableOpacity>
             <Modal transparent={true} visible={visible} animationType={"fade"} onRequestClose={hide}>
                 <SafeAreaView style={[styles.centeredContent, styles.backGround]}>
@@ -113,7 +117,7 @@ export const EmployeeList = ({propertyId}) => {
                                                     value={job}
                                                     style={styles.input}
                                                     setValue={(itemValue) => setJob(itemValue)}
-                                                    items={[{ label: "Janitor", value: "Janitor" }, { label: "Pool Boy/Girl/...", value: "Pool Boy/Girl/..." }, { label: "Chef", value: "Chef"}]}
+                                                    items={[{ label: "Janitor", value: "Janitor" }, { label: "Pool Boy/Girl/...", value: "Pool Boy/Girl/..." }, { label: "Chef", value: "Chef"}, { label: "Finance", value: "Finance"}, { label: "Custodian", value: "Custodian"}]}
                                                 >
                                                 </DropDownPicker>
 
@@ -195,7 +199,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 20,
         overflow: 'hidden',
-        //alignItems: 'center',
     },
     modalButton: {
         backgroundColor: '#2074df',
@@ -203,7 +206,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         alignItems: 'center',
-        //marginTop: 20,
     },
     modalButtonShow: {
         borderRadius: 5,
@@ -276,9 +278,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-    placerholder: {
-
-    },
 })
 
-export default EmployeeList;
+export default AddEmployeeModal;

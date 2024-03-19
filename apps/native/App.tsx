@@ -38,7 +38,7 @@ const App = () => {
       }}
     >
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="PropertyManagement"
         screenOptions={{
           headerShown: false, // This line hides the header globally
         }}
