@@ -155,8 +155,14 @@ const UserProfileScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Log Out</Text>
+      <TouchableOpacity
+        id="logoutButton"
+        style={styles.logoutButton}
+        onPress={handleLogout}
+      >
+        <Text id="logOutButton" style={styles.logoutButtonText}>
+          Log Out
+        </Text>
       </TouchableOpacity>
       <Text id="userProfileLabel" style={styles.title}>
         User Profile
@@ -174,6 +180,7 @@ const UserProfileScreen = ({ navigation }: any) => {
             onPress={pickImageAndUpdateProfile}
           />
           <TextInput
+            id="usernameInput"
             style={styles.input}
             value={userProfile.username}
             onChangeText={(value) =>
@@ -182,6 +189,7 @@ const UserProfileScreen = ({ navigation }: any) => {
             placeholder="Username"
           />
           <TextInput
+            id="phoneNumberInput"
             style={styles.input}
             value={userProfile.phoneNumber}
             onChangeText={(value) =>
@@ -192,18 +200,36 @@ const UserProfileScreen = ({ navigation }: any) => {
             }
             placeholder="Phone Number"
           />
-          <Button title="Save Changes" onPress={handleUpdate} />
-          <Button title="Cancel" onPress={() => setEditMode(false)} />
+          <Button
+            testID="saveBtn"
+            title="Save Changes"
+            onPress={handleUpdate}
+          />
+          <Button
+            testID="cancelBtn"
+            title="Cancel"
+            onPress={() => setEditMode(false)}
+          />
         </>
       ) : (
         <>
-          <Text style={styles.info}>Username: {userProfile.username}</Text>
-          <Text style={styles.info}>Email: {userProfile.email}</Text>
-          <Text style={styles.info}>
+          <Text id="usernameText" style={styles.info}>
+            Username: {userProfile.username}
+          </Text>
+          <Text id="userEmail" style={styles.info}>
+            Email: {userProfile.email}
+          </Text>
+          <Text id="phoneNumberText" style={styles.info}>
             Phone Number: {userProfile.phoneNumber}
           </Text>
-          <Text style={styles.info}>Role: {userProfile.role}</Text>
-          <Button title="Edit Profile" onPress={() => setEditMode(true)} />
+          <Text id="roleText" style={styles.info}>
+            Role: {userProfile.role}
+          </Text>
+          <Button
+            testID="updateBtn"
+            title="Edit Profile"
+            onPress={() => setEditMode(true)}
+          />
         </>
       )}
     </View>
