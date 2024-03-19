@@ -4,49 +4,23 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
 import { Button } from "@native/components/button";
 import { useNavigation } from "@react-navigation/native";
 import PropertyProfileComponent from "../components/PropertyProfileComponent";
-import {auth, db} from "../firebase";
-import {getDocs, collection, query, doc, getDoc} from "firebase/firestore";
+import {db} from "../firebase";
+import {getDocs, collection} from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PropertyAdapter from "@native/components/PropertyAdapter";
 import CondoUnitAdapter from "@native/components/CondoUnitAdapter";
-import {signInWithEmailAndPassword} from "firebase/auth";
 
 const CondoProfileScreen = () => {
   const navigation = useNavigation();
 
   const [ownedProperties, setOwnedProperties] = useState<Object[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(true);
-
-  async function returnRole(uid: string) {
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      return docSnap.data().role;
-    } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
-      return "notFound";
-    }
-  }
-
-  useEffect(() => {
-    const onLoad = async () => {
-      const signInCredential = await signInWithEmailAndPassword(auth, "louis@owner.com", "111222");
-      await AsyncStorage.setItem('userUID', signInCredential.user.uid);
-      await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
-    }
-
-    onLoad();
-  })
 
   useEffect(() => {
     const fetchData = async () => {
