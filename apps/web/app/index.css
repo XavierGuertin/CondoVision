@@ -193,5 +193,22 @@ textarea {
 }
 
 .notification-box .content {
-    padding-right: 80px; /* Add padding to prevent content overlap with the button */
+    padding-right: 0;
+}
+
+.badge {
+    position: absolute;
+    display: inline-block;
+    min-width: 10px;
+    margin-left: -20px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 10px;
+    background-color: #f44336;
 }
