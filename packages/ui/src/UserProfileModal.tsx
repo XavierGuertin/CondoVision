@@ -153,23 +153,6 @@ const UserProfileModal = ({ user, onClose }: any) => {
             setResponseMessage({success: false, message: "Failed to log out"});
     };
 
-    async function urlToFile(imageUrl: string | URL | Request, filename: string, mimeType: undefined) {
-        const response = await fetch(imageUrl);
-        const data = await response.blob();
-        const metadata = { type: mimeType || data.type };
-        return new File([data], filename, metadata);
-    }
-
-    useEffect(() => {
-        urlToFile(imageUrl, 'profilePicture.jpg', undefined)
-            .then(file => {
-                setFile(file);
-            })
-            .catch(error => {
-                console.error("Error converting URL to File: ", error);
-            });
-    }, [imageUrl]);
-
     return (
         <div
             className="fixed right-0 top-10 bottom-10 mt-20 w-1/4 max-sm:w-3/4 xs:w-3/4 sm:w-1/3 md:w-1/4 lg:w-1/5 bg-white p-6 overflow-auto rounded-lg shadow-xl transition-all duration-500 delay-200 transform translate-x-full ease-out transition-medium m-4 border-black border-2"
@@ -205,9 +188,6 @@ const UserProfileModal = ({ user, onClose }: any) => {
                                         setNewProfilePicture(true);
                                     }}
                                 />
-                            </div>
-                            <div className="text-center">
-                                <b>Drag & Drop or Click</b>
                             </div>
                         </div>
                         :
