@@ -4,16 +4,27 @@ import {auth} from "@web/firebase";
 import {dashNavLinks} from "./constants";
 import Image from "next/image";
 import UserProfileModal from './UserProfileModal';
+import NotificationsModal from "./NotificationsModal";
 
 const DashboardNav = () => {
     const [active, setActive] = useState("Dashboard");
     const [lastActive, setLastActive] = useState("Dashboard");
     const [authUser] = useAuthState(auth);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpenUser, setIsModalOpenUser] = useState(false);
+    const [isModalOpenNotifications, setIsModalOpenNotifications] = useState(false);
 
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-        if (!isModalOpen) {
+    const toggleModalUser = () => {
+        setIsModalOpenUser(!isModalOpenUser);
+        if (!isModalOpenUser) {
+            setLastActive(active);
+        } else {
+            setActive(lastActive);
+        }
+    };
+
+    const toggleModalNotifications = () => {
+        setIsModalOpenNotifications(!isModalOpenNotifications);
+        if (!isModalOpenNotifications) {
             setLastActive(active);
         } else {
             setActive(lastActive);
@@ -41,11 +52,14 @@ const DashboardNav = () => {
                         onClick={() => {
                             setActive(nav.title);
                             if (nav.id === 'userProfile') {
-                                toggleModal();
+                                toggleModalUser();
+                            }
+                            if (nav.id === 'notifications') {
+                                toggleModalNotifications();
                             }
                         }}
                     >
-                        { nav.id === 'userProfile' ?
+                        { nav.id === 'userProfile' || nav.id === 'notifications' ?
                             <a className="flex">
                                 {React.createElement(nav.logo, {size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}`})}
                                 <p className={`flex items-center ${active === nav.title ? 'text-blue-500' : ''}`}>{nav.title}</p>
@@ -60,7 +74,8 @@ const DashboardNav = () => {
                     </li>
                 ))}
             </ul>
-            {isModalOpen && <UserProfileModal user={authUser} onClose={toggleModal} />}
+            {isModalOpenUser && <UserProfileModal user={authUser} onClose={toggleModalUser} />}
+            {isModalOpenNotifications && <NotificationsModal user={authUser} onClose={toggleModalNotifications} />}
         </nav>
     );
 };

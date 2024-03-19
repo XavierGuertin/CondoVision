@@ -19,3 +19,4 @@ web-build/
 /firestore-debug.log
 /ui-debug.log
 /.nyc_output/
+/cypress/screenshots/*
