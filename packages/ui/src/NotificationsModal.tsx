@@ -1,25 +1,28 @@
 import React, {useEffect, useState} from 'react';
 import {IoClose} from 'react-icons/io5'
 import {auth, db} from "@web/firebase";
-import {doc, getDoc} from "firebase/firestore";
-const NotificationsModal = ({user, onClose}: any) => {
+import {doc, getDocs, collection, updateDoc} from "firebase/firestore";
+const NotificationsModal = ({onClose}: any) => {
 
     useEffect(() => {
         const fetchUserProfileAndAuthData = async () => {
             const user = auth.currentUser;
             if (user) {
-                const {uid, email, displayName} = user;
+                const {uid} = user;
 
-                // Get notifications from Firestore
-                const docPath = doc(db, "users", uid).path + "/notifications";
-                const docRef = doc(db, docPath, uid);
-                const notificationSnap = await getDoc(docRef);
-                const notifications = await docRef.get();
+                // Define the path to the notifications sub collection
+                const notificationsCollectionRef = collection(db, "users", uid, "notifications");
 
+                const querySnapshot = await getDocs(notificationsCollectionRef);
 
-                const notificationsRef = firestore.collection('users').doc(uid).collection('notifications');
-                const snapshot = await notificationsRef.get();
-                const notificationsData = notifications.map(doc => doc.data());
+                let notificationsData: any = [];
+
+                querySnapshot.forEach(doc => {
+                    if (!doc.data().markAsRead) {
+                        notificationsData.push({ id: doc.id, ...doc.data() });
+                    }
+                });
+
                 setNotifications(notificationsData);
             }
         };
@@ -28,12 +31,24 @@ const NotificationsModal = ({user, onClose}: any) => {
     }, []);
 
     const [notifications, setNotifications] = useState([
-        { id: 1, category:'Finance', message: 'You haven\'t paid'},
-        { id: 2, category: 'Information', message: 'Garbage one day late' },
+        { id: 1, category:'Notification', message: 'There is no notification at the moment.'}
     ]);
 
-    const markAsRead = (id: number) => {
+    const markAsRead = async (id: number) => {
+        // Filter notifications on the client side
         setNotifications(notifications.filter(notification => notification.id !== id));
+
+        // Get the user's UID
+        const uid = auth.currentUser?.uid;
+        if (!uid) return;
+
+        // Create a reference to the specific notification document
+        const notificationDocRef = doc(db, "users", uid, "notifications", id.toString());
+
+        // Update the document's markAsRead field to true
+        await updateDoc(notificationDocRef, {
+            markAsRead: true
+        });
     };
 
     return (
@@ -51,7 +66,7 @@ const NotificationsModal = ({user, onClose}: any) => {
                 {notifications.map(notification => (
                     <div key={notification.id} className="notification-box">
                         <div className="content">
-                            <p><strong>{notification.category}</strong></p>
+                            <p><strong>{notification.category.toUpperCase()}</strong></p>
                             <p>{notification.message}</p>
                         </div>
                         <button onClick={() => markAsRead(notification.id)} className="px-2 py-1">Mark as read</button>
