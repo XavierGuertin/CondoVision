@@ -28,6 +28,8 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
+    "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.17",
     "expo-document-picker": "^11.10.1",
     "expo-image-picker": "~14.3.2",
