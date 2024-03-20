@@ -51,6 +51,7 @@ const CondoFeeCalculationScreen = () => {
     const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
     const [feePerFt, setFeePerFt] = useState("noFeePerFt");
     const [parkingSpotCount, setParkingSpotCount] = useState(0);
+    const [parkingFee, setParkingFee] = useState(0);
 
     const navigation = useNavigation();
 
@@ -82,6 +83,8 @@ const CondoFeeCalculationScreen = () => {
             
 
         // TODO: fetch parking fee from firebase
+            const parkingFee = 3;
+            setParkingFee(parkingFee);
         };
         fetchData();
         setTimeout(() => {
