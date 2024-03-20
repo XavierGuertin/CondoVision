@@ -9,6 +9,7 @@ import SettingsScreen from "./SettingsScreen";
 import AddCondoProfileScreen from "./AddCondoProfileScreen";
 import CondoUnitDescriptionScreen from "./CondoUnitDescriptionScreen";
 import CondoPaymentFeeStatusAndHistoryScreen from "./CondoPaymentFeeStatusAndHistoryScreen";
+import CondoFeeCalculationScreen from "./CondoFeeCalculationScreen";
 
 export {
   HomeScreen,
@@ -22,4 +23,5 @@ export {
   AddCondoProfileScreen,
   CondoUnitDescriptionScreen,
   CondoPaymentFeeStatusAndHistoryScreen,
+  CondoFeeCalculationScreen,
 };
