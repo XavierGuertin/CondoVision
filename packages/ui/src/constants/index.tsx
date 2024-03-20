@@ -17,7 +17,7 @@ export const navLinks = [
     }
 ];
 
-import { IoSettingsOutline, IoPerson, IoNotifications, IoAnalytics, IoHome } from "react-icons/io5"; 
+import { IoSettingsOutline, IoPerson, IoNotifications, IoAnalytics, IoHome } from "react-icons/io5";
 export const dashNavLinks = [
     {
         id: "dashboard",
@@ -46,6 +46,7 @@ export const dashNavLinks = [
     }
 
 ]
+
 
 export const footerLinks = [
     {
