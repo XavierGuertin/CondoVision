@@ -12,7 +12,7 @@ import { Button } from "@native/components/button";
 import { useNavigation } from "@react-navigation/native";
 import PropertyProfileComponent from "../components/PropertyProfileComponent";
 import { db } from "../firebase";
-import { getDocs, collection, query } from "firebase/firestore";
+import { getDocs, collection, query, where } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PropertyAdapter from "@native/components/PropertyAdapter";
 import CondoUnitAdapter from "@native/components/CondoUnitAdapter";
@@ -27,8 +27,9 @@ const CondoProfileScreen = () => {
     const fetchData = async () => {
       const propertyList: Object[] = [];
       try {
+        const userUID = await AsyncStorage.getItem("userUID");
         const propertiesCollectionSnapshot = await getDocs(
-          collection(db, "properties")
+          query(collection(db, "properties"), where("owner", "==", userUID))
         );
 
         propertiesCollectionSnapshot.forEach(async (propertyDoc) => {
@@ -36,35 +37,30 @@ const CondoProfileScreen = () => {
           const condoUnitsSnapshot = await getDocs(
             collection(db, "properties", propertyDoc.id, "condoUnits")
           );
-          const userUID = await AsyncStorage.getItem("userUID");
-          var stopper = true;
-          var propertyData = propertyDoc.data();
+
+          const propertyData = propertyDoc.data();
 
           condoUnitsSnapshot.forEach((condoUnitDoc) => {
-            var condoData = condoUnitDoc.data();
-            var condoId = condoUnitDoc.id;
+            const condoData = condoUnitDoc.data();
+            const condoId = condoUnitDoc.id;
 
-            if (condoData.owner === userUID && stopper) {
-              const condoUnit = new CondoUnitAdapter(
-                condoId,
-                {
-                  includes: condoData.condoFees.includes,
-                  monthlyFee: condoData.condoFees.monthlyFee,
-                },
-                condoData.lockerId,
-                {
-                  contact: condoData.occupantInfo.contact,
-                  name: condoData.occupantInfo.name,
-                },
-                condoData.owner,
-                condoData.parkingSpotId,
-                condoData.size,
-                condoData.unitId
-              );
-              unitList.push(condoUnit.toJSON());
-              console.log(unitList);
-              stopper = false;
-            }
+            const condoUnit = new CondoUnitAdapter(
+              condoId,
+              {
+                includes: condoData.condoFees.includes,
+                monthlyFee: condoData.condoFees.monthlyFee,
+              },
+              condoData.lockerId,
+              {
+                contact: condoData.occupantInfo.contact,
+                name: condoData.occupantInfo.name,
+              },
+              condoData.owner,
+              condoData.parkingSpotId,
+              condoData.size,
+              condoData.unitId
+            );
+            unitList.push(condoUnit.toJSON());
           });
           if (propertyData.owner === userUID) {
             const property = new PropertyAdapter(
@@ -78,6 +74,8 @@ const CondoProfileScreen = () => {
               unitList
             );
             propertyList.push(property.toJSON());
+            console.log("Loaded property:");
+            console.log(property.toJSON());
             setOwnedProperties(propertyList);
           }
         });
@@ -112,7 +110,7 @@ const CondoProfileScreen = () => {
       </ScrollView>
       <View id="addPropertyBtnView" style={styles.addPropertyBtn}>
         <Button
-          text="Register a New Property" 
+          text="Register a New Property"
           onClick={() => navigation.navigate("AddCondoProfileScreen")}
         />
       </View>
