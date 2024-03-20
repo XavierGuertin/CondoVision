@@ -23,7 +23,7 @@ import { db } from "web/firebase";
 const BoldLabelWithValue = ({ label, value }) => (
   <View style={styles.row}>
     <Text style={styles.boldLabel}>{label}</Text>
-    <Text>{value}</Text>
+    <Text>{value} $</Text>
   </View>
 );
 
@@ -33,7 +33,7 @@ const FeeCalculationRow = ({ label, isExpanded, toggle, details }) => (
       <Text style={styles.itemHeaderText}>{label}</Text>
       <View style={styles.itemHeaderValueContainer}>
         <Text style={styles.itemHeaderValue}>
-          {details.value1 * details.value2}
+          {details.value1 * details.value2} $
         </Text>
         <Text style={styles.chevron}>{isExpanded ? "▲" : "▼"}</Text>
       </View>
@@ -41,6 +41,7 @@ const FeeCalculationRow = ({ label, isExpanded, toggle, details }) => (
     {isExpanded && (
       <View style={styles.itemDetails}>
         <BoldLabelWithValue label={details.label1} value={details.value1} />
+        <Text style={styles.multiplySymbol}>x</Text>
         <BoldLabelWithValue label={details.label2} value={details.value2} />
       </View>
     )}
@@ -125,13 +126,13 @@ const CondoFeeCalculationScreen = () => {
           <Text style={styles.header}>Fee Calculation</Text>
           <View style={styles.section}>
             <FeeCalculationRow
-              label="Total Unit Fee ($) = "
+              label="Total Unit Fee= "
               isExpanded={isUnitFeeExpanded}
               toggle={() => setUnitFeeExpanded(!isUnitFeeExpanded)}
               details={{
                 label1: "Condo Dimensions (ft²) = ",
                 value1: condoDimensions,
-                label2: "Fee per ($/ft²) = ",
+                label2: "Fee per sq.ft ($/ft²) = ",
                 value2: feePerFt,
               }}
             />
@@ -144,7 +145,7 @@ const CondoFeeCalculationScreen = () => {
               details={{
                 label1: "Parking Spot(s) = ",
                 value1: parkingSpotCount,
-                label2: "Fee per Parking Spot = ",
+                label2: "Fee per Parking Spot ($/spot) = ",
                 value2: parkingFee,
               }}
             />
@@ -255,6 +256,11 @@ const styles = StyleSheet.create({
   itemDetails: {
     padding: 20,
     backgroundColor: "#F5F5F5",
+  },
+  multiplySymbol: {
+    fontWeight: "bold",
+    fontSize: 18,
+    marginRight: 4,
   },
   row: {
     flexDirection: "row",
