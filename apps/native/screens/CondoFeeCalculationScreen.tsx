@@ -1,91 +1,64 @@
-import { getStorage, ref, uploadBytes, uploadString, getDownloadURL } from 'firebase/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, StyleSheet, Button, TextInput, TouchableOpacity } from 'react-native';
-import { collection, addDoc } from "firebase/firestore";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  ScrollView,
+  View,
+  StyleSheet,
+  Button,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import { db } from "web/firebase";
 
-const BoldLabelWithValue = ({ label, value }) => {
-    return (
-      <View style={styles.row}>
-        <Text style={styles.boldLabel}>{label}</Text>
-        <Text>{value}</Text>
-      </View>
-    );
-};
+const BoldLabelWithValue = ({ label, value }) => (
+    <View style={styles.row}>
+    <Text style={styles.boldLabel}>{label}</Text>
+    <Text>{value}</Text>
+    </View>
+);
 
-const FeeCalculationRow = ({ label, value, isExpanded, toggle, details }) => {
-    return (
-        <View style={styles.itemContainer}>
-          <TouchableOpacity style={styles.itemHeader} onPress={toggle}>
-            <Text style={styles.itemHeaderText}>{label}</Text>
-            <View style={styles.itemHeaderValueContainer}>
-              <Text style={styles.itemHeaderValue}>{value}</Text>
-              <Text style={styles.chevron}>{isExpanded ? '▲' : '▼'}</Text>
-            </View>
-          </TouchableOpacity>
-          {isExpanded && (
-            <View style={styles.itemDetails}>
-              <BoldLabelWithValue label={details.label1} value={details.value1} />
-              <BoldLabelWithValue label={details.label2} value={details.value2} />
-            </View>
-          )}
+const FeeCalculationRow = ({ label, value, isExpanded, toggle, details }) => (
+    <View style={styles.itemContainer}>
+        <TouchableOpacity style={styles.itemHeader} onPress={toggle}>
+        <Text style={styles.itemHeaderText}>{label}</Text>
+        <View style={styles.itemHeaderValueContainer}>
+            <Text style={styles.itemHeaderValue}>{value}</Text>
+            <Text style={styles.chevron}>{isExpanded ? '▲' : '▼'}</Text>
         </View>
-      );
-};
+        </TouchableOpacity>
+        {isExpanded && (
+        <View style={styles.itemDetails}>
+            <BoldLabelWithValue label={details.label1} value={details.value1} />
+            <BoldLabelWithValue label={details.label2} value={details.value2} />
+        </View>
+        )}
+    </View>
+);
   
-const CondoFeeCalculation = () => {
+const CondoFeeCalculationScreen = () => {
+    const [loading, setLoading] = useState(true);
     const [isUnitFeeExpanded, setUnitFeeExpanded] = useState(false);
     const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
-    // const [condoSize, setCondoSize] = useState('');
-    // const [parkingSpots, setParkingSpots] = useState('');
-    // const [feePerSqFt, setFeePerSqFt] = useState('');
-    // const [feePerParkingSpot, setFeePerParkingSpot] = useState('');
-    // const [totalUnitFee, setTotalUnitFee] = useState('');
-    // const [totalParkingFee, setTotalParkingFee] = useState('');
-    // const [grandTotal, setGrandTotal] = useState('');
-  
-    // useEffect(() => {
-    //     // Assuming Firebase is properly initialized
-    //     const db = firebase.firestore();
-  
-    //     // Fetch condo size and parking spots for the owner
-    //     const fetchOwnerDetails = async () => {
-    //         // Replace 'ownerDetails' with your actual collection and document
-    //         const ownerDoc = await db.collection('ownerDetails').doc('currentOwner').get();
-    //         if (ownerDoc.exists) {
-    //         const ownerData = ownerDoc.data();
-    //         setCondoSize(ownerData?.condoSize.toString());
-    //         setParkingSpots(ownerData?.parkingSpots.toString());
-    //         }
-    //     };
-  
-    //     // Fetch fee rates
-    //     const fetchFeeRates = async () => {
-    //         const ratesDoc = await db.collection('rates').doc('current').get();
-    //         if (ratesDoc.exists) {
-    //         const ratesData = ratesDoc.data();
-    //         setFeePerSqFt(ratesData?.feePerSqFt.toString());
-    //         setFeePerParkingSpot(ratesData?.feePerParkingSpot.toString());
-    //         }
-    //     };
-  
-    //     fetchOwnerDetails();
-    //     fetchFeeRates();
-    // }, []);
-  
-    // useEffect(() => {
-    //   // Calculate total unit fee
-    //   const calculatedTotalUnitFee = parseFloat(condoSize) * parseFloat(feePerSqFt);
-    //   setTotalUnitFee(calculatedTotalUnitFee.toFixed(2)); // assuming 2 decimal places
-  
-    //   // Calculate total parking fee
-    //   const calculatedTotalParkingFee = parseInt(parkingSpots, 10) * parseFloat(feePerParkingSpot);
-    //   setTotalParkingFee(calculatedTotalParkingFee.toFixed(2)); // assuming 2 decimal places
-  
-    //   // Calculate grand total
-    //   setGrandTotal((calculatedTotalUnitFee + calculatedTotalParkingFee).toFixed(2)); // assuming 2 decimal places
-    // }, [condoSize, parkingSpots, feePerSqFt, feePerParkingSpot]);
-  
+
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        const fetchData = async () => {
+          // TODO: fetch data from firebase
+        };
+        fetchData();
+      }, []);
+
     return (
       <ScrollView 
         style={styles.container}
@@ -219,4 +192,4 @@ const CondoFeeCalculation = () => {
 });
 
 
-export default CondoFeeCalculation;
+export default CondoFeeCalculationScreen;
