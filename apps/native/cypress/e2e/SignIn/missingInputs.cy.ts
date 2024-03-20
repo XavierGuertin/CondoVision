@@ -5,7 +5,6 @@ describe('Missing Inputs Tests Sign In', () => {
     beforeEach(() => {
         cy.visit('/');
         cy.get("[id=logInButtonHome]").click();
-        cy.get("[id=navigateToSignUp]").click();
     });
 
 
