@@ -40,21 +40,21 @@ export const EmployeeListModal = ({propertyId}) => {
 
     return (
         <>
-            <TouchableOpacity style={[styles.modalButton, styles.modalButtonShow]} onPress={handlePress} >
+            <TouchableOpacity id={"viewEmployeesBtn"} style={[styles.modalButton, styles.modalButtonShow]} onPress={handlePress} >
                 <Text style={styles.modalButtonText}>VIEW EMPLOYEES</Text>
             </TouchableOpacity>
             <Modal transparent={true} visible={visible} animationType={"fade"} onRequestClose={hide}>
                 <SafeAreaView style={[styles.centeredContent, styles.backGround]}>
                     <View style={styles.modal}>
-                        <TouchableOpacity onPress={hide} style={styles.modalButton}>
+                        <TouchableOpacity id={"hideEmployeeListModal"} onPress={hide} style={styles.modalButton}>
                             <FontAwesome5  name="times" solid size={24} color="#fff" />
                         </TouchableOpacity>
-                        <View style={styles.container2}>
+                        <View id={"employeeList"} style={styles.container2}>
                             <FlatList
                                 data={employeeList}
-                                renderItem={({item}) => <View style={styles.employeeView}>
-                                    <Text style={styles.item}>{item.email}</Text>
-                                    <Text style={styles.job}>{item.job}</Text>
+                                renderItem={({item}) => <View id={"employeeView"} style={styles.employeeView}>
+                                    <Text id={"employeeEmail"} style={styles.item}>{item.email}</Text>
+                                    <Text id={"employeeJob"} style={styles.job}>{item.job}</Text>
                                 </View>}
                             />
                         </View>
