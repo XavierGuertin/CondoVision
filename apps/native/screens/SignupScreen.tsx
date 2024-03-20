@@ -33,7 +33,6 @@ const SignupScreen = ({ navigation }: any) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-
             await setDoc(doc(db, "users", user.uid), {
                 email: email,
                 role: role,
