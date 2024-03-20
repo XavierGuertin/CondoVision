@@ -1,6 +1,11 @@
-import React, {useState} from 'react'
-import { collection, getDocs} from "firebase/firestore";
-import {db} from "@native/firebase";
+// EmployeeListModal.js
+// A component for displaying a modal with a list of employees associated with a specific property.
+// It fetches and shows employee details such as email and job from Firestore,
+// and includes an 'AddEmployeeModal' for adding new employees.
+
+import React, { useState } from 'react';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@native/firebase";
 import {
     Modal,
     SafeAreaView,
@@ -13,13 +18,13 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import AddEmployeeModal from "@native/components/AddEmployeeModal";
 
-export const EmployeeListModal = ({propertyId}) => {
-
+export const EmployeeListModal = ({ propertyId }) => {
     const [visible, setVisible] = useState(false);
     const [employeeList, setEmployeeList] = useState([]);
     const show = () => setVisible(true);
     const hide = () => setVisible(false);
 
+    // Fetches employees' data from Firestore and updates the local state.
     const fetchData = async () => {
         const users = [];
         const querySnapshot = await getDocs(collection(db, `properties/${propertyId}/Employees`));
@@ -32,7 +37,8 @@ export const EmployeeListModal = ({propertyId}) => {
         });
         setEmployeeList(users)
     }
-
+    
+    // Handler to fetch data and show the modal.
     const handlePress = async () => {
         await fetchData()
         show()
