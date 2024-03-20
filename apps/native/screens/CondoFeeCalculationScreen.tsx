@@ -49,12 +49,28 @@ const CondoFeeCalculationScreen = () => {
     const [loading, setLoading] = useState(true);
     const [isUnitFeeExpanded, setUnitFeeExpanded] = useState(false);
     const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
+    const [condoDimensions, setCondoDimensions] = useState("noDimensions");
 
     const navigation = useNavigation();
 
     useEffect(() => {
         const fetchData = async () => {
-          // TODO: fetch data from firebase
+        const condoId = await AsyncStorage.getItem("unitId");
+        const propertyId = await AsyncStorage.getItem("propertyId");
+
+        const condoSnapshot = await getDoc(
+            doc(db, "properties", propertyId, "condoUnits", condoId)
+        );
+
+        const data = condoSnapshot.data();
+        const snapshotCondoDimensions: string = data.size;
+
+        setCondoDimensions(snapshotCondoDimensions);
+
+        // TODO: fetch condo dimensions from firebase
+        // TODO: fetch fee per ft² from firebase
+        // TODO: fetch parking spot/unit from firebase
+        // TODO: fetch parking fee from firebase
         };
         fetchData();
         setTimeout(() => {
@@ -86,7 +102,7 @@ const CondoFeeCalculationScreen = () => {
                             value="9 $"
                             isExpanded={isUnitFeeExpanded}
                             toggle={() => setUnitFeeExpanded(!isUnitFeeExpanded)}
-                            details={{ label1: "Condo Dimensions (ft²) = ", value1: "3", label2: "Fee per ($/ft²) = ", value2: "3" }}
+                            details={{ label1: "Condo Dimensions (ft²) = ", value1: condoDimensions , label2: "Fee per ($/ft²) = ", value2: "3" }}
                         />
                     </View>
                     <View style={styles.section}>
