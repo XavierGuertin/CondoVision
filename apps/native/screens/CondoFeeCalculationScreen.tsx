@@ -27,12 +27,12 @@ const BoldLabelWithValue = ({ label, value }) => (
     </View>
 );
 
-const FeeCalculationRow = ({ label, value, isExpanded, toggle, details }) => (
+const FeeCalculationRow = ({ label, isExpanded, toggle, details }) => (
     <View style={styles.itemContainer}>
         <TouchableOpacity style={styles.itemHeader} onPress={toggle}>
         <Text style={styles.itemHeaderText}>{label}</Text>
         <View style={styles.itemHeaderValueContainer}>
-            <Text style={styles.itemHeaderValue}>{value}</Text>
+            <Text style={styles.itemHeaderValue}>{(details.value1 * details.value2)}</Text>
             <Text style={styles.chevron}>{isExpanded ? '▲' : '▼'}</Text>
         </View>
         </TouchableOpacity>
@@ -114,7 +114,6 @@ const CondoFeeCalculationScreen = () => {
                     <View style={styles.section}>
                         <FeeCalculationRow
                             label="Total Unit Fee ($) = "
-                            value="9 $"
                             isExpanded={isUnitFeeExpanded}
                             toggle={() => setUnitFeeExpanded(!isUnitFeeExpanded)}
                             details={{ label1: "Condo Dimensions (ft²) = ", value1: condoDimensions , label2: "Fee per ($/ft²) = ", value2: feePerFt }}
@@ -122,8 +121,7 @@ const CondoFeeCalculationScreen = () => {
                     </View>
                     <View style={styles.section}>
                         <FeeCalculationRow 
-                            label="Parking Spot(s) Fees = " 
-                            value="1 $"
+                            label="Parking Spot(s) Fees = "
                             isExpanded={isParkingFeeExpanded}
                             toggle={() => setParkingFeeExpanded(!isParkingFeeExpanded)}
                             details={{ label1: "Parking Spot(s) = ", value1: parkingSpotCount, label2: "Fee per Parking Spot = ", value2: parkingFee }}
