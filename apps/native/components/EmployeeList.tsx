@@ -15,6 +15,12 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import DropDownPicker from "react-native-dropdown-picker";
 
+
+/**
+ * Component for listing and adding employees to a specific property.
+ * @param {Object} props Component props
+ * @param {string} props.propertyId The ID of the property to add employees to.
+ */
 export const EmployeeList = ({propertyId}) => {
 
     const [email, setEmail] = useState('');
@@ -29,6 +35,10 @@ export const EmployeeList = ({propertyId}) => {
     const show = () => setVisible(true);
     const hide = () => setVisible(false);
 
+
+    /**
+   * Handles the registration of a new employee.
+   */
     const handleRegistration = async () => {
         async function returnRole(uid: string) {
             const docRef = doc(db, "users", uid);
@@ -56,6 +66,7 @@ export const EmployeeList = ({propertyId}) => {
                 user: doc(db, "users", user.uid)
             })
 
+            // Reset form and close modal after successful registration
             setConnectionStatus("");
             hide();
             setJob("Janitor");
@@ -63,7 +74,6 @@ export const EmployeeList = ({propertyId}) => {
             setPassword('');
             setPasswordVisible(false);
             setError("");
-            //navigation.navigate('UserProfile');
         } catch (error) {
             setConnectionStatus("error");
             setError("Firestore: " + error);
@@ -151,6 +161,7 @@ export const EmployeeList = ({propertyId}) => {
     )
 }
 
+// Styles for the component
 const styles = StyleSheet.create({
     backGround: {
         backgroundColor: 'rgba(0,0,0,0.6)'
