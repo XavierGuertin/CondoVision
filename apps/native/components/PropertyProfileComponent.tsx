@@ -12,7 +12,7 @@ import {
   Button,
   Linking
 } from "react-native";
-import EmployeeList from "@native/components/EmployeeList";
+import EmployeeListModal from "@native/components/EmployeeListModal";
 import AddFacilities from "@native/components/AddFacilities";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -109,6 +109,7 @@ export const PropertyProfileComponent = ({
   return (
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
+      id={"propertyProfileComponentToggleBtn"}
       style={styles.container}
     >
       <View style={styles.toggleContainer}>
@@ -179,7 +180,7 @@ export const PropertyProfileComponent = ({
           />
           {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
-            <EmployeeList propertyId={data.id} />
+            <EmployeeListModal propertyId={data.id} />
           </View>
           <View style={styles.detailSection}>
             <AddFacilities propertyId={data.id} />
