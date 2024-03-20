@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {doc, getDoc, setDoc, addDoc, collection} from "firebase/firestore";
+import {doc, setDoc, addDoc, collection} from "firebase/firestore";
 import {auth, db} from "@native/firebase";
 import {createUserWithEmailAndPassword} from "@firebase/auth";
 import {
@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import DropDownPicker from "react-native-dropdown-picker";
-import {useNavigation} from "@react-navigation/native";
 
 export const AddEmployeeModal = (props) => {
 
@@ -27,24 +26,12 @@ export const AddEmployeeModal = (props) => {
     const [errorMessage, setError] = useState("");
     const [visible, setVisible] = useState(false);
     const [open, setOpen] = useState(false);
+    const [consoleOutput, setConsoleOutput] = useState("cov");
+    const handleExit = () => {setConsoleOutput(consoleOutput);}
     const show = () => setVisible(true);
-    const hide = () => setVisible(false);
-
-    const navigation = useNavigation();
+    const hide = () => {setVisible(false);handleExit();};
 
     const handleRegistration = async () => {
-        async function returnRole(uid: string) {
-            const docRef = doc(db, "users", uid);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                console.log("Document data:", docSnap.data());
-                return docSnap.data().role;
-            } else {
-                // docSnap.data() will be undefined in this case
-                return "notFound";
-            }
-        }
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -76,13 +63,13 @@ export const AddEmployeeModal = (props) => {
 
     return (
         <>
-            <TouchableOpacity style={[styles.modalButton, styles.modalButtonShow]} onPress={show}>
+            <TouchableOpacity id={"addEmployeeBtn"} style={[styles.modalButton, styles.modalButtonShow]} onPress={show}>
                 <Text style={styles.modalButtonText}>ADD EMPLOYEE</Text>
             </TouchableOpacity>
             <Modal transparent={true} visible={visible} animationType={"fade"} onRequestClose={hide}>
                 <SafeAreaView style={[styles.centeredContent, styles.backGround]}>
                     <View style={styles.modal}>
-                        <TouchableOpacity onPress={hide} style={styles.modalButton}>
+                        <TouchableOpacity id={"hideAddEmployeeModal"} onPress={hide} style={styles.modalButton}>
                             <FontAwesome5  name="times" solid size={24} color="#fff" />
                         </TouchableOpacity>
                         {
@@ -103,7 +90,7 @@ export const AddEmployeeModal = (props) => {
                                                 <TextInput
                                                     id={'emailSignUp'}
                                                     style={styles.input}
-                                                    placeholder="Email"
+                                                    placeholder="email"
                                                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                                                     value={email}
                                                     onChangeText={setEmail}
@@ -112,6 +99,7 @@ export const AddEmployeeModal = (props) => {
                                                 />
 
                                                 <DropDownPicker
+                                                    testID={"jobDropDownPicker"}
                                                     open={open}
                                                     setOpen={setOpen}
                                                     value={job}
@@ -126,7 +114,7 @@ export const AddEmployeeModal = (props) => {
                                                     <TextInput
                                                         id={'passwordSignUp'}
                                                         style={styles.passwordInput}
-                                                        placeholder="Password"
+                                                        placeholder="password"
                                                         placeholderTextColor={'rgba(0,0,0,0.3)'}
                                                         value={password}
                                                         onChangeText={setPassword}
@@ -134,6 +122,7 @@ export const AddEmployeeModal = (props) => {
                                                         autoCapitalize="none"
                                                     />
                                                     <TouchableOpacity
+                                                        id={"showPasswordBtn"}
                                                         onPress={() => setPasswordVisible(!passwordVisible)}
                                                         style={styles.showButton}
                                                     >
@@ -141,7 +130,7 @@ export const AddEmployeeModal = (props) => {
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
-                                            <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+                                            <TouchableOpacity id={"registerEmployeeBtn"} style={styles.button} onPress={handleRegistration}>
                                                 <Text id={'createAccountButton'} style={styles.buttonText}>Register Employee</Text>
                                             </TouchableOpacity>
                                         </View>

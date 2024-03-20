@@ -109,6 +109,7 @@ export const PropertyProfileComponent = ({
   return (
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
+      id={"propertyProfileComponentToggleBtn"}
       style={styles.container}
     >
       <View style={styles.toggleContainer}>
