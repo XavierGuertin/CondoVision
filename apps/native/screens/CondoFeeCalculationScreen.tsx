@@ -71,38 +71,37 @@ const CondoFeeCalculationScreen = () => {
                 />
             </View>
             { loading ? (
-        <View style ={styles.loading}>
-            <ActivityIndicator size={"large"} />
-        </View>
-    ) : (
-      <ScrollView 
-        style={styles.container}
-        contentContainerStyle={{justifyContent: 'flex-start'}}
-        >
-        <Text style={styles.header}>Fee Calculation</Text>
-        <View style={styles.section}>
-          <FeeCalculationRow
-            label="Total Unit Fee ($) = "
-            value="9 $"
-            isExpanded={isUnitFeeExpanded}
-            toggle={() => setUnitFeeExpanded(!isUnitFeeExpanded)}
-            details={{ label1: "Condo Dimensions (ft²) = ", value1: "3", label2: "Fee per ($/ft²) = ", value2: "3" }}
-          />
-        </View>
-        <View style={styles.section}>
-            <FeeCalculationRow 
-                label="Parking Spot(s) Fees = " 
-                value="1 $"
-                isExpanded={isParkingFeeExpanded}
-                toggle={() => setParkingFeeExpanded(!isParkingFeeExpanded)}
-                details={{ label1: "Parking Spot(s) = ", value1: "3", label2: "Fee per Parking Spot = ", value2: "3" }}
-            />
-        </View>
-        <View style={styles.section}>
-          {/* <Text style={styles.grandTotalText}>TOTAL FEES = {grandTotal}</Text> */}
-          <Text style={styles.grandTotalText}>TOTAL FEES = 64$</Text>
-        </View>
-      </ScrollView>
+                <View style ={styles.loading}>
+                    <ActivityIndicator size={"large"} />
+                </View>
+            ) : (
+                <ScrollView 
+                    style={styles.scrollViewStyle}
+                    contentContainerStyle={{ alignItems: "center", justifyContent: 'flex-start'}}
+                    >
+                    <Text style={styles.header}>Fee Calculation</Text>
+                    <View style={styles.section}>
+                        <FeeCalculationRow
+                            label="Total Unit Fee ($) = "
+                            value="9 $"
+                            isExpanded={isUnitFeeExpanded}
+                            toggle={() => setUnitFeeExpanded(!isUnitFeeExpanded)}
+                            details={{ label1: "Condo Dimensions (ft²) = ", value1: "3", label2: "Fee per ($/ft²) = ", value2: "3" }}
+                        />
+                    </View>
+                    <View style={styles.section}>
+                        <FeeCalculationRow 
+                            label="Parking Spot(s) Fees = " 
+                            value="1 $"
+                            isExpanded={isParkingFeeExpanded}
+                            toggle={() => setParkingFeeExpanded(!isParkingFeeExpanded)}
+                            details={{ label1: "Parking Spot(s) = ", value1: "3", label2: "Fee per Parking Spot = ", value2: "3" }}
+                        />
+                    </View>
+                    <View style={styles.section}>
+                        <Text style={styles.grandTotalText}>TOTAL FEES = 64$</Text>
+                    </View>
+                </ScrollView>
                 )}
       </View>
     );
@@ -112,7 +111,14 @@ const CondoFeeCalculationScreen = () => {
     mainContainer: {
         flex: 1,
         backgroundColor: '#f5f5f5',
-        paddingHorizontal: '5%',
+        flexDirection: "column",
+        paddingBottom: "20%",
+        paddingTop: "20%",
+        width: "100%",
+        height: "100%",
+    },
+    scrollViewStyle: {
+        width: "100%",
     },
     loading: {
         flex: 1,
@@ -125,11 +131,13 @@ const CondoFeeCalculationScreen = () => {
         marginVertical: 20,
     },
     section: {
+        flexDirection: "column",
         backgroundColor: 'white',
+        width: "90%",
         borderRadius: 8,
         padding: 20,
         marginVertical: 10,
-        alignSelf: 'stretch',
+        justifyContent: "center",
     },
     totalText: {
         marginTop: 10,
