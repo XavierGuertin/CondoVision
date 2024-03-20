@@ -1,16 +1,21 @@
 import * as React from "react";
-import {
-    TouchableOpacity,
-    StyleSheet,
-    GestureResponderEvent,
-    Text,
-} from "react-native";
+import { TouchableOpacity, StyleSheet, Text, GestureResponderEvent } from "react-native";
 
+/**
+ * ButtonProps defines the properties for the Button component.
+ * @prop {string} text - The text to display on the button.
+ * @prop {(event: GestureResponderEvent) => void} [onClick] - The function to call when the button is pressed.
+ */
 export interface ButtonProps {
     text: string;
     onClick?: (event: GestureResponderEvent) => void;
 }
 
+/**
+ * A reusable button component for the application.
+ * @param {ButtonProps} props - The properties passed to the Button component.
+ * @returns A custom styled TouchableOpacity component acting as a button.
+ */
 export function Button({ text, onClick }: ButtonProps) {
     return (
         <TouchableOpacity style={styles.button} onPress={onClick}>
@@ -19,6 +24,7 @@ export function Button({ text, onClick }: ButtonProps) {
     );
 }
 
+// Styles for the Button component
 const styles = StyleSheet.create({
     button: {
         maxWidth: 200,
