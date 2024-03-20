@@ -49,7 +49,8 @@ const CondoFeeCalculationScreen = () => {
     const [loading, setLoading] = useState(true);
     const [isUnitFeeExpanded, setUnitFeeExpanded] = useState(false);
     const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
-    const [feePerFt, setFeePerFt] = useState("noFeePerFt");
+    const [condoDimensions, setCondoDimensions] = useState(0);
+    const [feePerFt, setFeePerFt] = useState(0);
     const [parkingSpotCount, setParkingSpotCount] = useState(0);
     const [parkingFee, setParkingFee] = useState(0);
 
@@ -57,40 +58,40 @@ const CondoFeeCalculationScreen = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-        const condoId = await AsyncStorage.getItem("unitId");
-        const propertyId = await AsyncStorage.getItem("propertyId");
+            const condoId = await AsyncStorage.getItem("unitId");
+            const propertyId = await AsyncStorage.getItem("propertyId");
 
-        //fetch unit data
-        const condoSnapshot = await getDoc(
-            doc(db, "properties", propertyId, "condoUnits", condoId)
-        );
-        const unitData = condoSnapshot.data();
+            //fetch unit data
+            const condoSnapshot = await getDoc(
+                doc(db, "properties", propertyId, "condoUnits", condoId)
+            );
+            const unitData = condoSnapshot.data();
 
-        // fetch condo dimension (size) from firebase
-        const snapshotCondoDimensions: string = unitData.size;
-        setCondoDimensions(snapshotCondoDimensions);
+            // Fetch condo dimension (size) from database
+            const snapshotCondoDimensionsString: string = unitData.size;
+            const snapshotCondoDimensions: number = parseInt(snapshotCondoDimensionsString);
+            setCondoDimensions(snapshotCondoDimensions);
 
-            // fetch condo fee per ft² (mothly fee) from database
-            const snapshotFeePerFt: string = unitData.condoFees.monthlyFee;
+            // Fetch condo fee per ft² (mothly fee) from database
+            const snapshotFeePerFtString: string = unitData.condoFees.monthlyFee;
+            const snapshotFeePerFt: number = parseInt(snapshotFeePerFtString);
             setFeePerFt(snapshotFeePerFt);
 
-        // TODO: fetch condo dimensions from firebase
-        // TODO: fetch fee per ft² from firebase
-        // TODO: fetch parking spot/unit from firebase
+            // Fetch parking spot/unit from firebase
             const snapshotParkingSpotId: string = unitData.parkingSpotId;
             //if parking spot is not null or undefined, parkingspotcount is 1, else 0
             setParkingSpotCount(snapshotParkingSpotId === null || snapshotParkingSpotId === undefined || snapshotParkingSpotId === "" ? 0 : 1);
             
 
-        // TODO: fetch parking fee from firebase
-            const parkingFee = 3;
+            // TODO: fetch parking fee from newly created parkingFee field
+            const parkingFee = 4;
             setParkingFee(parkingFee);
         };
         fetchData();
         setTimeout(() => {
             setLoading(false);
           }, 1000);
-      }, []);
+    }, []);
 
     return (
         <View style={styles.mainContainer}>
@@ -136,6 +137,8 @@ const CondoFeeCalculationScreen = () => {
       </View>
     );
   };
+
+
   
   const styles = StyleSheet.create({
     mainContainer: {
