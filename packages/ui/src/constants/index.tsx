@@ -17,7 +17,6 @@ export const dashNavLinks = [
     createDashNavLink("settings", "Settings", IoSettingsOutline),
 ];
 
-
 export const footerLinks = [
     {
         title: "Partners",
