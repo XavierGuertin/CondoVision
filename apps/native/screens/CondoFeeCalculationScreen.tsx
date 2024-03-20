@@ -58,14 +58,16 @@ const CondoFeeCalculationScreen = () => {
         const condoId = await AsyncStorage.getItem("unitId");
         const propertyId = await AsyncStorage.getItem("propertyId");
 
+        //fetch unit data
         const condoSnapshot = await getDoc(
             doc(db, "properties", propertyId, "condoUnits", condoId)
         );
+        const unitData = condoSnapshot.data();
 
-        const data = condoSnapshot.data();
-        const snapshotCondoDimensions: string = data.size;
-
+        // fetch condo dimension (size) from firebase
+        const snapshotCondoDimensions: string = unitData.size;
         setCondoDimensions(snapshotCondoDimensions);
+
 
         // TODO: fetch condo dimensions from firebase
         // TODO: fetch fee per ft² from firebase
