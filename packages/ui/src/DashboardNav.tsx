@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from "react";
-import {useAuthState} from "react-firebase-hooks/auth";
-import {auth, db} from "@web/firebase";
-import {dashNavLinks} from "./constants";
+import React, { useState, useEffect } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, db } from "@web/firebase";
+import { dashNavLinks } from "./constants";
 import Image from "next/image";
 import UserProfileModal from './UserProfileModal';
 import NotificationsModal from "./NotificationsModal";
-import {collection, getDocs} from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 
 const DashboardNav = () => {
     const [active, setActive] = useState("Dashboard");
@@ -16,11 +16,9 @@ const DashboardNav = () => {
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
 
     useEffect(() => {
-        console.log('useEffect is being called');
-
         const fetchNotifications = async () => {
             if (authUser) {
-                const {uid} = authUser;
+                const { uid } = authUser;
 
                 // Define the path to the notifications sub collection
                 const notificationsCollectionRef = collection(db, "users", uid, "notifications");
@@ -31,7 +29,7 @@ const DashboardNav = () => {
 
                 querySnapshot.forEach(doc => {
                     if (!doc.data().markAsRead) {
-                        notificationsData.push({id: doc.id, ...doc.data()});
+                        notificationsData.push({ id: doc.id, ...doc.data() });
                     }
                 });
                 console.log('notificationsData', notificationsData);
@@ -68,16 +66,14 @@ const DashboardNav = () => {
                     alt="CondoVision Logo"
                     width={75}
                     height={75}
-                    className="ml-6 logo"
-
-                />
+                    className="ml-6 logo" />
             </a>
             <ul className="list-none sm:flex hidden justify-end items-center flex-1">
                 {dashNavLinks.map((nav) => (
                     <li
                         key={nav.id}
                         className={`font-poppins font-normal cursor-pointer text-16px ${active === nav.title ? "text-white" : "text-dimWhite"
-                        } mr-10`}
+                            } mr-10`}
                         onClick={() => {
                             setActive(nav.title);
                             if (nav.id === 'userProfile') {
@@ -90,7 +86,7 @@ const DashboardNav = () => {
                     >
                         {nav.id === 'notifications' ?
                             <a className="flex">
-                                {React.createElement(nav.logo, {size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}`})}
+                                {React.createElement(nav.logo, { size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}` })}
                                 <p className={`flex items-center ${active === nav.title ? 'text-blue-500' : ''}`}>{nav.title}</p>
                                 {unreadNotificationsCount > 0 &&
                                     <span className="badge">{unreadNotificationsCount}</span>}
@@ -99,7 +95,7 @@ const DashboardNav = () => {
 
                         {nav.id === 'userProfile' ?
                             <a className="flex">
-                                {React.createElement(nav.logo, {size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}`})}
+                                {React.createElement(nav.logo, { size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}` })}
                                 <p className={`flex items-center ${active === nav.title ? 'text-blue-500' : ''}`}>{nav.title}</p>
                             </a>
                             : null
@@ -107,16 +103,16 @@ const DashboardNav = () => {
 
                         {nav.id != 'userProfile' && nav.id != 'notifications' ?
                             <a href={`/${nav.id}`} className="flex">
-                                {React.createElement(nav.logo, {size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}`})}
+                                {React.createElement(nav.logo, { size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}` })}
                                 <p className={`flex items-center ${active === nav.title ? 'text-blue-500' : ''}`}>{nav.title}</p>
-                            </a>: null
+                            </a> : null
                         }
 
                     </li>
                 ))}
             </ul>
-            {isModalOpenUser && <UserProfileModal user={authUser} onClose={toggleModalUser}/>}
-            {isModalOpenNotifications && <NotificationsModal user={authUser} onClose={toggleModalNotifications}/>}
+            {isModalOpenUser && <UserProfileModal user={authUser} onClose={toggleModalUser} />}
+            {isModalOpenNotifications && <NotificationsModal user={authUser} onClose={toggleModalNotifications} />}
         </nav>
     );
 };
