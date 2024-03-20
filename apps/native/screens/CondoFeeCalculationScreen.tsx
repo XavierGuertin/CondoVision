@@ -123,7 +123,7 @@ const CondoFeeCalculationScreen = () => {
             justifyContent: "flex-start",
           }}
         >
-          <Text style={styles.header}>Fee Calculation</Text>
+          <Text style={styles.header}>Monthlty Fee Calculation</Text>
           <View style={styles.section}>
             <FeeCalculationRow
               label="Total Unit Fee= "
