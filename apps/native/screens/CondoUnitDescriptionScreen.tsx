@@ -93,6 +93,12 @@ export default function CondoUnitDescriptionScreen() {
                     navigation.navigate("CondoPaymentFeeStatusAndHistoryScreen")
                   }
                 />
+                <Button
+                  title="See Calculated Fees"
+                  onPress={() =>
+                    navigation.navigate("CondoFeeCalculationScreen")
+                  }
+                />
               </View>
             </View>
           </>

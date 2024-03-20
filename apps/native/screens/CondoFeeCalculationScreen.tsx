@@ -57,9 +57,16 @@ const CondoFeeCalculationScreen = () => {
           // TODO: fetch data from firebase
         };
         fetchData();
+        setTimeout(() => {
+            setLoading(false);
+          }, 1000);
       }, []);
 
-    return (
+    return loading ? (
+        <View style ={styles.loading}>
+            <ActivityIndicator size={"large"} />
+        </View>
+    ) : (
       <ScrollView 
         style={styles.container}
         contentContainerStyle={{justifyContent: 'flex-start'}}
@@ -97,6 +104,11 @@ const CondoFeeCalculationScreen = () => {
         backgroundColor: '#f5f5f5',
         paddingHorizontal: '5%',
     },
+    loading: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      },
     header: {
         fontSize: 20,
         fontWeight: 'bold',
