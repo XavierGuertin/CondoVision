@@ -1,6 +1,5 @@
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import {
     Image,
@@ -11,10 +10,8 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
-
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {fetchUsername, fetchUserRole} from "@native/components/FirebaseFunctions";
@@ -34,19 +31,16 @@ const LoginScreen = ({ navigation }: any) => {
             await AsyncStorage.setItem('userRole', await fetchUserRole(signInCredential.user.uid));
             const userName = fetchUsername(signInCredential.user.uid);
             setConnectionStatus("success");
-            navigation.navigate('UserProfile');
         } catch (error) {
             setConnectionStatus("error");
             setError("Firestore: " + error);
         }
-
     };
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
-        >
+            style={styles.container}>
             <TouchableWithoutFeedback>
                 <View style={styles.flexibleContainer}>
                     <View style={styles.header}>

@@ -77,9 +77,13 @@ describe('Account Creation Tests', () => {
     //try to create an account with less than 6 characters in the password
     it('less than 6 characters password', () => {
         cy.get('[id=emailSignUp]').type(userEmail);
+        cy.get('[data-testid=roleDropDownPicker]').click();
+        cy.get('[data-testid=roleDropDownPicker]').click();
         cy.get('[id=passwordSignUp]').type("pass");
+        cy.get('[id=showSignupPasswordBtn]').click();
         cy.get('[id=createAccountButton]').click();
         cy.get('[id=SignUpError]').contains('Firestore: FirebaseError: Firebase: Password should be at least 6 characters (auth/weak-password).');
+        cy.get('[id=goBackBtn]').click();
     });
 
     // try to create an account with valid inputs
@@ -95,5 +99,6 @@ describe('Account Creation Tests', () => {
         cy.get('[id=passwordSignUp]').type(userPassword);
         cy.get('[id=createAccountButton]').click();
         cy.get('[id=SignUpError]').contains('Firestore: FirebaseError: Firebase: Error (auth/email-already-in-use).');
+        cy.get('[id=loginInBtn]').click();
     });
 });
