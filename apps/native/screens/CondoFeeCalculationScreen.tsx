@@ -50,6 +50,7 @@ const CondoFeeCalculationScreen = () => {
     const [isUnitFeeExpanded, setUnitFeeExpanded] = useState(false);
     const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
     const [feePerFt, setFeePerFt] = useState("noFeePerFt");
+    const [parkingSpotCount, setParkingSpotCount] = useState(0);
 
     const navigation = useNavigation();
 
@@ -75,6 +76,11 @@ const CondoFeeCalculationScreen = () => {
         // TODO: fetch condo dimensions from firebase
         // TODO: fetch fee per ft² from firebase
         // TODO: fetch parking spot/unit from firebase
+            const snapshotParkingSpotId: string = unitData.parkingSpotId;
+            //if parking spot is not null or undefined, parkingspotcount is 1, else 0
+            setParkingSpotCount(snapshotParkingSpotId === null || snapshotParkingSpotId === undefined || snapshotParkingSpotId === "" ? 0 : 1);
+            
+
         // TODO: fetch parking fee from firebase
         };
         fetchData();
@@ -116,7 +122,7 @@ const CondoFeeCalculationScreen = () => {
                             value="1 $"
                             isExpanded={isParkingFeeExpanded}
                             toggle={() => setParkingFeeExpanded(!isParkingFeeExpanded)}
-                            details={{ label1: "Parking Spot(s) = ", value1: "3", label2: "Fee per Parking Spot = ", value2: "3" }}
+                            details={{ label1: "Parking Spot(s) = ", value1: parkingSpotCount, label2: "Fee per Parking Spot = ", value2: parkingFee }}
                         />
                     </View>
                     <View style={styles.section}>
