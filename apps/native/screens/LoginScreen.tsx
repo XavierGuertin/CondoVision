@@ -17,6 +17,7 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {fetchUsername, fetchUserRole} from "@native/components/FirebaseFunctions";
 
 const LoginScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
@@ -25,40 +26,13 @@ const LoginScreen = ({ navigation }: any) => {
     const [errorMessage, setError] = useState("");
     const [connectionStatus, setConnectionStatus] = useState("");
 
-    async function returnRole(uid: string) {
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            return docSnap.data().role;
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-            return "notFound";
-        }
-    }
-
-    async function returnUsername(uid: string) {
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            return docSnap.data().username;
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-            return "notFound";
-        }
-    }
-
     const handleLogin = async () => {
         // Implement login logic
         try {
             const signInCredential = await signInWithEmailAndPassword(auth, email, password);
             await AsyncStorage.setItem('userUID', signInCredential.user.uid);
-            await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
+            await AsyncStorage.setItem('userRole', await fetchUserRole(signInCredential.user.uid));
+            const userName = fetchUsername(signInCredential.user.uid);
             setConnectionStatus("success");
             navigation.navigate('UserProfile');
         } catch (error) {
@@ -76,7 +50,7 @@ const LoginScreen = ({ navigation }: any) => {
             <TouchableWithoutFeedback>
                 <View style={styles.flexibleContainer}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
+                        <TouchableOpacity id={"goBackHomeBtn"} onPress={() => navigation.goBack()} style={styles.headerIcon}>
                             <FontAwesome5 name="times" solid size={24} color="#000" />
                         </TouchableOpacity>
                         <Text id="loginLabel" style={styles.headerTitle}>Login</Text>
@@ -114,6 +88,7 @@ const LoginScreen = ({ navigation }: any) => {
                                     autoCapitalize="none"
                                 />
                                 <TouchableOpacity
+                                    id={"showLoginPasswordBtn"}
                                     onPress={() => setPasswordVisible(!passwordVisible)}
                                     style={styles.showButton}
                                 >
@@ -124,7 +99,7 @@ const LoginScreen = ({ navigation }: any) => {
                         <TouchableOpacity style={styles.button} onPress={handleLogin}>
                             <Text id='loginBtn' style={styles.buttonText}>Log In</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { /* Implement forgot password logic */ }}>
+                        <TouchableOpacity id={"forgotPasswordBtn"} onPress={() => { /* Implement forgot password logic */ }}>
                             <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
                         </TouchableOpacity>
                     </View>
