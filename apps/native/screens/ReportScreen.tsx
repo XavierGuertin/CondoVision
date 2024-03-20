@@ -1,4 +1,3 @@
-import CondoFeeCalculation from '@native/components/CondoFeeCalculation';
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
@@ -6,8 +5,6 @@ const ReportScreen = ({navigation}: any) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Reports</Text>
-            <Text>Reports bruv Hasn't been developed yet</Text>
-            <CondoFeeCalculation />
         </View>
     );
 };
