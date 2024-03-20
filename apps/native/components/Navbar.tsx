@@ -4,6 +4,11 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
+
+/**
+ * Navbar component to navigate across different screens in the app.
+ * It dynamically hides on specified screens to enhance user experience.
+ */
 const Navbar = () => {
   const navigation = useNavigation();
   const navigationState = navigation.getState();
@@ -14,6 +19,8 @@ const Navbar = () => {
   }
 
   const currentRouteName = navigationState.routes[navigationState.index].name;
+
+  // Check if current screen is in the list to hide Navbar
   const hideOnScreens = ["Signup", "Login", "Home"];
   if (hideOnScreens.includes(currentRouteName)) {
     return null;
@@ -43,6 +50,7 @@ const Navbar = () => {
   );
 };
 
+// Styles for the Navbar component
 const styles = StyleSheet.create({
   navbarContainer: {
     flexDirection: "row",
