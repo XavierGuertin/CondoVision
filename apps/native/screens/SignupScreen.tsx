@@ -8,17 +8,14 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
-
 import { auth, db } from '../firebase';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
-import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import {fetchUserRole} from "@native/components/FirebaseFunctions";
 
@@ -33,7 +30,6 @@ const SignupScreen = ({ navigation }: any) => {
     const [open, setOpen] = useState(false);
 
     const handleSignup = async () => {
-
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -42,7 +38,6 @@ const SignupScreen = ({ navigation }: any) => {
                 email: email,
                 role: role,
             });
-
             const signInCredential = await signInWithEmailAndPassword(auth, email, password);
             await AsyncStorage.setItem('userUID', signInCredential.user.uid);
             await AsyncStorage.setItem('userRole', await fetchUserRole(signInCredential.user.uid));

@@ -13,6 +13,7 @@ describe('Sign In Using Existing Account', () => {
     it('Sign In Using Existing Account', () => {
         cy.get('[id=email]').type(existingEmail);
         cy.get('[id=password]').type(userPassword);
+        cy.get('[id=showLoginPasswordBtn]').click();
         cy.get('[id=loginBtn]').click();
         cy.get('[id=userProfileLabel]').should('have.text', 'User Profile');
     });
@@ -31,5 +32,7 @@ describe('Sign In Using Existing Account', () => {
         cy.get('[id=password]').type(invalidPassword);
         cy.get('[id=loginBtn]').click();
         cy.get('[id=SignInError]').contains('Error');
+        cy.get('[id=forgotPasswordBtn]').click();
+        cy.get('[id=goBackHomeBtn]').click();
     });
 });
