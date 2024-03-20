@@ -47,6 +47,12 @@ const condoData = {
   ],
 };
 
+
+
+/**
+ * Displays detailed information about a property including units and PDF files, with functionality to upload new PDFs.
+ * @param {object} props - Component props with default values for data and imageRefs.
+ */
 export const PropertyProfileComponent = ({
   data = condoData,
   imageRefs = [
@@ -60,6 +66,10 @@ export const PropertyProfileComponent = ({
   const [selectedCondoId, setSelectedCondoId] = useState(Number);
   const navigation = useNavigation();
 
+
+  /**
+     * Fetches PDF files associated with the property from Firebase Storage and updates component state.
+     */
   const fetchPDFs = async () => {
     const storage = getStorage();
     const listRef = ref(storage, `properties/${data.id}/pdfs/`);
@@ -67,10 +77,10 @@ export const PropertyProfileComponent = ({
     try {
       const result = await listAll(listRef);
       const filesData = await Promise.all(
-          result.items.map(async (itemRef) => {
-            const url = await getDownloadURL(itemRef);
-            return { name: itemRef.name, url };
-          })
+        result.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return { name: itemRef.name, url };
+        })
       );
       setPdfFiles(filesData);
     } catch (error) {
@@ -91,11 +101,16 @@ export const PropertyProfileComponent = ({
     console.log("Called");
     await AsyncStorage.setItem("unitId", id);
     await AsyncStorage.setItem("propertyId", data.id);
-    setTimeout(() => {}, 500);
+    setTimeout(() => { }, 500);
     console.log("Unit id saved: ", id);
     navigation.navigate("CondoUnitDescriptionScreen");
   };
 
+
+  /**
+   * Handles property form submission to add a new registration key to Firestore.
+   * @param {object} formData - The data collected from the form.
+   */
   const handleFormSubmit = async (formData) => {
     try {
       const docRef = await addDoc(collection(db, "RegistrationKeys"), formData);
@@ -183,9 +198,9 @@ export const PropertyProfileComponent = ({
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>PDF Files:</Text>
             {pdfFiles.map((file, index) => (
-                <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
-                  {file.name}
-                </Text>
+              <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
+                {file.name}
+              </Text>
             ))}
           </View>
           <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
