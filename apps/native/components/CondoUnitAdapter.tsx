@@ -1,3 +1,6 @@
+/**
+ * CondoUnitAdapter adapts condo unit properties into a standardized format.
+ */
 class CondoUnitAdapter {
   private id: string;
   private condoFees: Object;
@@ -28,6 +31,10 @@ class CondoUnitAdapter {
     this.unitId = unitId;
   }
 
+  /**
+   * Serializes the condo unit's properties to a JSON object.
+   * @returns A JSON representation of the condo unit.
+   */
   toJSON = () => {
     return {
       id: this.id,
