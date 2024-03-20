@@ -62,7 +62,15 @@ const CondoFeeCalculationScreen = () => {
           }, 1000);
       }, []);
 
-    return loading ? (
+    return (
+        <View style={styles.mainContainer}>
+            <View style={styles.backButton}>
+                <Button 
+                    title="Back"
+                    onPress={() => navigation.navigate("CondoUnitDescriptionScreen")}
+                />
+            </View>
+            { loading ? (
         <View style ={styles.loading}>
             <ActivityIndicator size={"large"} />
         </View>
@@ -95,11 +103,13 @@ const CondoFeeCalculationScreen = () => {
           <Text style={styles.grandTotalText}>TOTAL FEES = 64$</Text>
         </View>
       </ScrollView>
+                )}
+      </View>
     );
   };
   
   const styles = StyleSheet.create({
-    container: {
+    mainContainer: {
         flex: 1,
         backgroundColor: '#f5f5f5',
         paddingHorizontal: '5%',
@@ -200,6 +210,11 @@ const CondoFeeCalculationScreen = () => {
     },
     value: {
         color: '#333',
+    },
+    backButton: {
+        alignSelf: "flex-start",
+        paddingLeft: 20,
+        marginBottom: 20,
     },
 });
 
