@@ -82,7 +82,9 @@ const styles = StyleSheet.create({
     },
     employeeView: {
         borderTopColor: "gray",
+        borderBottomColor: "gray",
         borderTopWidth: 1,
+        borderBottomWidth: 1,
         alignItems: "center",
         justifyContent: "center"
     },
