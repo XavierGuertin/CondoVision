@@ -1,51 +1,21 @@
+const createNavLink = (id: string, title: string) => ({ id, title });
 export const navLinks = [
-    {
-        id: "home",
-        title: "Home",
-    },
-    {
-        id: "features",
-        title: "Features",
-    },
-    {
-        id: "quote",
-        title: "Quote",
-    },
-    {
-        id: "contact",
-        title: "Contact",
-    }
+    createNavLink("home", "Home"),
+    createNavLink("features", "Features"),
+    createNavLink("quote", "Quote"),
+    createNavLink("contact", "Contact"),
 ];
 
+import { IconBaseProps } from "react-icons";
 import { IoSettingsOutline, IoPerson, IoNotifications, IoAnalytics, IoHome } from "react-icons/io5";
+const createDashNavLink = (id: string, title: string, logo: { (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; }) => ({ id, title, logo });
 export const dashNavLinks = [
-    {
-        id: "dashboard",
-        title: "Dashboard",
-        logo: IoHome
-    },
-    {
-        id: "notifications",
-        title: "Notifications",
-        logo: IoNotifications
-    },
-    {
-        id: "finance",
-        title: "Finance",
-        logo: IoAnalytics
-    },
-    {
-        id: "userProfile",
-        title: "Profile",
-        logo: IoPerson
-    },
-    {
-        id: "settings",
-        title: "Settings",
-        logo: IoSettingsOutline
-    }
-
-]
+    createDashNavLink("dashboard", "Dashboard", IoHome),
+    createDashNavLink("notifications", "Notifications", IoNotifications),
+    createDashNavLink("finance", "Finance", IoAnalytics),
+    createDashNavLink("userProfile", "Profile", IoPerson),
+    createDashNavLink("settings", "Settings", IoSettingsOutline),
+];
 
 
 export const footerLinks = [
