@@ -1,16 +1,17 @@
 'use client';
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase";
-import { DashboardNav, PropertyList, PropertyComponent } from "@ui/index";
+import React, { useEffect, useState } from "react";
 import { db } from "@web/firebase";
 import { getDocs, collection } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
 import CondoUnitAdapter from "../../../native/components/CondoUnitAdapter";
 import PropertyAdapter from "../../../native/components/PropertyAdapter";
+import {
+    DashboardNav,
+    PropertyList,
+    PropertyComponent,
+} from "@ui/index";
 
 
 const Page = () => {
-    const [authUser] = useAuthState(auth);
     const [ownedProperties, setOwnedProperties] = useState<Object[]>([]);
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const [selectedProperty, setSelectedProperty] = useState<Object>();
