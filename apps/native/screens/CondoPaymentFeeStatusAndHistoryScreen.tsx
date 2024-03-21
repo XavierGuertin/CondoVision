@@ -1,6 +1,13 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   Text,
@@ -29,7 +36,9 @@ const CondoPaymentFeeStatusAndHistoryScreen = () => {
       const propertyId = await AsyncStorage.getItem("propertyId");
 
       // Fetch condo unit details to check payment status
-      const condoSnapshot = await getDoc(doc(db, "properties", propertyId, "condoUnits", condoId));
+      const condoSnapshot = await getDoc(
+        doc(db, "properties", propertyId, "condoUnits", condoId)
+      );
       const data = condoSnapshot.data();
       const isSnapshotPayed: boolean = data.condoFees.isPayed;
       setIsPayed(isSnapshotPayed);
@@ -83,6 +92,7 @@ const CondoPaymentFeeStatusAndHistoryScreen = () => {
     <View style={styles.container}>
       <View style={styles.backButton}>
         <Button
+          testID="feeBackBtn"
           title="Back"
           onPress={() => navigation.navigate("CondoUnitDescriptionScreen")}
         />
@@ -91,9 +101,13 @@ const CondoPaymentFeeStatusAndHistoryScreen = () => {
       <View style={styles.statusContainer}>
         <Text style={styles.statusTitle}>Current Status: </Text>
         {isPayed ? (
-          <Text style={styles.paid}>Paid</Text>
+          <Text id="status" style={styles.paid}>
+            Paid
+          </Text>
         ) : (
-          <Text style={styles.notPaid}>Not Paid</Text>
+          <Text id="status" style={styles.notPaid}>
+            Not Paid
+          </Text>
         )}
       </View>
       <View style={styles.contentContainer}>
