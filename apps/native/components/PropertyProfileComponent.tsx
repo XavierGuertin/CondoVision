@@ -3,14 +3,14 @@ import UserPropertyForm from "./UserPropertyForm";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    ScrollView,
-    Button,
-    Linking,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Button,
+  Linking,
 } from "react-native";
 import EmployeeListModal from "@native/components/EmployeeListModal";
 import AddFacilities from "@native/components/AddFacilities";
@@ -106,7 +106,11 @@ export const PropertyProfileComponent = ({
     }
   };
 
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   return (
+
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
       id={"propertyProfileComponentToggleBtn"}
@@ -117,7 +121,9 @@ export const PropertyProfileComponent = ({
           <View style={styles.collapsedInfo}>
             <Image source={imageRefs[0]} style={styles.image} />
             <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>{data.propertyName}</Text>
+              <Text id="propertyTitle" style={styles.infoText}>
+                {data.propertyName}
+              </Text>
             </View>
           </View>
         )}
@@ -163,6 +169,7 @@ export const PropertyProfileComponent = ({
               {data.units.map((unit) => (
                 <View key={unit.id} style={styles.condoProfileContainer}>
                   <Text
+                    id={unit.id}
                     style={styles.condoText}
                     onPress={() => {
                       onCondoClick(unit.id);
@@ -183,14 +190,29 @@ export const PropertyProfileComponent = ({
             <EmployeeListModal propertyId={data.id} />
           </View>
           <View style={styles.detailSection}>
+            <Button
+                title="Book Facility"
+                onPress={() => navigation.navigate('FacilityBookingScreen', {propertyId: data.id,})}/>
+          </View>
+          <View style={styles.detailSection}>
+            <AddFacilities propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>PDF Files:</Text>
             {pdfFiles.map((file, index) => (
-              <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
+              <Text
+                key={index}
+                style={styles.pdfLink}
+                onPress={() => Linking.openURL(file.url)}
+              >
                 {file.name}
               </Text>
             ))}
           </View>
-          <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
+          <TouchableOpacity
+            onPress={handleUploadPDF}
+            style={styles.uploadButton}
+          >
             <Text style={styles.buttonText}>Upload PDF</Text>
           </TouchableOpacity>
         </ScrollView>
