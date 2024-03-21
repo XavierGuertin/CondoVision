@@ -1,7 +1,7 @@
-// PropertyProfileComponent.tsx
-// A component that displays detailed information about a property including unit details and allows uploading of PDF files related to the property.
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import UserPropertyForm from "./UserPropertyForm";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 import {
   View,
   Text,
@@ -12,17 +12,14 @@ import {
   Linking,
   Button
 } from "react-native";
-import { collection, addDoc } from 'firebase/firestore';
-import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import { db } from '../firebase'; // Ensure this path is correct based on your project structure
-import UserPropertyForm from './UserPropertyForm';
-import EmployeeList from '@native/components/EmployeeList';
-import PDFUploader from '@native/components/PDFUploader';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AddFacilities from './AddFacilities';
+import EmployeeListModal from "@native/components/EmployeeListModal";
+import AddFacilities from "@native/components/AddFacilities";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import PDFUploader from "@native/components/PDFUploader";
+import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
 
-// Pre-defined property data, replace with your dynamic data as needed
+// Dummy data for the condo
 const condoData = {
   id: "QWRTRQWNB:LGQ",
   address: "123 Condo Lane, Condo City, CC 12345",
@@ -51,33 +48,19 @@ const condoData = {
   ],
 };
 
-
-
-/**
- * A React component to display and manage property information including an interactive list of units,
- * support for uploading PDF documents associated with the property, and navigation to unit details.
- * 
- * @param {object} props Component props.
- * @param {object} props.data Property data object, defaults to condoData.
- * @param {Array} props.imageRefs Array of image references for the property.
- */
 export const PropertyProfileComponent = ({
-  data = condoData,
-  imageRefs = [
-    require("../../../public/logoWhiteBG.png"), // Adjust the path as necessary
-    require("../../../public/logoBright.png"), // Adjust the path as necessary
-  ],
-}) => {
+ data = condoData,
+ imageRefs = [
+ require("../../../public/logoWhiteBG.png"), // Adjust the path as necessary
+ require("../../../public/logoBright.png"), // Adjust the path as necessary
+ ],
+ }) => {
   const [pdfUrls, setPdfUrls] = useState([]);
   const [pdfFiles, setPdfFiles] = useState([]);
   const [expanded, setExpanded] = useState(false); // State to toggle expanded/collapsed view
   const [selectedCondoId, setSelectedCondoId] = useState(Number);
   const navigation = useNavigation();
 
-
-  /**
-     * Fetches PDF files associated with the property from Firebase Storage and updates component state.
-     */
   const fetchPDFs = async () => {
     const storage = getStorage();
     const listRef = ref(storage, `properties/${data.id}/pdfs/`);
@@ -85,10 +68,10 @@ export const PropertyProfileComponent = ({
     try {
       const result = await listAll(listRef);
       const filesData = await Promise.all(
-        result.items.map(async (itemRef) => {
-          const url = await getDownloadURL(itemRef);
-          return { name: itemRef.name, url };
-        })
+          result.items.map(async (itemRef) => {
+            const url = await getDownloadURL(itemRef);
+            return { name: itemRef.name, url };
+          })
       );
       setPdfFiles(filesData);
     } catch (error) {
@@ -105,25 +88,15 @@ export const PropertyProfileComponent = ({
     PDFUploader.uploadPDF(data.id, data.owner);
   };
 
-  /**
-   * Navigates to the CondoUnitDescriptionScreen for a selected unit.
-   * @param {string} id - The ID of the selected condo unit.
-   */
-
   const onCondoClick = async (id: string) => {
     console.log("Called");
     await AsyncStorage.setItem("unitId", id);
     await AsyncStorage.setItem("propertyId", data.id);
-    setTimeout(() => { }, 500);
+    setTimeout(() => {}, 500);
     console.log("Unit id saved: ", id);
     navigation.navigate("CondoUnitDescriptionScreen");
   };
 
-
-  /**
-   * Handles property form submission to add a new registration key to Firestore.
-   * @param {object} formData - The data collected from the form.
-   */
   const handleFormSubmit = async (formData) => {
     try {
       const docRef = await addDoc(collection(db, "RegistrationKeys"), formData);
@@ -137,102 +110,103 @@ export const PropertyProfileComponent = ({
   // @ts-ignore
   // @ts-ignore
   return (
-    <TouchableOpacity
-      onPress={() => setExpanded(!expanded)}
-      style={styles.container}
-    >
-      <View style={styles.toggleContainer}>
-        {!expanded && (
-          <View style={styles.collapsedInfo}>
-            <Image source={imageRefs[0]} style={styles.image} />
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>{data.propertyName}</Text>
-            </View>
-          </View>
-        )}
-      </View>
-      {expanded && (
-        <ScrollView
-          style={styles.expandedScrollView}
-          contentContainerStyle={styles.expandedContent}
-        >
-          <View style={styles.imageContainer}>
-            {imageRefs.map((image, index) => (
-              <Image key={index} source={image} style={styles.imageExpanded} />
-            ))}
-          </View>
-          <Text style={styles.header}>Condo Details</Text>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Address:</Text>
-            <Text style={styles.infoText}>{data.address}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Locker Count:</Text>
-            <Text style={styles.infoText}>{data.lockerCount}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Owner:</Text>
-            <Text style={styles.infoText}>{data.owner}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Parking Count:</Text>
-            <Text style={styles.infoText}>{data.parkingCount}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Property Name:</Text>
-            <Text style={styles.infoText}>{data.propertyName}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Unit Count:</Text>
-            <Text style={styles.infoText}>{data.unitCount}</Text>
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>Units:</Text>
-            <View style={styles.condoDetailSection}>
-              {data.units.map((unit) => (
-                <View key={unit.id} style={styles.condoProfileContainer}>
-                  <Text
-                    style={styles.condoText}
-                    onPress={() => {
-                      onCondoClick(unit.id);
-                    }}
-                  >
-                    {unit.id}
-                  </Text>
+      <TouchableOpacity
+          onPress={() => setExpanded(!expanded)}
+          id={"propertyProfileComponentToggleBtn"}
+          style={styles.container}
+      >
+        <View style={styles.toggleContainer}>
+          {!expanded && (
+              <View style={styles.collapsedInfo}>
+                <Image source={imageRefs[0]} style={styles.image} />
+                <View style={styles.infoContainer}>
+                  <Text style={styles.infoText}>{data.propertyName}</Text>
                 </View>
-              ))}
-            </View>
-          </View>
-          <UserPropertyForm
-            onFormSubmit={handleFormSubmit}
-            propertyID={data.id}
-          />
-          {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
-          <View style={styles.detailSection}>
-            <EmployeeList propertyId={data.id} />
-          </View>
-          <View style={styles.detailSection}>
-            <Button
-                title="Book Facility"
-                onPress={() => navigation.navigate('FacilityBookingScreen', {propertyId: data.id,})}/>
-          </View>
-          <View style={styles.detailSection}>
-            <AddFacilities propertyId={data.id} />
-          </View>
-          <View style={styles.detailSection}>
-            <Text style={styles.infoTitle}>PDF Files:</Text>
-            {pdfFiles.map((file, index) => (
-              <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
-                {file.name}
-              </Text>
-            ))}
-          </View>
-          <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
-            <Text style={styles.buttonText}>Upload PDF</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      )}
-    </TouchableOpacity>
+              </View>
+          )}
+        </View>
+        {expanded && (
+            <ScrollView
+                style={styles.expandedScrollView}
+                contentContainerStyle={styles.expandedContent}
+            >
+              <View style={styles.imageContainer}>
+                {imageRefs.map((image, index) => (
+                    <Image key={index} source={image} style={styles.imageExpanded} />
+                ))}
+              </View>
+              <Text style={styles.header}>Condo Details</Text>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>Address:</Text>
+                <Text style={styles.infoText}>{data.address}</Text>
+              </View>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>Locker Count:</Text>
+                <Text style={styles.infoText}>{data.lockerCount}</Text>
+              </View>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>Owner:</Text>
+                <Text style={styles.infoText}>{data.owner}</Text>
+              </View>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>Parking Count:</Text>
+                <Text style={styles.infoText}>{data.parkingCount}</Text>
+              </View>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>Property Name:</Text>
+                <Text style={styles.infoText}>{data.propertyName}</Text>
+              </View>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>Unit Count:</Text>
+                <Text style={styles.infoText}>{data.unitCount}</Text>
+              </View>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>Units:</Text>
+                <View style={styles.condoDetailSection}>
+                  {data.units.map((unit) => (
+                      <View key={unit.id} style={styles.condoProfileContainer}>
+                        <Text
+                            style={styles.condoText}
+                            onPress={() => {
+                              onCondoClick(unit.id);
+                            }}
+                        >
+                          {unit.id}
+                        </Text>
+                      </View>
+                  ))}
+                </View>
+              </View>
+              <UserPropertyForm
+                  onFormSubmit={handleFormSubmit}
+                  propertyID={data.id}
+              />
+              {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
+              <View style={styles.detailSection}>
+                <EmployeeListModal propertyId={data.id} />
+              </View>
+              <View style={styles.detailSection}>
+                <Button
+                    title="Book Facility"
+                    onPress={() => navigation.navigate('FacilityBookingScreen', {propertyId: data.id,})}/>
+              </View>
+              <View style={styles.detailSection}>
+                <AddFacilities propertyId={data.id} />
+              </View>
+              <View style={styles.detailSection}>
+                <Text style={styles.infoTitle}>PDF Files:</Text>
+                {pdfFiles.map((file, index) => (
+                    <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
+                      {file.name}
+                    </Text>
+                ))}
+              </View>
+              <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
+                <Text style={styles.buttonText}>Upload PDF</Text>
+              </TouchableOpacity>
+            </ScrollView>
+        )}
+      </TouchableOpacity>
   );
 };
 
