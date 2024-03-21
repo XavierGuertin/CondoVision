@@ -15,7 +15,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { auth, db, storage } from "../firebase";
 
-const UserProfileScreen = ({ navigation }: any) => {
+/**
+ * Screen for displaying and editing the user's profile information,
+ * including uploading a profile picture.
+ */
+const UserProfileScreen = ({ navigation }) => {
   const [userProfile, setUserProfile] = useState({
     email: "",
     username: "",
@@ -31,6 +35,7 @@ const UserProfileScreen = ({ navigation }: any) => {
       const user = auth.currentUser;
       if (user) {
         const { uid, email, displayName, phoneNumber, photoURL } = user;
+        // Attempt to fetch profile image URL; set it if available
         if (photoURL) {
           setImageUrl(photoURL);
         } else {
@@ -81,6 +86,7 @@ const UserProfileScreen = ({ navigation }: any) => {
     fetchUserProfileAndAuthData();
   }, []);
 
+  // Updates the user's profile in Firestore
   const handleUpdate = async () => {
     const userUID = await AsyncStorage.getItem("userUID");
     if (userUID) {
@@ -96,6 +102,7 @@ const UserProfileScreen = ({ navigation }: any) => {
     }
   };
 
+  // Handles user logout
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -107,6 +114,7 @@ const UserProfileScreen = ({ navigation }: any) => {
     }
   };
 
+  // Picks an image from the user's library and updates the profile picture
   const pickImageAndUpdateProfile = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
@@ -121,6 +129,7 @@ const UserProfileScreen = ({ navigation }: any) => {
       quality: 1,
     });
 
+    // Uploads the selected image to Firebase Storage and updates user profile
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0]; // Access the first selected asset
       const uri = asset.uri; // Use the uri from the asset
