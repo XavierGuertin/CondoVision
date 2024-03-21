@@ -10,7 +10,7 @@
             cy.get("[id=homeBtn]").click()
             cy.get("[id=email]").type(testUserEmail, {force: true})
             cy.get("[id=password]").type(testUserPassword, {force: true})
-            cy.get("[id=loginBtn]").click()
+            cy.get("[id=loginBtn]").should('be.visible').click()
             cy.get("[id=propertyManagementBtn]").click()
             cy.get(`[id=propertyTitle]`).contains("mybigPROPERTY").click()
             cy.get(`[id=${testUnitId}]`).click()
