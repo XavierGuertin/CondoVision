@@ -15,7 +15,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { db } from '../firebase';
 import UserPropertyForm from './UserPropertyForm';
-import EmployeeList from '@native/components/EmployeeList';
+import EmployeeListModal from '@native/components/EmployeeListModal';
 import PDFUploader from '@native/components/PDFUploader';
 import { useNavigation } from '@react-navigation/native';
 
@@ -203,7 +203,7 @@ export const PropertyProfileComponent = ({
           />
           {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
-            <EmployeeList propertyId={data.id} />
+            <EmployeeListModal propertyId={data.id} />
           </View>
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>PDF Files:</Text>
