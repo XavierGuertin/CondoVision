@@ -24,9 +24,9 @@ const BoldLabelWithValue = ({ label, value, isMoney }) => (
   <View style={styles.row}>
     <Text style={styles.boldLabel}>{label}</Text>
     {isMoney ? (
-        <Text style={styles.value}>{value} $</Text>
+      <Text style={styles.value}>{value} $</Text>
     ) : (
-        <Text>{value}</Text>
+      <Text>{value}</Text>
     )}
   </View>
 );
@@ -44,9 +44,17 @@ const FeeCalculationRow = ({ label, isExpanded, toggle, details }) => (
     </TouchableOpacity>
     {isExpanded && (
       <View style={styles.itemDetails}>
-        <BoldLabelWithValue label={details.label1} value={details.value1} />
+        <BoldLabelWithValue
+          label={details.label1}
+          value={details.value1}
+          isMoney={false}
+        />
         <Text style={styles.multiplySymbol}>x</Text>
-        <BoldLabelWithValue label={details.label2} value={details.value2} isMoney={true} />
+        <BoldLabelWithValue
+          label={details.label2}
+          value={details.value2}
+          isMoney={true}
+        />
       </View>
     )}
   </View>
@@ -106,24 +114,33 @@ const CondoFeeCalculationScreen = () => {
       // TODO: fetch parking fee from newly created parkingFee field
       const parkingFeePerSpot = 4;
       setParkingFee(parkingFeePerSpot);
-
-      // Calculate & set total condo fees:
-      const totalCondoFees = condoDimensions * feePerFt;
-      setTotalCondoFees(totalCondoFees);
-
-      // Calculate & set total parking fees:
-      const totalParkingFees = parkingSpotCount * parkingFeePerSpot;
-      setTotalParkingFees(totalParkingFees);
-
-      //Calculate and set total fees
-      const totalFees = totalCondoFees + totalParkingFees;
-      setTotalFees(totalFees);
     };
     fetchData();
+  }, []);
+
+  // Calculation of totalCondoFees and totalParkingFees
+  useEffect(() => {
+    // Calculate & set total condo fees:
+    const totalCondoFees = condoDimensions * feePerFt;
+    setTotalCondoFees(totalCondoFees);
+
+    // Calculate & set total parking fees:
+    const totalParkingFees = parkingSpotCount * parkingFeePerSpot;
+    setTotalParkingFees(totalParkingFees);
+  }, [condoDimensions, feePerFt, parkingSpotCount, parkingFeePerSpot]);
+
+  // Calculation of totalFees
+  useEffect(() => {
+    //Calculate and set total fees
+    const totalFees = totalCondoFees + totalParkingFees;
+    setTotalFees(totalFees);
+
+    // Now that all calculations are done, set loading to false afteer a delay
+    // Loading state remains for at least 1 second for better UX
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-  }, []);
+  }, [totalCondoFees, totalCondoFees]);
 
   return (
     <View style={styles.mainContainer}>
@@ -145,7 +162,7 @@ const CondoFeeCalculationScreen = () => {
             justifyContent: "flex-start",
           }}
         >
-          <Text style={styles.header}>Monthlty Fee Calculation</Text>
+          <Text style={styles.header}>Monthly Fee Calculation</Text>
           <View style={styles.section}>
             <FeeCalculationRow
               label="Total Unit Fee= "
@@ -175,7 +192,7 @@ const CondoFeeCalculationScreen = () => {
           {/* TODO: seperate total fees and result */}
           <View style={styles.section}>
             <Text style={styles.grandTotalText}>
-              TOTAL FEES  =  {totalFees} $
+              TOTAL FEES = {totalFees} $
             </Text>
           </View>
         </ScrollView>
