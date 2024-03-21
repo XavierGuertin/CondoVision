@@ -106,7 +106,11 @@ export const PropertyProfileComponent = ({
     }
   };
 
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   return (
+
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
       id={"propertyProfileComponentToggleBtn"}
@@ -184,6 +188,11 @@ export const PropertyProfileComponent = ({
           {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
             <EmployeeListModal propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
+            <Button
+                title="Book Facility"
+                onPress={() => navigation.navigate('FacilityBookingScreen', {propertyId: data.id,})}/>
           </View>
           <View style={styles.detailSection}>
             <AddFacilities propertyId={data.id} />
