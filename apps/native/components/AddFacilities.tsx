@@ -160,31 +160,38 @@ const AddFacilityForm: React.FC<AddFacilityFormProps> = ({ propertyId }) => {
                                 <Text style={styles.label}>Opening Time</Text>
                                 <DropDownPicker
                                     open={dropOpen}
-                                    onOpen={onDropOpen}
-                                    setOpen={setDropOpen}
-                                    value={openTime}
-                                    style={styles.input}
+                                    onOpen={() => {
+                                        setDropClose(false); // Ensure the 'Closing Time' dropdown is closed
+                                        setDropOpen(true);
+                                    }}
                                     setValue={setOpenTime}
+                                    value={openTime}
                                     items={times}
-                                    zIndex={2000}
-                                    zIndexInverse={1000}
-                                >
-                                </DropDownPicker>
+                                    setOpen={setDropOpen}
+                                    setItems={setTimes}
+                                    listMode="MODAL" // This prop makes the dropdown appear over all components
+                                    style={{ ...styles.input, backgroundColor: '#fff' }} // Ensuring the background is white
+                                    dropDownContainerStyle={{ ...styles.dropDownContainerStyle }}
+                                />
+
                             </View>
                             <View style = {styles.fieldView}>
                                 <Text style={styles.label}>Closing Time</Text>
                                 <DropDownPicker
                                     open={dropClose}
-                                    onOpen={onDropClose}
-                                    setOpen={setDropClose}
-                                    value={closeTime}
-                                    style={styles.input}
+                                    onOpen={() => {
+                                        setDropOpen(false); // Ensure the 'Opening Time' dropdown is closed
+                                        setDropClose(true);
+                                    }}
                                     setValue={setCloseTime}
+                                    value={closeTime}
                                     items={times}
-                                    zIndex={1000}
-                                    zIndexInverse={2000}
-                                >
-                                </DropDownPicker>
+                                    setOpen={setDropClose}
+                                    setItems={setTimes}
+                                    listMode="MODAL" // Apply modal prop here as well
+                                    style={{ ...styles.input, backgroundColor: '#fff' }}
+                                    dropDownContainerStyle={{ ...styles.dropDownContainerStyle }}
+                                />
                             </View>
                         </View>
                         <TouchableOpacity style={styles.button} onPress={saveFacility}>
@@ -294,7 +301,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     overflow: 'hidden',
+
   },
+    dropDownContainerStyle: {
+        backgroundColor: '#fff',
+        zIndex: 1000,
+    },
+
 });
 
 export default AddFacilityForm;
