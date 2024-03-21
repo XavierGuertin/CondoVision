@@ -118,6 +118,7 @@ const CondoFeeCalculationScreen = () => {
     <View style={styles.mainContainer}>
       <View style={styles.backButton}>
         <Button
+          testID="feeCalculationBackButton"
           title="Back"
           onPress={() => navigation.navigate("CondoUnitDescriptionScreen")}
         />
@@ -134,8 +135,8 @@ const CondoFeeCalculationScreen = () => {
             justifyContent: "flex-start",
           }}
         >
-          <Text style={styles.header}>Monthly Fee Calculation</Text>
-          <View style={styles.section}>
+          <Text id="feeHeader" style={styles.header}>Monthly Fee Calculation</Text>
+          <View id="condoFeeSection" style={styles.section}>
             <FeeCalculationRow
               label="Total Unit Fee= "
               isExpanded={isUnitFeeExpanded}
@@ -148,7 +149,7 @@ const CondoFeeCalculationScreen = () => {
               }}
             />
           </View>
-          <View style={styles.section}>
+          <View id="parkingFeeSection" style={styles.section}>
             <FeeCalculationRow
               label="Parking Spot(s) Fees = "
               isExpanded={isParkingFeeExpanded}
