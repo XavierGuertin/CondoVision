@@ -98,7 +98,7 @@ export default function CondoUnitDescriptionScreen() {
                   }
                 />
                 <Button
-                  testID="feeCalculationButton"
+                  testID="feeCalculationBtn"
                   title="See Calculated Fees"
                   onPress={() =>
                     navigation.navigate("CondoFeeCalculationScreen")

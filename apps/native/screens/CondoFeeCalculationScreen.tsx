@@ -118,7 +118,7 @@ const CondoFeeCalculationScreen = () => {
     <View style={styles.mainContainer}>
       <View style={styles.backButton}>
         <Button
-          testID="feeCalculationBackButton"
+          testID="feeCalculationBackBtn"
           title="Back"
           onPress={() => navigation.navigate("CondoUnitDescriptionScreen")}
         />
