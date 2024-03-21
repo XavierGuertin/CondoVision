@@ -13,12 +13,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "web/firebase";
 
+/**
+ * Screen to display the description of a condo unit.
+ */
 export default function CondoUnitDescriptionScreen() {
-  const [unit, setUnit] = useState(Object);
-  const [unitId, setUnitId] = useState(String);
-  const [loading, setLoading] = useState(true);
+  const [unit, setUnit] = useState(Object); // Initialize unit state as an empty object
+  const [unitId, setUnitId] = useState(String); // Initialize unitId state as an empty string
+  const [loading, setLoading] = useState(true); // State to track loading status
 
-  const navigation = useNavigation();
+  const navigation = useNavigation(); // Hook to access navigation
 
   useEffect(() => {
     const fetchId = async () => {
@@ -29,16 +32,17 @@ export default function CondoUnitDescriptionScreen() {
         console.log(pid, " ", unid);
         getDoc(doc(db, `properties/${pid}/condoUnits/${unid}`)).then((snap) => {
           console.log(snap.data());
-          setUnit(snap.data());
+          setUnit(snap.data()); // Set unit data
         });
       });
       setTimeout(() => {
-        setLoading(false);
+        setLoading(false); // Set loading to false once data is fetched
       }, 2000);
     };
-    fetchId();
+    fetchId(); // Call fetchId when component mounts
   }, []);
 
+  // Function to compile and return included amenities from condo fees
   const includesText = () => {
     let includesString: string = "";
     unit.condoFees.includes.map(
