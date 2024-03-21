@@ -58,6 +58,7 @@ export default function CondoUnitDescriptionScreen() {
           <>
             <View style={styles.backButtonContainer}>
               <Button
+                testID="backBtn"
                 title="Back"
                 onPress={() => navigation.navigate("PropertyManagement")}
               ></Button>
@@ -71,7 +72,9 @@ export default function CondoUnitDescriptionScreen() {
               </View>
               <View style={styles.unitDescription}>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.title}>{unitId}</Text>
+                  <Text id="title" style={styles.title}>
+                    {unitId}
+                  </Text>
                 </View>
                 <Text style={styles.subtitle}>
                   Included in Condo Fees: {includesText()}
@@ -92,6 +95,7 @@ export default function CondoUnitDescriptionScreen() {
                 <Text style={styles.subtitle}>Size: {unit.size}</Text>
                 <Text style={styles.subtitle}>Unit Id: {unit.unitId}</Text>
                 <Button
+                  testID="feeBtn"
                   title="Fees"
                   onPress={() =>
                     navigation.navigate("CondoPaymentFeeStatusAndHistoryScreen")
