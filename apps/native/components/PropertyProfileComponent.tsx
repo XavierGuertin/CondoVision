@@ -9,8 +9,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Button,
   Linking,
-  Button
 } from "react-native";
 import EmployeeListModal from "@native/components/EmployeeListModal";
 import AddFacilities from "@native/components/AddFacilities";
@@ -49,12 +49,12 @@ const condoData = {
 };
 
 export const PropertyProfileComponent = ({
- data = condoData,
- imageRefs = [
- require("../../../public/logoWhiteBG.png"), // Adjust the path as necessary
- require("../../../public/logoBright.png"), // Adjust the path as necessary
- ],
- }) => {
+  data = condoData,
+  imageRefs = [
+    require("../../../public/logoWhiteBG.png"), // Adjust the path as necessary
+    require("../../../public/logoBright.png"), // Adjust the path as necessary
+  ],
+}) => {
   const [pdfUrls, setPdfUrls] = useState([]);
   const [pdfFiles, setPdfFiles] = useState([]);
   const [expanded, setExpanded] = useState(false); // State to toggle expanded/collapsed view
@@ -68,10 +68,10 @@ export const PropertyProfileComponent = ({
     try {
       const result = await listAll(listRef);
       const filesData = await Promise.all(
-          result.items.map(async (itemRef) => {
-            const url = await getDownloadURL(itemRef);
-            return { name: itemRef.name, url };
-          })
+        result.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return { name: itemRef.name, url };
+        })
       );
       setPdfFiles(filesData);
     } catch (error) {
@@ -110,103 +110,114 @@ export const PropertyProfileComponent = ({
   // @ts-ignore
   // @ts-ignore
   return (
-      <TouchableOpacity
-          onPress={() => setExpanded(!expanded)}
-          id={"propertyProfileComponentToggleBtn"}
-          style={styles.container}
-      >
-        <View style={styles.toggleContainer}>
-          {!expanded && (
-              <View style={styles.collapsedInfo}>
-                <Image source={imageRefs[0]} style={styles.image} />
-                <View style={styles.infoContainer}>
-                  <Text style={styles.infoText}>{data.propertyName}</Text>
-                </View>
-              </View>
-          )}
-        </View>
-        {expanded && (
-            <ScrollView
-                style={styles.expandedScrollView}
-                contentContainerStyle={styles.expandedContent}
-            >
-              <View style={styles.imageContainer}>
-                {imageRefs.map((image, index) => (
-                    <Image key={index} source={image} style={styles.imageExpanded} />
-                ))}
-              </View>
-              <Text style={styles.header}>Condo Details</Text>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>Address:</Text>
-                <Text style={styles.infoText}>{data.address}</Text>
-              </View>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>Locker Count:</Text>
-                <Text style={styles.infoText}>{data.lockerCount}</Text>
-              </View>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>Owner:</Text>
-                <Text style={styles.infoText}>{data.owner}</Text>
-              </View>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>Parking Count:</Text>
-                <Text style={styles.infoText}>{data.parkingCount}</Text>
-              </View>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>Property Name:</Text>
-                <Text style={styles.infoText}>{data.propertyName}</Text>
-              </View>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>Unit Count:</Text>
-                <Text style={styles.infoText}>{data.unitCount}</Text>
-              </View>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>Units:</Text>
-                <View style={styles.condoDetailSection}>
-                  {data.units.map((unit) => (
-                      <View key={unit.id} style={styles.condoProfileContainer}>
-                        <Text
-                            style={styles.condoText}
-                            onPress={() => {
-                              onCondoClick(unit.id);
-                            }}
-                        >
-                          {unit.id}
-                        </Text>
-                      </View>
-                  ))}
-                </View>
-              </View>
-              <UserPropertyForm
-                  onFormSubmit={handleFormSubmit}
-                  propertyID={data.id}
-              />
-              {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
-              <View style={styles.detailSection}>
-                <EmployeeListModal propertyId={data.id} />
-              </View>
-              <View style={styles.detailSection}>
-                <Button
-                    title="Book Facility"
-                    onPress={() => navigation.navigate('FacilityBookingScreen', {propertyId: data.id,})}/>
-              </View>
-              <View style={styles.detailSection}>
-                <AddFacilities propertyId={data.id} />
-              </View>
-              <View style={styles.detailSection}>
-                <Text style={styles.infoTitle}>PDF Files:</Text>
-                {pdfFiles.map((file, index) => (
-                    <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
-                      {file.name}
-                    </Text>
-                ))}
-              </View>
-              <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>
-                <Text style={styles.buttonText}>Upload PDF</Text>
-              </TouchableOpacity>
-            </ScrollView>
+
+    <TouchableOpacity
+      onPress={() => setExpanded(!expanded)}
+      id={"propertyProfileComponentToggleBtn"}
+      style={styles.container}
+    >
+      <View style={styles.toggleContainer}>
+        {!expanded && (
+          <View style={styles.collapsedInfo}>
+            <Image source={imageRefs[0]} style={styles.image} />
+            <View style={styles.infoContainer}>
+              <Text id="propertyTitle" style={styles.infoText}>
+                {data.propertyName}
+              </Text>
+            </View>
+          </View>
         )}
-      </TouchableOpacity>
+      </View>
+      {expanded && (
+        <ScrollView
+          style={styles.expandedScrollView}
+          contentContainerStyle={styles.expandedContent}
+        >
+          <View style={styles.imageContainer}>
+            {imageRefs.map((image, index) => (
+              <Image key={index} source={image} style={styles.imageExpanded} />
+            ))}
+          </View>
+          <Text style={styles.header}>Condo Details</Text>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>Address:</Text>
+            <Text style={styles.infoText}>{data.address}</Text>
+          </View>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>Locker Count:</Text>
+            <Text style={styles.infoText}>{data.lockerCount}</Text>
+          </View>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>Owner:</Text>
+            <Text style={styles.infoText}>{data.owner}</Text>
+          </View>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>Parking Count:</Text>
+            <Text style={styles.infoText}>{data.parkingCount}</Text>
+          </View>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>Property Name:</Text>
+            <Text style={styles.infoText}>{data.propertyName}</Text>
+          </View>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>Unit Count:</Text>
+            <Text style={styles.infoText}>{data.unitCount}</Text>
+          </View>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>Units:</Text>
+            <View style={styles.condoDetailSection}>
+              {data.units.map((unit) => (
+                <View key={unit.id} style={styles.condoProfileContainer}>
+                  <Text
+                    id={unit.id}
+                    style={styles.condoText}
+                    onPress={() => {
+                      onCondoClick(unit.id);
+                    }}
+                  >
+                    {unit.id}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          </View>
+          <UserPropertyForm
+            onFormSubmit={handleFormSubmit}
+            propertyID={data.id}
+          />
+          {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
+          <View style={styles.detailSection}>
+            <EmployeeListModal propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
+            <Button
+                title="Book Facility"
+                onPress={() => navigation.navigate('FacilityBookingScreen', {propertyId: data.id,})}/>
+          </View>
+          <View style={styles.detailSection}>
+            <AddFacilities propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
+            <Text style={styles.infoTitle}>PDF Files:</Text>
+            {pdfFiles.map((file, index) => (
+              <Text
+                key={index}
+                style={styles.pdfLink}
+                onPress={() => Linking.openURL(file.url)}
+              >
+                {file.name}
+              </Text>
+            ))}
+          </View>
+          <TouchableOpacity
+            onPress={handleUploadPDF}
+            style={styles.uploadButton}
+          >
+            <Text style={styles.buttonText}>Upload PDF</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      )}
+    </TouchableOpacity>
   );
 };
 
