@@ -1,13 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   Text,
@@ -18,26 +11,30 @@ import {
 } from "react-native";
 import { db } from "web/firebase";
 
+/**
+ * Displays the payment status and history for a condo unit.
+ */
 const CondoPaymentFeeStatusAndHistoryScreen = () => {
-  const [loading, setLoading] = useState(true);
-  const [isPayed, setIsPayed] = useState(true);
-  const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [isPayed, setIsPayed] = useState(true); // Track if the current fee is paid
+  const [payments, setPayments] = useState([]); // Store payment history
 
-  const navigation = useNavigation();
+  const navigation = useNavigation(); // Navigation hook for routing
+
+  // Fetch data on component mount
   useEffect(() => {
     const fetchData = async () => {
+      // Retrieve stored condo and property IDs
       const condoId = await AsyncStorage.getItem("unitId");
       const propertyId = await AsyncStorage.getItem("propertyId");
 
-      const condoSnapshot = await getDoc(
-        doc(db, "properties", propertyId, "condoUnits", condoId)
-      );
-
+      // Fetch condo unit details to check payment status
+      const condoSnapshot = await getDoc(doc(db, "properties", propertyId, "condoUnits", condoId));
       const data = condoSnapshot.data();
       const isSnapshotPayed: boolean = data.condoFees.isPayed;
-
       setIsPayed(isSnapshotPayed);
 
+      // Fetch payments history
       const paymentsSnapshots = await getDocs(
         query(collection(db, "payments"), where("condoId", "==", condoId))
       );
@@ -66,16 +63,18 @@ const CondoPaymentFeeStatusAndHistoryScreen = () => {
     };
     fetchData();
     setTimeout(() => {
-      setLoading(false);
+      setLoading(false); // Data fetch complete
     }, 1000);
   }, []);
 
+  // Converts timestamp seconds to a human-readable date
   const secondsToDate = (seconds: number) => {
     const date = new Date(seconds * 1000);
     const returnDate = date.toISOString();
     return returnDate.slice(0, returnDate.indexOf("T"));
   };
 
+  // Render loading spinner or content based on loading state
   return loading ? (
     <View style={styles.loading}>
       <ActivityIndicator size={"large"} />
