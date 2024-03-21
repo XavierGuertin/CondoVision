@@ -19,7 +19,7 @@
 
         it("visit condo fee calculation screen, then go back", () => {
             cy.get("[data-testid=feeCalculationBtn]").click({force:true})
-            cy.get("[id=condoFeeCalculationScreen]").contains("Condo Fee Calculation")
+            cy.get("[id=feeHeader]").contains("Monthly Fee Calculation")
             cy.get("[data-testid=feeCalculationBackBtn]").click()
         })
     })
