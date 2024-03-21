@@ -20,10 +20,14 @@ import {
 } from "react-native";
 import { db } from "web/firebase";
 
-const BoldLabelWithValue = ({ label, value }) => (
+const BoldLabelWithValue = ({ label, value, isMoney }) => (
   <View style={styles.row}>
     <Text style={styles.boldLabel}>{label}</Text>
-    <Text>{value} $</Text>
+    {isMoney ? (
+        <Text style={styles.value}>{value} $</Text>
+    ) : (
+        <Text>{value}</Text>
+    )}
   </View>
 );
 
@@ -42,7 +46,7 @@ const FeeCalculationRow = ({ label, isExpanded, toggle, details }) => (
       <View style={styles.itemDetails}>
         <BoldLabelWithValue label={details.label1} value={details.value1} />
         <Text style={styles.multiplySymbol}>x</Text>
-        <BoldLabelWithValue label={details.label2} value={details.value2} />
+        <BoldLabelWithValue label={details.label2} value={details.value2} isMoney={true} />
       </View>
     )}
   </View>
@@ -168,10 +172,10 @@ const CondoFeeCalculationScreen = () => {
               }}
             />
           </View>
-          // TODO: seperate total fees and result
+          {/* TODO: seperate total fees and result */}
           <View style={styles.section}>
             <Text style={styles.grandTotalText}>
-              TOTAL FEES = {totalFees} $
+              TOTAL FEES  =  {totalFees} $
             </Text>
           </View>
         </ScrollView>
