@@ -1,13 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   Text,
@@ -20,17 +13,17 @@ import {
 } from "react-native";
 import { db } from "web/firebase";
 
+// Displays a label with a value. And If `isMoney` is true, appends a dollar sign.
 const BoldLabelWithValue = ({ label, value, isMoney }) => (
   <View style={styles.row}>
     <Text style={styles.boldLabel}>{label}</Text>
-    {isMoney ? (
-      <Text style={styles.value}>{value} $</Text>
-    ) : (
-      <Text>{value}</Text>
-    )}
+    <Text style={isMoney ? styles.value : null}>
+      {value} {isMoney && "$"}
+    </Text>
   </View>
 );
 
+// Displays a Fee row with an expandable section to show details of calculation of it.
 const FeeCalculationRow = ({ label, isExpanded, toggle, details }) => (
   <View style={styles.itemContainer}>
     <TouchableOpacity style={styles.itemHeader} onPress={toggle}>
@@ -60,80 +53,59 @@ const FeeCalculationRow = ({ label, isExpanded, toggle, details }) => (
   </View>
 );
 
+// Main component for calculating and displaying condo fees.
 const CondoFeeCalculationScreen = () => {
   const [loading, setLoading] = useState(true);
   const [isUnitFeeExpanded, setUnitFeeExpanded] = useState(false);
   const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
-
   const [condoDimensions, setCondoDimensions] = useState(0);
   const [feePerFt, setFeePerFt] = useState(0);
-
   const [parkingSpotCount, setParkingSpotCount] = useState(0);
   const [parkingFeePerSpot, setParkingFee] = useState(0);
-
   const [totalCondoFees, setTotalCondoFees] = useState(0);
   const [totalParkingFees, setTotalParkingFees] = useState(0);
   const [totalFees, setTotalFees] = useState(0);
 
   const navigation = useNavigation();
 
+  // Fetches and sets initial data for condo fee calculations.
   useEffect(() => {
     const fetchData = async () => {
       const condoId = await AsyncStorage.getItem("unitId");
       const propertyId = await AsyncStorage.getItem("propertyId");
 
-      //fetch unit data
-      const condoSnapshot = await getDoc(
-        doc(db, "properties", propertyId, "condoUnits", condoId)
-      );
-      const unitData = condoSnapshot.data();
+      if (condoId && propertyId) {
+        //fetch unit data
+        const condoSnapshot = await getDoc(
+          doc(db, "properties", propertyId, "condoUnits", condoId)
+        );
 
-      // Fetch condo dimension (size) from database
-      const snapshotCondoDimensionsString: string = unitData.size;
-      const snapshotCondoDimensions: number = parseInt(
-        snapshotCondoDimensionsString
-      );
-      setCondoDimensions(snapshotCondoDimensions);
+        if (condoSnapshot.exists()) {
+          const unitData = condoSnapshot.data();
 
-      // Fetch condo fee per ft² (mothly fee) from database
-      const snapshotFeePerFtString: string = unitData.condoFees.monthlyFee;
-      const snapshotFeePerFt: number = parseInt(snapshotFeePerFtString);
-      setFeePerFt(snapshotFeePerFt);
-
-      // Fetch parking spot/unit from firebase
-      const snapshotParkingSpotId: string = unitData.parkingSpotId;
-      //if parking spot is not null or undefined, parkingspotcount is 1, else 0
-      setParkingSpotCount(
-        snapshotParkingSpotId === null ||
-          snapshotParkingSpotId === undefined ||
-          snapshotParkingSpotId === ""
-          ? 0
-          : 1
-      );
-
-      // TODO: fetch parking fee from newly created parkingFee field
-      const parkingFeePerSpot = 4;
-      setParkingFee(parkingFeePerSpot);
+          setCondoDimensions(Number(unitData.size) || 0);
+          setFeePerFt(Number(unitData.condoFees.monthlyFee) || 0);
+          // If parking spot is not null or undefined, parkingspotcount is 1, else 0
+          setParkingSpotCount(unitData.parkingSpotId ? 1 : 0);
+          // For now, we just set the parking fee to a fixed value for demonstration.
+          // TODO: fetch parking fee from newly created parkingFee field
+          setParkingFee(4);
+        }
+      }
     };
+
     fetchData();
   }, []);
 
-  // Calculation of totalCondoFees and totalParkingFees
+  // Calculation of totalCondoFees and totalParkingFees when dependencies change
   useEffect(() => {
-    // Calculate & set total condo fees:
-    const totalCondoFees = condoDimensions * feePerFt;
-    setTotalCondoFees(totalCondoFees);
-
-    // Calculate & set total parking fees:
-    const totalParkingFees = parkingSpotCount * parkingFeePerSpot;
-    setTotalParkingFees(totalParkingFees);
+    setTotalCondoFees(condoDimensions * feePerFt);
+    setTotalParkingFees(parkingSpotCount * parkingFeePerSpot);
   }, [condoDimensions, feePerFt, parkingSpotCount, parkingFeePerSpot]);
 
   // Calculation of totalFees
   useEffect(() => {
-    //Calculate and set total fees
-    const totalFees = totalCondoFees + totalParkingFees;
-    setTotalFees(totalFees);
+    setTotalFees(totalCondoFees + totalParkingFees);
 
     // Now that all calculations are done, set loading to false afteer a delay
     // Loading state remains for at least 1 second for better UX
