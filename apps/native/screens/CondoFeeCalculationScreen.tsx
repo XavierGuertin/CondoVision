@@ -52,10 +52,16 @@ const CondoFeeCalculationScreen = () => {
   const [loading, setLoading] = useState(true);
   const [isUnitFeeExpanded, setUnitFeeExpanded] = useState(false);
   const [isParkingFeeExpanded, setParkingFeeExpanded] = useState(false);
+
   const [condoDimensions, setCondoDimensions] = useState(0);
   const [feePerFt, setFeePerFt] = useState(0);
+
   const [parkingSpotCount, setParkingSpotCount] = useState(0);
-  const [parkingFee, setParkingFee] = useState(0);
+  const [parkingFeePerSpot, setParkingFee] = useState(0);
+
+  const [totalCondoFees, setTotalCondoFees] = useState(0);
+  const [totalParkingFees, setTotalParkingFees] = useState(0);
+  const [totalFees, setTotalFees] = useState(0);
 
   const navigation = useNavigation();
 
@@ -94,8 +100,20 @@ const CondoFeeCalculationScreen = () => {
       );
 
       // TODO: fetch parking fee from newly created parkingFee field
-      const parkingFee = 4;
-      setParkingFee(parkingFee);
+      const parkingFeePerSpot = 4;
+      setParkingFee(parkingFeePerSpot);
+
+      // Calculate & set total condo fees:
+      const totalCondoFees = condoDimensions * feePerFt;
+      setTotalCondoFees(totalCondoFees);
+
+      // Calculate & set total parking fees:
+      const totalParkingFees = parkingSpotCount * parkingFeePerSpot;
+      setTotalParkingFees(totalParkingFees);
+
+      //Calculate and set total fees
+      const totalFees = totalCondoFees + totalParkingFees;
+      setTotalFees(totalFees);
     };
     fetchData();
     setTimeout(() => {
@@ -146,12 +164,15 @@ const CondoFeeCalculationScreen = () => {
                 label1: "Parking Spot(s) = ",
                 value1: parkingSpotCount,
                 label2: "Fee per Parking Spot ($/spot) = ",
-                value2: parkingFee,
+                value2: parkingFeePerSpot,
               }}
             />
           </View>
+          // TODO: seperate total fees and result
           <View style={styles.section}>
-            <Text style={styles.grandTotalText}>TOTAL FEES = 64$</Text>
+            <Text style={styles.grandTotalText}>
+              TOTAL FEES = {totalFees} $
+            </Text>
           </View>
         </ScrollView>
       )}
@@ -216,11 +237,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexWrap: "wrap",
     alignItems: "center",
-  },
-  multiplySymbol: {
-    fontWeight: "bold",
-    fontSize: 18,
-    marginRight: 4,
   },
   itemContainer: {
     backgroundColor: "white",
