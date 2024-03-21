@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PDFUploader from "@native/components/PDFUploader";
 import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
+import FacilityBookingScreen from "@native/screens/FacilityBookingScreen";
 
 // Dummy data for the condo
 const condoData = {
@@ -106,6 +107,8 @@ export const PropertyProfileComponent = ({
     }
   };
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <TouchableOpacity
       onPress={() => setExpanded(!expanded)}
@@ -180,6 +183,11 @@ export const PropertyProfileComponent = ({
           {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
             <EmployeeList propertyId={data.id} />
+          </View>
+          <View style={styles.detailSection}>
+            <Button
+                title="Book Facility"
+                onPress={() => navigation.navigate('FacilityBookingScreen', {propertyId: data.id,})}/>
           </View>
           <View style={styles.detailSection}>
             <AddFacilities propertyId={data.id} />

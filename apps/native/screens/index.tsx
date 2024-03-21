@@ -9,7 +9,7 @@ import SettingsScreen from "./SettingsScreen";
 import AddCondoProfileScreen from "./AddCondoProfileScreen";
 import CondoUnitDescriptionScreen from "./CondoUnitDescriptionScreen";
 import CondoPaymentFeeStatusAndHistoryScreen from "./CondoPaymentFeeStatusAndHistoryScreen";
-
+import FacilityBookingScreen from "@native/screens/FacilityBookingScreen";
 export {
   HomeScreen,
   LoginScreen,
@@ -22,4 +22,5 @@ export {
   AddCondoProfileScreen,
   CondoUnitDescriptionScreen,
   CondoPaymentFeeStatusAndHistoryScreen,
+  FacilityBookingScreen
 };
