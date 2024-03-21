@@ -10,7 +10,8 @@ import {
   SettingsScreen,
   AddCondoProfileScreen,
   CondoPaymentFeeStatusAndHistoryScreen,
-  FacilityBookingScreen
+  CondoFeeCalculationScreen,
+  FacilityBookingScreen,
 } from "./screens/index"; // screens
 import React, { useState, useEffect } from "react";
 import {
@@ -68,6 +69,10 @@ const App = () => {
         <Stack.Screen
           name="CondoPaymentFeeStatusAndHistoryScreen"
           component={CondoPaymentFeeStatusAndHistoryScreen}
+        />
+        <Stack.Screen
+          name="CondoFeeCalculationScreen"
+          component={CondoFeeCalculationScreen}
         />
         <Stack.Screen
             name="FacilityBookingScreen"
