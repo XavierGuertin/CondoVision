@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import UserPropertyForm from "./UserPropertyForm";
-import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+// PropertyProfileComponent.tsx
+// A component that displays detailed information about a property including unit details and allows uploading of PDF files related to the property.
+
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,18 +9,20 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Button,
-  Linking
+  Linking,
+  Button
 } from "react-native";
-import EmployeeList from "@native/components/EmployeeList";
-import AddFacilities from "@native/components/AddFacilities";
-import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import PDFUploader from "@native/components/PDFUploader";
-import { getStorage, ref, listAll, getDownloadURL } from "firebase/storage";
-import FacilityBookingScreen from "@native/screens/FacilityBookingScreen";
+import { collection, addDoc } from 'firebase/firestore';
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { db } from '../firebase'; // Ensure this path is correct based on your project structure
+import UserPropertyForm from './UserPropertyForm';
+import EmployeeList from '@native/components/EmployeeList';
+import PDFUploader from '@native/components/PDFUploader';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import AddFacilities from './AddFacilities';
 
-// Dummy data for the condo
+// Pre-defined property data, replace with your dynamic data as needed
 const condoData = {
   id: "QWRTRQWNB:LGQ",
   address: "123 Condo Lane, Condo City, CC 12345",
@@ -49,6 +51,16 @@ const condoData = {
   ],
 };
 
+
+
+/**
+ * A React component to display and manage property information including an interactive list of units,
+ * support for uploading PDF documents associated with the property, and navigation to unit details.
+ * 
+ * @param {object} props Component props.
+ * @param {object} props.data Property data object, defaults to condoData.
+ * @param {Array} props.imageRefs Array of image references for the property.
+ */
 export const PropertyProfileComponent = ({
   data = condoData,
   imageRefs = [
@@ -62,6 +74,10 @@ export const PropertyProfileComponent = ({
   const [selectedCondoId, setSelectedCondoId] = useState(Number);
   const navigation = useNavigation();
 
+
+  /**
+     * Fetches PDF files associated with the property from Firebase Storage and updates component state.
+     */
   const fetchPDFs = async () => {
     const storage = getStorage();
     const listRef = ref(storage, `properties/${data.id}/pdfs/`);
@@ -69,10 +85,10 @@ export const PropertyProfileComponent = ({
     try {
       const result = await listAll(listRef);
       const filesData = await Promise.all(
-          result.items.map(async (itemRef) => {
-            const url = await getDownloadURL(itemRef);
-            return { name: itemRef.name, url };
-          })
+        result.items.map(async (itemRef) => {
+          const url = await getDownloadURL(itemRef);
+          return { name: itemRef.name, url };
+        })
       );
       setPdfFiles(filesData);
     } catch (error) {
@@ -89,15 +105,25 @@ export const PropertyProfileComponent = ({
     PDFUploader.uploadPDF(data.id, data.owner);
   };
 
+  /**
+   * Navigates to the CondoUnitDescriptionScreen for a selected unit.
+   * @param {string} id - The ID of the selected condo unit.
+   */
+
   const onCondoClick = async (id: string) => {
     console.log("Called");
     await AsyncStorage.setItem("unitId", id);
     await AsyncStorage.setItem("propertyId", data.id);
-    setTimeout(() => {}, 500);
+    setTimeout(() => { }, 500);
     console.log("Unit id saved: ", id);
     navigation.navigate("CondoUnitDescriptionScreen");
   };
 
+
+  /**
+   * Handles property form submission to add a new registration key to Firestore.
+   * @param {object} formData - The data collected from the form.
+   */
   const handleFormSubmit = async (formData) => {
     try {
       const docRef = await addDoc(collection(db, "RegistrationKeys"), formData);
@@ -107,6 +133,7 @@ export const PropertyProfileComponent = ({
     }
   };
 
+  // @ts-ignore
   // @ts-ignore
   // @ts-ignore
   return (
@@ -195,9 +222,9 @@ export const PropertyProfileComponent = ({
           <View style={styles.detailSection}>
             <Text style={styles.infoTitle}>PDF Files:</Text>
             {pdfFiles.map((file, index) => (
-                <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
-                  {file.name}
-                </Text>
+              <Text key={index} style={styles.pdfLink} onPress={() => Linking.openURL(file.url)}>
+                {file.name}
+              </Text>
             ))}
           </View>
           <TouchableOpacity onPress={handleUploadPDF} style={styles.uploadButton}>

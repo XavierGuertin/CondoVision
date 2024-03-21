@@ -1,3 +1,8 @@
+// CondoUnitRegistration.js
+// Provides functionality for users to register a condo unit using a registration key.
+// The component retrieves the user's email from local storage or the current Firebase auth session,
+// and validates the provided registration key against Firestore database entries.
+
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { getAuth } from 'firebase/auth';
@@ -9,6 +14,7 @@ const CondoUnitRegistration = () => {
     const [registrationKey, setRegistrationKey] = useState('');
     const [userEmail, setUserEmail] = useState('');
 
+    // Fetches the user's email on component mount, either from AsyncStorage or Firebase Auth
     useEffect(() => {
         const fetchUserEmail = async () => {
             const storedEmail = await AsyncStorage.getItem('userEmail');
@@ -27,6 +33,7 @@ const CondoUnitRegistration = () => {
         fetchUserEmail();
     }, []);
 
+    // Handles the submission of the registration key.
     const handleSubmit = async () => {
         if (!registrationKey || !userEmail) {
         Alert.alert('Error', 'Missing registration key');

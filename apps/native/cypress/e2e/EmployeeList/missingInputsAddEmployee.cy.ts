@@ -2,6 +2,9 @@ import {deleteUser, getAuth, onAuthStateChanged, connectAuthEmulator} from "fire
 import {deleteDoc, doc, getFirestore, connectFirestoreEmulator} from "firebase/firestore";
 import {initializeApp} from "firebase/app";
 
+const testUserEmail = "e2etestuser@gmail.com";
+const testUserPassword= "password";
+
 const firebaseConfig = {
     apiKey: "AIzaSyA0dkvX3tb390kt_2aj8OTNaF60KRQY4jk",
     authDomain: "soen-390-capstone.firebaseapp.com",
@@ -43,7 +46,6 @@ async function createTestUser() {
     }
 }
 
-
 function clearEmulatorData() {
     const options = {
         method: 'DELETE',
@@ -59,46 +61,44 @@ function clearEmulatorData() {
         .catch(error => console.error('Error clearing Firestore:', error));
 }
 
-describe('Account Creation Tests', () => {
-    const userEmail = `testuser@test.com`; // Unique email for each test run
+describe('Missing Inputs Tests Register Employee', () => {
+    const userEmail = `lv2@test.com`; // Unique email for each test run
     const existingEmail = `admin@condovision.com`; // Email that already exists in the database
     const userPassword = 'testPassword'; // Unique password for each test run
 
     beforeEach(() => {
         cy.visit('/');
-        cy.get("[id=logInButtonHome]").click();
-        cy.get("[id=navigateToSignUp]").click();
+        cy.get("[id=homeBtn]").click();
+        cy.get("[id=email]").type(testUserEmail, {force: true});
+        cy.get("[id=password]").type(testUserPassword, {force: true});
+        cy.get("[id=loginBtn]").click();
+        cy.get("[id=propertyManagementBtn]").click();
+        cy.get("[id=propertyView]").children().should('have.length', 1);
+        cy.get("[id=propertyProfileComponentToggleBtn]").first().click();
+        cy.get("[id=viewEmployeesBtn]").click();
+        cy.get("[id=addEmployeeBtn]").click();
     });
 
     before(() => {
         createTestUser();
     });
 
-    //try to create an account with less than 6 characters in the password
-    it('less than 6 characters password', () => {
-        cy.get('[id=emailSignUp]').type(userEmail);
-        cy.get('[data-testid=roleDropDownPicker]').click();
-        cy.get('[data-testid=roleDropDownPicker]').click();
-        cy.get('[id=passwordSignUp]').type("pass");
-        cy.get('[id=showSignupPasswordBtn]').click();
-        cy.get('[id=createAccountButton]').click();
-        cy.get('[id=SignUpError]').contains('Firestore: FirebaseError: Firebase: Password should be at least 6 characters (auth/weak-password).');
-        cy.get('[id=goBackBtn]').click();
-    });
+    it("Register Employee with existing email", () => {
 
-    // try to create an account with valid inputs
-    it('Create account with valid inputs', () => {
-        cy.get('[id=emailSignUp]').type(userEmail);
-        cy.get('[id=passwordSignUp]').type(userPassword);
-        cy.get('[id=createAccountButton]').click();
-    });
+        // Register Employee
+        cy.get("input[placeholder='email']").type(existingEmail, {force: true});
+        cy.get("[data-testid=jobDropDownPicker]").click();
+        cy.get("[data-testid=jobDropDownPicker]").click();
+        cy.get("input[placeholder='password']").type(userPassword, {force: true});
+        cy.get("[id=showPasswordBtn]").click();
+        cy.get("[id=registerEmployeeBtn]").click();
+    })
+    it("less than 6 characters password", () => {
 
-    // try to create an account with an already existing email
-    it('Create account with existing email', () => {
-        cy.get('[id=emailSignUp]').type(existingEmail);
-        cy.get('[id=passwordSignUp]').type(userPassword);
-        cy.get('[id=createAccountButton]').click();
-        cy.get('[id=SignUpError]').contains('Firestore: FirebaseError: Firebase: Error (auth/email-already-in-use).');
-        cy.get('[id=loginInBtn]').click();
-    });
+        // Register Employee
+        cy.get("input[placeholder='email']").type(userEmail, {force: true});
+        cy.get("input[placeholder='password']").type("Pass", {force: true});
+        cy.get("[id=registerEmployeeBtn]").click();
+        cy.get("[id=hideAddEmployeeModal]").click();
+    })
 });

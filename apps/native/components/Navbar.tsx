@@ -1,24 +1,34 @@
-import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/Ionicons";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+// Navbar.js
+// A custom navigation bar component for a React Native application.
+// It dynamically hides on specific screens such as Signup, Login, and Home for enhanced UX.
+
+import React from 'react';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Navbar = () => {
   const navigation = useNavigation();
   const navigationState = navigation.getState();
 
-  // Check if navigationState is defined and has routes
+  // Early return null if navigationState or its routes are undefined.
   if (!navigationState || !navigationState.routes) {
     return null;
   }
 
+  // Determine the current route name.
   const currentRouteName = navigationState.routes[navigationState.index].name;
-  const hideOnScreens = ["Signup", "Login", "Home"];
+
+  // List of screens where the navbar should not be displayed.
+  const hideOnScreens = ['Signup', 'Login', 'Home'];
+
+  // Hide navbar on specified screens.
   if (hideOnScreens.includes(currentRouteName)) {
     return null;
   }
 
+  // Renders navigation bar with buttons to navigate to different screens.
   return (
     <View style={styles.navbarContainer}>
       <TouchableOpacity

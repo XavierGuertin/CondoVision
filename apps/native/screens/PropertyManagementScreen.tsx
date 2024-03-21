@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
@@ -102,7 +101,7 @@ const CondoProfileScreen = () => {
       <ScrollView id="propertyView" style={styles.flexibleContainer}>
         {ownedProperties.length > 0 ? (
           ownedProperties.map((property) => (
-            <PropertyProfileComponent data={property} key={property.id} />
+            <PropertyProfileComponent id="propertyProfileComponent" data={property} key={property.id} />
           ))
         ) : (
           <Text style={styles.noCondosText}>No Condos were found.</Text>

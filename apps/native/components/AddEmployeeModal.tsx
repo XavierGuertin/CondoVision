@@ -1,22 +1,28 @@
-import React, {useState} from 'react'
-import {doc, getDoc, setDoc, addDoc, collection} from "firebase/firestore";
-import {auth, db} from "@native/firebase";
-import {createUserWithEmailAndPassword} from "@firebase/auth";
+// AddEmployeeModal.js
+// This component provides a modal form for adding new employees to the system.
+// It allows setting up basic information such as email, password, and job role for the employee.
+
+import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    SafeAreaView,
-    StyleSheet, Text, TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import DropDownPicker from "react-native-dropdown-picker";
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { auth, db } from '@native/firebase';
+import { createUserWithEmailAndPassword } from '@firebase/auth';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import DropDownPicker from 'react-native-dropdown-picker';
 
-export const EmployeeList = ({propertyId}) => {
-
+export const AddEmployeeModal = (props) => {
+    // State management for form fields and modal visibility.
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const role = "Employee";
@@ -26,36 +32,31 @@ export const EmployeeList = ({propertyId}) => {
     const [errorMessage, setError] = useState("");
     const [visible, setVisible] = useState(false);
     const [open, setOpen] = useState(false);
+    const [consoleOutput, setConsoleOutput] = useState("cov");
+    const handleExit = () => {setConsoleOutput(consoleOutput);}
     const show = () => setVisible(true);
-    const hide = () => setVisible(false);
+    const hide = () => {setVisible(false);handleExit();};
 
     const handleRegistration = async () => {
-        async function returnRole(uid: string) {
-            const docRef = doc(db, "users", uid);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                console.log("Document data:", docSnap.data());
-                return docSnap.data().role;
-            } else {
-                // docSnap.data() will be undefined in this case
-                return "notFound";
-            }
-        }
         try {
+            
+            // Create a new user with email and password.
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
+            // Set user details in 'users' collection.
             await setDoc(doc(db, "users", user.uid), {
                 email: email,
                 role: role,
                 job: job,
             });
 
-            await addDoc(collection(db, `properties/${propertyId}/Employees`), {
-                user: doc(db, "users", user.uid)
+            // Add the employee to the 'Employees' sub-collection under the specified property.
+            await addDoc(collection(db, `properties/${props.propertyId}/Employees`), {
+                user: doc(db, "users", user.uid),
+                email: email,
+                job: job
             })
-
             setConnectionStatus("");
             hide();
             setJob("Janitor");
@@ -63,7 +64,7 @@ export const EmployeeList = ({propertyId}) => {
             setPassword('');
             setPasswordVisible(false);
             setError("");
-            //navigation.navigate('UserProfile');
+            alert("Click on View Employees to view Updated List");
         } catch (error) {
             setConnectionStatus("error");
             setError("Firestore: " + error);
@@ -72,13 +73,13 @@ export const EmployeeList = ({propertyId}) => {
 
     return (
         <>
-            <TouchableOpacity style={[styles.modalButton, styles.modalButtonShow]} onPress={show}>
-                <Text style={styles.modalButtonText}>ADD EMPLOYEES</Text>
+            <TouchableOpacity id={"addEmployeeBtn"} style={[styles.modalButton, styles.modalButtonShow]} onPress={show}>
+                <Text style={styles.modalButtonText}>ADD EMPLOYEE</Text>
             </TouchableOpacity>
             <Modal transparent={true} visible={visible} animationType={"fade"} onRequestClose={hide}>
                 <SafeAreaView style={[styles.centeredContent, styles.backGround]}>
                     <View style={styles.modal}>
-                        <TouchableOpacity onPress={hide} style={styles.modalButton}>
+                        <TouchableOpacity id={"hideAddEmployeeModal"} onPress={hide} style={styles.modalButton}>
                             <FontAwesome5  name="times" solid size={24} color="#fff" />
                         </TouchableOpacity>
                         {
@@ -99,7 +100,7 @@ export const EmployeeList = ({propertyId}) => {
                                                 <TextInput
                                                     id={'emailSignUp'}
                                                     style={styles.input}
-                                                    placeholder="Email"
+                                                    placeholder="email"
                                                     placeholderTextColor={'rgba(0,0,0,0.3)'}
                                                     value={email}
                                                     onChangeText={setEmail}
@@ -108,12 +109,14 @@ export const EmployeeList = ({propertyId}) => {
                                                 />
 
                                                 <DropDownPicker
+                                                    testID={"jobDropDownPicker"}
                                                     open={open}
                                                     setOpen={setOpen}
                                                     value={job}
                                                     style={styles.input}
                                                     setValue={(itemValue) => setJob(itemValue)}
-                                                    items={[{ label: "Janitor", value: "Janitor" }, { label: "Pool Boy/Girl/...", value: "Pool Boy/Girl/..." }, { label: "Chef", value: "Chef"}]}
+                                                    dropDownDirection={"TOP"}
+                                                    items={[{ label: "Janitor", value: "Janitor" }, { label: "Pool Boy/Girl/...", value: "Pool Boy/Girl/..." }, { label: "Chef", value: "Chef"}, { label: "Finance", value: "Finance"}, { label: "Custodian", value: "Custodian"}]}
                                                 >
                                                 </DropDownPicker>
 
@@ -121,7 +124,7 @@ export const EmployeeList = ({propertyId}) => {
                                                     <TextInput
                                                         id={'passwordSignUp'}
                                                         style={styles.passwordInput}
-                                                        placeholder="Password"
+                                                        placeholder="password"
                                                         placeholderTextColor={'rgba(0,0,0,0.3)'}
                                                         value={password}
                                                         onChangeText={setPassword}
@@ -129,6 +132,7 @@ export const EmployeeList = ({propertyId}) => {
                                                         autoCapitalize="none"
                                                     />
                                                     <TouchableOpacity
+                                                        id={"showPasswordBtn"}
                                                         onPress={() => setPasswordVisible(!passwordVisible)}
                                                         style={styles.showButton}
                                                     >
@@ -136,7 +140,7 @@ export const EmployeeList = ({propertyId}) => {
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
-                                            <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+                                            <TouchableOpacity id={"registerEmployeeBtn"} style={styles.button} onPress={handleRegistration}>
                                                 <Text id={'createAccountButton'} style={styles.buttonText}>Register Employee</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -195,7 +199,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 20,
         overflow: 'hidden',
-        //alignItems: 'center',
     },
     modalButton: {
         backgroundColor: '#2074df',
@@ -203,7 +206,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         alignItems: 'center',
-        //marginTop: 20,
     },
     modalButtonShow: {
         borderRadius: 5,
@@ -276,9 +278,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-    placerholder: {
-
-    },
 })
 
-export default EmployeeList;
+export default AddEmployeeModal;
