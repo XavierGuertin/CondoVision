@@ -1,4 +1,4 @@
-// PropertyProfileComponent.js
+// PropertyProfileComponent.tsx
 // A component that displays detailed information about a property including unit details and allows uploading of PDF files related to the property.
 
 import React, { useEffect, useState } from 'react';
