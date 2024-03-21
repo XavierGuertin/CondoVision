@@ -1,19 +1,15 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, db } from "../firebase"; // Ensure this import path matches your Firebase config setup
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
-import PDFUploader from "@native/components/PDFUploader";
+// AddCondoUnitForm.tsx
+// A component for adding new condo units to a specific property in the database.
+// This component leverages Firebase for database operations and includes a PDFUploader for document management.
 
-// Define your types (if not already defined)
+import React, { useState } from 'react';
+import { ScrollView, View, Text, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, db } from '../firebase'; // Adjust this import path according to your Firebase config setup.
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
+import PDFUploader from '@native/components/PDFUploader';
+
+// Type definitions for condo unit and its details.
 type OccupantInfo = {
   name: string;
   contact: string;
@@ -34,44 +30,39 @@ type Unit = {
   lockerId: string;
 };
 
+// Initial state for a new condo unit form.
 const initialUnitState: Unit = {
-  unitId: "",
-  size: "",
-  owner: "",
-  occupantInfo: { name: "", contact: "" },
-  condoFees: { monthlyFee: "", includes: [] },
-  parkingSpotId: "",
-  lockerId: "",
+  unitId: '',
+  size: '',
+  owner: '',
+  occupantInfo: { name: '', contact: '' },
+  condoFees: { monthlyFee: '', includes: [] },
+  parkingSpotId: '',
+  lockerId: '',
 };
 
+// Props definition for the AddCondoUnitForm component.
 type CondoUnitFormProps = {
   propertyId: string;
-  onUnitSaved: () => void; // Add this callback function type
+  onUnitSaved: () => void;
 };
 
-const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({
-  propertyId,
-  onUnitSaved,
-}) => {
+const AddCondoUnitForm: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSaved }) => {
   const [user] = useAuthState(auth);
   const [unit, setUnit] = useState<Unit>(initialUnitState);
 
-  const handleInputChange = <T extends keyof Unit>(
-    field: T,
-    value: Unit[T]
-  ) => {
+  // Handles changes in form inputs, updating the state accordingly.
+  const handleInputChange = <T extends keyof Unit>(field: T, value: Unit[T]) => {
     setUnit((prevUnit) => ({
       ...prevUnit,
       [field]: value,
     }));
   };
 
-  const validInput = () => {
-    return (
-      unit.unitId != "" && unit.size != "" && unit.condoFees.monthlyFee != ""
-    );
-  };
+  // Validates form input to ensure all required fields are filled out.
+  const validInput = () => unit.unitId !== '' && unit.size !== '' && unit.condoFees.monthlyFee !== '';
 
+  // Saves the new condo unit to the database and resets the form upon success.
   const saveCondoUnit = async () => {
     if (!validInput()) {
       alert("Invalid unit information!");

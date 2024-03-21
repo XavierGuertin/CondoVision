@@ -1,75 +1,93 @@
+// UserPropertyForm.js
+// Provides a form for submitting user property information, including email validation and status selection, with the capability to send a registration key to the user.
+
+import React, { useState } from 'react';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 import { db } from '@native/firebase';
 import { addDoc, collection, getDocs, query, setDoc, where } from 'firebase/firestore';
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 
+/**
+ * Validates an email address against a standard pattern.
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} True if the email is valid, false otherwise.
+ */
 const isValidEmail = (email) => {
-    const emailRegex =/^[^\s@]+@[^\s@]+.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
     return emailRegex.test(email);
 }
 
+/**
+ * A form component for registering a property to a user with a specific role.
+ * @param {Object} props - Component props.
+ * @param {Function} props.onFormSubmit - Callback function to handle form submission.
+ * @param {string} props.propertyID - The ID of the property being registered.
+ */
 const UserPropertyForm = ({ onFormSubmit, propertyID }) => {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
 
+    /**
+     * Handles form submission by validating inputs and updating or adding registration key document in Firestore.
+     */
     const handleSubmit = async () => {
-    const key = Math.random().toString(36).substring(2, 9); // Generate a random key
-    if (email && status) {
-        if(!isValidEmail(email)){
-            Alert.alert('Invalid Email', 'Please enter a valid email address');
-            return;
-        }
-        
-        const q = query(collection(db, "RegistrationKeys"), where("email", "==", email), where("propertyID", "==", propertyID));
-        const querySnapshot = await getDocs(q);
-        
-        if(!querySnapshot.empty) {
-            const docRef = querySnapshot.docs[0].ref;
+        // Generate a random key for registration
+        const key = Math.random().toString(36).substring(2, 9);
+        if (email && status) {
+            if (!isValidEmail(email)) {
+                Alert.alert('Invalid Email', 'Please enter a valid email address');
+                return;
+            }
 
-        // Update the existing record
-        await setDoc(docRef, { email, status, key, propertyID, isUsed: false }, { merge: true });
-        Alert.alert('Update Successful', 'Registration Key has been sent');
+            const q = query(collection(db, "RegistrationKeys"), where("email", "==", email), where("propertyID", "==", propertyID));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                const docRef = querySnapshot.docs[0].ref;
+
+                // Update the existing record
+                await setDoc(docRef, { email, status, key, propertyID, isUsed: false }, { merge: true });
+                Alert.alert('Update Successful', 'Registration Key has been sent');
+            } else {
+                // Add a new record if no duplicate is found
+                await addDoc(collection(db, "RegistrationKeys"), { email, status, key, propertyID, isUsed: false });
+                Alert.alert('Submission Successful', 'Registration Key has been sent');
+            }
         } else {
-            // Add a new record if no duplicate is found
-            await addDoc(collection(db, "RegistrationKeys"), { email, status, key, propertyID, isUsed: false });
-            Alert.alert('Submission Successful', 'Registration Key has been sent');
-        } 
-    } else {
-        Alert.alert('Please fill in all fields.');
-    }
-  };
+            Alert.alert('Please fill in all fields.');
+        }
+    };
 
-  return (
-    <View style={styles.container}>
-        <TextInput
-            style={styles.input}
-            placeholder="Enter user's email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-        />
-        <RNPickerSelect
-            onValueChange={(value) => setStatus(value)}
-            items={[
-            { label: 'Owner', value: 'owner' },
-            { label: 'Renter', value: 'renter' },
-            ]}
-            placeholder={{
-            label: 'Select user status...',
-            value: null,
-            }}
-            style={{ ...pickerSelectStyles }}
-            value={status}
-        />
-        <TouchableOpacity
-            onPress={ handleSubmit }
-            style={styles.uploadButton}
-        >
-            <Text style={styles.buttonText}>Send Registration Key</Text>
-        </TouchableOpacity>
-    </View>
-  );
+    return (
+        <View style={styles.container}>
+            <TextInput
+                style={styles.input}
+                placeholder="Enter user's email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+            />
+            <RNPickerSelect
+                onValueChange={(value) => setStatus(value)}
+                items={[
+                    { label: 'Owner', value: 'owner' },
+                    { label: 'Renter', value: 'renter' },
+                ]}
+                placeholder={{
+                    label: 'Select user status...',
+                    value: null,
+                }}
+                style={{ ...pickerSelectStyles }}
+                value={status}
+            />
+            <TouchableOpacity
+                onPress={handleSubmit}
+                style={styles.uploadButton}
+            >
+                <Text style={styles.buttonText}>Send Registration Key</Text>
+            </TouchableOpacity>
+        </View>
+    );
 };
 
 const textSize = 20;
@@ -100,7 +118,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
     },
-        image: {
+    image: {
         width: "100%",
         height: 80,
         borderRadius: 10,
@@ -178,8 +196,8 @@ const pickerSelectStyles = StyleSheet.create({
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon
         marginBottom: 20,
-      },
-      inputAndroid: {
+    },
+    inputAndroid: {
         fontSize: 16,
         paddingHorizontal: 10,
         paddingVertical: 8,

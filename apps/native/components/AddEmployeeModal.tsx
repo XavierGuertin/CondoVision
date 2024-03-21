@@ -1,22 +1,28 @@
-import React, {useState} from 'react'
-import {doc, setDoc, addDoc, collection} from "firebase/firestore";
-import {auth, db} from "@native/firebase";
-import {createUserWithEmailAndPassword} from "@firebase/auth";
+// AddEmployeeModal.js
+// This component provides a modal form for adding new employees to the system.
+// It allows setting up basic information such as email, password, and job role for the employee.
+
+import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    SafeAreaView,
-    StyleSheet, Text, TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import DropDownPicker from "react-native-dropdown-picker";
+import { doc, setDoc, addDoc, collection } from 'firebase/firestore';
+import { auth, db } from '@native/firebase';
+import { createUserWithEmailAndPassword } from '@firebase/auth';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export const AddEmployeeModal = (props) => {
-
+    // State management for form fields and modal visibility.
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const role = "Employee";
@@ -33,15 +39,19 @@ export const AddEmployeeModal = (props) => {
 
     const handleRegistration = async () => {
         try {
+            
+            // Create a new user with email and password.
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
+            // Set user details in 'users' collection.
             await setDoc(doc(db, "users", user.uid), {
                 email: email,
                 role: role,
                 job: job,
             });
 
+            // Add the employee to the 'Employees' sub-collection under the specified property.
             await addDoc(collection(db, `properties/${props.propertyId}/Employees`), {
                 user: doc(db, "users", user.uid),
                 email: email,
