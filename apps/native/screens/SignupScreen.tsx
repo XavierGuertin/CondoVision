@@ -8,18 +8,17 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
-
 import { auth, db } from '../firebase';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { createUserWithEmailAndPassword } from '@firebase/auth';
-import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import {fetchUserRole} from "@native/components/FirebaseFunctions";
+
 
 const SignupScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
@@ -31,31 +30,16 @@ const SignupScreen = ({ navigation }: any) => {
     const [open, setOpen] = useState(false);
 
     const handleSignup = async () => {
-        async function returnRole(uid: string) {
-            const docRef = doc(db, "users", uid);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                console.log("Document data:", docSnap.data());
-                return docSnap.data().role;
-            } else {
-                // docSnap.data() will be undefined in this case
-                return "notFound";
-            }
-        }
-
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-
             await setDoc(doc(db, "users", user.uid), {
                 email: email,
                 role: role,
             });
-
             const signInCredential = await signInWithEmailAndPassword(auth, email, password);
             await AsyncStorage.setItem('userUID', signInCredential.user.uid);
-            await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
+            await AsyncStorage.setItem('userRole', await fetchUserRole(signInCredential.user.uid));
             setConnectionStatus("Success!");
             navigation.navigate('UserProfile');
         } catch (error) {
@@ -72,11 +56,11 @@ const SignupScreen = ({ navigation }: any) => {
             <TouchableWithoutFeedback>
                 <View style={styles.flexibleContainer}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
+                        <TouchableOpacity id={"goBackBtn"} onPress={() => navigation.goBack()} style={styles.headerIcon}>
                             <FontAwesome5 name="times" solid size={24} color="#000" />
                         </TouchableOpacity>
                         <Text style={styles.headerTitle}>Signup</Text>
-                        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.headerRightText}>
+                        <TouchableOpacity id={"loginInBtn"} onPress={() => navigation.navigate('Login')} style={styles.headerRightText}>
                             <Text style={styles.headerText}>Log In</Text>
                         </TouchableOpacity>
                     </View>
@@ -101,6 +85,7 @@ const SignupScreen = ({ navigation }: any) => {
                             />
 
                             <DropDownPicker
+                                testID={"roleDropDownPicker"}
                                 open={open}
                                 setOpen={setOpen}
                                 value={role}
@@ -121,6 +106,7 @@ const SignupScreen = ({ navigation }: any) => {
                                     autoCapitalize="none"
                                 />
                                 <TouchableOpacity
+                                    id={"showSignupPasswordBtn"}
                                     onPress={() => setPasswordVisible(!passwordVisible)}
                                     style={styles.showButton}
                                 >

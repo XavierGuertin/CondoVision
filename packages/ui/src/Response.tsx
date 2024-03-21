@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 // @ts-ignore
-const Response = ({success, message}) => {
+const Response = ({ success, message }) => {
     const [show, setShow] = useState(false);
 
     useEffect(() => {
@@ -11,9 +11,6 @@ const Response = ({success, message}) => {
                 setShow(false);
             }, 3000); // The message box will disappear after 3 seconds
 
-            // setTimeout(() => {
-            //     window.location.href = "/";
-            // }, 2000);
             return () => clearTimeout(timer);
         }
     }, [message]);
@@ -24,8 +21,7 @@ const Response = ({success, message}) => {
         <div className={`fixed top-0 inset-x-0 flex justify-center`}>
             <div
                 className={`p-4 text-white ${success ? 'bg-green-500' : 'bg-red-500'}
-                    rounded-md shadow-lg text-sm font-medium mt-4 transition-all`}
-            >
+                    rounded-md shadow-lg text-sm font-medium mt-4 transition-all`}>
                 {message}
             </div>
         </div>

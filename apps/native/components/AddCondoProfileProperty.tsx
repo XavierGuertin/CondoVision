@@ -1,17 +1,14 @@
 // AddCondoPropertyForm.tsx
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// A form component for adding a new condo property to the database.
+// Utilizes Firebase for data storage and AsyncStorage for local storage of user-specific details.
 
+import React, { useState } from 'react';
+import { ScrollView, View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Defines the shape of a CondoProperty object.
 type CondoProperty = {
   propertyName: string;
   unitCount: number;
@@ -21,22 +18,22 @@ type CondoProperty = {
   owner: string;
 };
 
+// Props definition for AddCondoPropertyForm component.
 type AddCondoPropertyFormProps = {
   onPropertySaved: (propertyName: string, address: string) => void;
 };
 
-const AddCondoPropertyForm: React.FC<AddCondoPropertyFormProps> = ({
-  onPropertySaved,
-}) => {
+const AddCondoPropertyForm: React.FC<AddCondoPropertyFormProps> = ({ onPropertySaved }) => {
   const [property, setProperty] = useState<CondoProperty>({
-    propertyName: "",
+    propertyName: '',
     unitCount: 0,
     parkingCount: 0,
     lockerCount: 0,
-    address: "",
-    owner: "",
+    address: '',
+    owner: '',
   });
 
+  // Handles input changes for form fields, updating the property state.
   const handleInputChange = (field: keyof CondoProperty, value: any) => {
     setProperty((prevProperty) => ({
       ...prevProperty,
@@ -44,14 +41,12 @@ const AddCondoPropertyForm: React.FC<AddCondoPropertyFormProps> = ({
     }));
   };
 
+  // Validates the form input to ensure required fields are populated and valid.
   const validInput = () => {
-    return (
-      property.propertyName != "" &&
-      property.unitCount > 0 &&
-      property.address != ""
-    );
+    return property.propertyName !== '' && property.unitCount > 0 && property.address !== '';
   };
 
+  // Saves the new condo property to Firebase, assigns the current user as owner, and resets the form.
   const saveCondoProperty = async () => {
     try {
       if (!validInput()) {
