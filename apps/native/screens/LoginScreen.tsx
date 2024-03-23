@@ -1,7 +1,6 @@
-import { auth, db } from '../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import React, { useState } from 'react';
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
 import {
     Image,
     KeyboardAvoidingView,
@@ -11,13 +10,11 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    Keyboard,
     TouchableWithoutFeedback,
 } from 'react-native';
-
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-`import AsyncStorage from '@react-native-async-storage/async-storage';`
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {fetchUsername, fetchUserRole} from "@native/components/FirebaseFunctions";
 
 const LoginScreen = ({ navigation }: any) => {
     const [email, setEmail] = useState('');
@@ -26,63 +23,34 @@ const LoginScreen = ({ navigation }: any) => {
     const [errorMessage, setError] = useState("");
     const [connectionStatus, setConnectionStatus] = useState("");
 
-    async function returnRole(uid: string) {
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            return docSnap.data().role;
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-            return "notFound";
-        }
-    }
-
-    async function returnUsername(uid: string) {
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            return docSnap.data().username;
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-            return "notFound";
-        }
-    }
-
     const handleLogin = async () => {
         // Implement login logic
         try {
             const signInCredential = await signInWithEmailAndPassword(auth, email, password);
             await AsyncStorage.setItem('userUID', signInCredential.user.uid);
-            await AsyncStorage.setItem('userRole', await returnRole(signInCredential.user.uid));
+            await AsyncStorage.setItem('userRole', await fetchUserRole(signInCredential.user.uid));
+            const userName = fetchUsername(signInCredential.user.uid);
             setConnectionStatus("success");
             navigation.navigate('UserProfile');
         } catch (error) {
             setConnectionStatus("error");
             setError("Firestore: " + error);
         }
-
     };
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
-        >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            style={styles.container}>
+            <TouchableWithoutFeedback>
                 <View style={styles.flexibleContainer}>
                     <View style={styles.header}>
-                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
+                        <TouchableOpacity id={"goBackHomeBtn"} onPress={() => navigation.goBack()} style={styles.headerIcon}>
                             <FontAwesome5 name="times" solid size={24} color="#000" />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}>Login</Text>
+                        <Text id="loginLabel" style={styles.headerTitle}>Login</Text>
                         <TouchableOpacity onPress={() => navigation.navigate('Signup')} style={styles.headerRightText}>
-                            <Text style={styles.headerText}>Sign Up</Text>
+                            <Text id='navigateToSignUp' style={styles.headerText}>Sign Up</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.logoContainer}>
@@ -93,9 +61,10 @@ const LoginScreen = ({ navigation }: any) => {
                         />
                     </View>
                     <View style={styles.centeredContent}>
-                        <Text style={connectionStatus == "error" ? styles.errorMessage : null}>{errorMessage}</Text>
+                        <Text id='SignInError' style={connectionStatus == "error" ? styles.errorMessage : null}>{errorMessage}</Text>
                         <View style={styles.inputContainer}>
                             <TextInput
+                                id={'email'}
                                 style={styles.input}
                                 placeholder="Email"
                                 value={email}
@@ -105,6 +74,7 @@ const LoginScreen = ({ navigation }: any) => {
                             />
                             <View style={styles.passwordContainer}>
                                 <TextInput
+                                    id={'password'}
                                     style={styles.passwordInput}
                                     placeholder="Password"
                                     value={password}
@@ -113,6 +83,7 @@ const LoginScreen = ({ navigation }: any) => {
                                     autoCapitalize="none"
                                 />
                                 <TouchableOpacity
+                                    id={"showLoginPasswordBtn"}
                                     onPress={() => setPasswordVisible(!passwordVisible)}
                                     style={styles.showButton}
                                 >
@@ -121,9 +92,9 @@ const LoginScreen = ({ navigation }: any) => {
                             </View>
                         </View>
                         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                            <Text style={styles.buttonText}>Log In</Text>
+                            <Text id='loginBtn' style={styles.buttonText}>Log In</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { /* Implement forgot password logic */ }}>
+                        <TouchableOpacity id={"forgotPasswordBtn"} onPress={() => { /* Implement forgot password logic */ }}>
                             <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
                         </TouchableOpacity>
                     </View>

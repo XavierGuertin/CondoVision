@@ -1,16 +1,16 @@
 'use client';
-import {signInWithEmailAndPassword} from "firebase/auth";
-import React, {useState} from "react";
-import {auth, db} from "@web/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
+import { auth, db } from "@web/firebase";
 import Alert from 'react-bootstrap/Alert';
-import {doc, getDoc} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [connectionStatus, setConnectionStatus] = useState("");
 
-    async function returnRole(uid : string) {
+    async function returnRole(uid: string) {
         const docRef = doc(db, "users", uid);
         const docSnap = await getDoc(docRef);
 
@@ -24,7 +24,7 @@ const SignIn = () => {
         }
     }
 
-    async function returnUsername(uid : string) {
+    async function returnUsername(uid: string) {
         const docRef = doc(db, "users", uid);
         const docSnap = await getDoc(docRef);
 
@@ -38,7 +38,6 @@ const SignIn = () => {
         }
     }
 
-
     const signIn = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password)
@@ -48,6 +47,7 @@ const SignIn = () => {
                 window.localStorage.setItem('userRole', await returnRole(userCredential.user.uid));
                 window.localStorage.setItem('username', await returnUsername(userCredential.user.uid));
                 setConnectionStatus("success");
+                window.location.href = "/dashboard";
             })
             .catch((error) => {
                 console.log(error);
@@ -66,15 +66,17 @@ const SignIn = () => {
                             {connectionStatus === "success" ?
                                 <Alert variant="success">
                                     <Alert.Heading className={"SignInSuccess"}>
-                                        <strong>Success! </strong>You are logged in successfully.<br/>
+                                        <strong>Success! </strong>You are logged in successfully.<br />
                                     </Alert.Heading>
-                                </Alert> : null}
+                                </Alert> : null
+                            }
                             {connectionStatus === "error" ?
                                 <Alert variant="danger">
                                     <Alert.Heading className={"SignInError"}>
-                                        <strong>Error! </strong>Invalid email or password. Please try again.<br/>
+                                        <strong>Error! </strong>Invalid email or password. Please try again.<br />
                                     </Alert.Heading>
-                                </Alert> : null}
+                                </Alert> : null
+                            }
 
                             <input
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
@@ -82,21 +84,19 @@ const SignIn = () => {
                                 name={"emailSignIn"}
                                 placeholder="Enter your email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                                onChange={(e) => setEmail(e.target.value)} />
                             <input
                                 className="block border border-grey-light w-full p-3 rounded mb-4"
                                 type="password"
                                 name={"passwordSignIn"}
                                 placeholder="Enter your password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                                onChange={(e) => setPassword(e.target.value)} />
                             <button
                                 type="submit"
                                 name={"submitSignIn"}
-                                className="w-full text-center py-3 rounded bg-blue-gradient text-white focus:outline-none my-1"
-                            >Log In
+                                className="w-full text-center py-3 rounded bg-blue-gradient text-white focus:outline-none my-1">
+                                Log In
                             </button>
                         </div>
                     </div>

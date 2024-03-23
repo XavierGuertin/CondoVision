@@ -14,7 +14,7 @@ describe('Sign In Using Existing Account', () => {
         cy.get('[name=emailSignIn]').type(existingEmail);
         cy.get('[name=passwordSignIn]').type(userPassword);
         cy.get('[name=submitSignIn]').click();
-        cy.get('.SignInSuccess').contains('Success!');
+        cy.url().should('include', '/dashboard');
     });
 
     //Sign In Using Non-Existing Email Account

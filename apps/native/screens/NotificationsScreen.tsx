@@ -1,10 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {doc, getDoc, updateDoc} from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {auth, db} from '../firebase';
+import { auth, db } from '../firebase';
 
-const NotificationsScreen = ({navigation}: any) => {
+/**
+ * Screen component for displaying notifications. Currently placeholders,
+ * but includes setup for user profile fetching and updating.
+ * 
+ * @param {Object} navigation - Navigation prop for routing.
+ */
+const NotificationsScreen = ({ navigation }: any) => {
     const [userProfile, setUserProfile] = useState({
         email: '',
         username: '',
@@ -13,6 +19,7 @@ const NotificationsScreen = ({navigation}: any) => {
     });
 
     useEffect(() => {
+        // Fetches user profile data from Firestore and updates local state.
         const fetchUserProfileAndAuthData = async () => {
             const user = auth.currentUser;
             if (user) {
@@ -45,6 +52,7 @@ const NotificationsScreen = ({navigation}: any) => {
         fetchUserProfileAndAuthData();
     }, []);
 
+    // Placeholder for updating user profile information.
     const handleUpdate = async () => {
         const userUID = await AsyncStorage.getItem('userUID');
         if (userUID) {
@@ -60,6 +68,8 @@ const NotificationsScreen = ({navigation}: any) => {
             }
         }
     };
+
+    // Renders the screen's UI components.
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Notification Center</Text>
@@ -68,6 +78,7 @@ const NotificationsScreen = ({navigation}: any) => {
     );
 };
 
+// Style definitions for the NotificationsScreen component.
 const styles = StyleSheet.create({
     container: {
         flex: 1,

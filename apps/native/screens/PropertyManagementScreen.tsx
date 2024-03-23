@@ -4,15 +4,14 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { Button } from '@native/components/button';
+import { Button } from "@native/components/button";
 import { useNavigation } from "@react-navigation/native";
-import CondoProfileComponent from "../components/CondoProfileComponent";
-import { db } from '../firebase';
-import { getDocs, collection, query } from "firebase/firestore";
+import PropertyProfileComponent from "../components/PropertyProfileComponent";
+import { db } from "../firebase";
+import { getDocs, collection, query, where } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PropertyAdapter from "@native/components/PropertyAdapter";
 import CondoUnitAdapter from "@native/components/CondoUnitAdapter";
@@ -27,8 +26,9 @@ const CondoProfileScreen = () => {
     const fetchData = async () => {
       const propertyList: Object[] = [];
       try {
+        const userUID = await AsyncStorage.getItem("userUID");
         const propertiesCollectionSnapshot = await getDocs(
-          collection(db, "properties")
+          query(collection(db, "properties"), where("owner", "==", userUID))
         );
 
         propertiesCollectionSnapshot.forEach(async (propertyDoc) => {
@@ -36,33 +36,30 @@ const CondoProfileScreen = () => {
           const condoUnitsSnapshot = await getDocs(
             collection(db, "properties", propertyDoc.id, "condoUnits")
           );
-          const userUID = await AsyncStorage.getItem("userUID");
-          var stopper = true;
-          var propertyData = propertyDoc.data();
+
+          const propertyData = propertyDoc.data();
 
           condoUnitsSnapshot.forEach((condoUnitDoc) => {
-            var condoData = condoUnitDoc.data();
+            const condoData = condoUnitDoc.data();
+            const condoId = condoUnitDoc.id;
 
-            if (condoData.owner === userUID && stopper) {
-              const condoUnit = new CondoUnitAdapter(
-                condoData.id,
-                {
-                  includes: condoData.condoFees.includes,
-                  monthlyFee: condoData.condoFees.monthlyFee,
-                },
-                condoData.lockerId,
-                {
-                  contact: condoData.occupantInfo.contact,
-                  name: condoData.occupantInfo.name,
-                },
-                condoData.owner,
-                condoData.parkingSpotId,
-                condoData.size,
-                condoData.unitId
-              );
-              unitList.push(condoUnit.toJSON());
-              stopper = false;
-            }
+            const condoUnit = new CondoUnitAdapter(
+              condoId,
+              {
+                includes: condoData.condoFees.includes,
+                monthlyFee: condoData.condoFees.monthlyFee,
+              },
+              condoData.lockerId,
+              {
+                contact: condoData.occupantInfo.contact,
+                name: condoData.occupantInfo.name,
+              },
+              condoData.owner,
+              condoData.parkingSpotId,
+              condoData.size,
+              condoData.unitId
+            );
+            unitList.push(condoUnit.toJSON());
           });
           if (propertyData.owner === userUID) {
             const property = new PropertyAdapter(
@@ -76,6 +73,8 @@ const CondoProfileScreen = () => {
               unitList
             );
             propertyList.push(property.toJSON());
+            console.log("Loaded property:");
+            console.log(property.toJSON());
             setOwnedProperties(propertyList);
           }
         });
@@ -99,15 +98,20 @@ const CondoProfileScreen = () => {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Condo Profiles</Text>
       </View>
-      <ScrollView style={styles.flexibleContainer}>
+      <ScrollView id="propertyView" style={styles.flexibleContainer}>
         {ownedProperties.length > 0 ? (
-            ownedProperties.map((property) => <CondoProfileComponent data={property} key={property.id} />)
+          ownedProperties.map((property) => (
+            <PropertyProfileComponent id="propertyProfileComponent" data={property} key={property.id} />
+          ))
         ) : (
-            <Text style={styles.noCondosText}>No Condos were found.</Text>
+          <Text style={styles.noCondosText}>No Condos were found.</Text>
         )}
       </ScrollView>
-      <View style = {styles.addPropertyBtn}>
-          <Button text="Add New Property" onClick={() => navigation.navigate('AddCondoProfileScreen')}/>
+      <View id="addPropertyBtnView" style={styles.addPropertyBtn}>
+        <Button
+          text="Register a New Property"
+          onClick={() => navigation.navigate("AddCondoProfileScreen")}
+        />
       </View>
     </SafeAreaView>
   );
@@ -149,9 +153,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 18,
   },
-  addPropertyBtn:{
+  addPropertyBtn: {
     margin: 30,
-    marginBottom: 100
+    marginBottom: 100,
   },
 });
 

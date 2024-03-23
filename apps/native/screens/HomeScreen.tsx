@@ -31,11 +31,12 @@ export default function HomeScreen({ navigation }: any) {
                 </View>
 
                 <TouchableOpacity
+                    id="homeBtn"
                     onPress={() => {
                         navigation.navigate('Login');
                     }}>
                     <View style={styles.button}>
-                        <Text style={styles.buttonText}>Log In</Text>
+                        <Text id={'logInButtonHome'} style={styles.buttonText}>Log In</Text>
                     </View>
                 </TouchableOpacity>
             </View>

@@ -1,8 +1,18 @@
+interface CondoFees {
+  includes: string[];
+  monthlyFee: number;
+}
+
+interface OccupantInfo {
+  contact: string;
+  name: string;
+}
+
 class CondoUnitAdapter {
   private id: string;
-  private condoFees: Object;
+  private condoFees: CondoFees;
   private lockerId: string;
-  private occupantInfo: Object;
+  private occupantInfo: OccupantInfo;
   private owner: string;
   private parkingSpotId: string;
   private size: string;
@@ -10,13 +20,13 @@ class CondoUnitAdapter {
 
   constructor(
     id: string,
-    condoFees: Object,
+    condoFees: CondoFees,
     lockerId: string,
-    occupantInfo: Object,
+    occupantInfo: OccupantInfo,
     owner: string,
     parkingSpotId: string,
     size: string,
-    unitId: string,
+    unitId: string
   ) {
     this.id = id;
     this.condoFees = condoFees;
@@ -30,6 +40,7 @@ class CondoUnitAdapter {
 
   toJSON = () => {
     return {
+      id: this.id,
       condoFees: {
         includes: this.condoFees.includes,
         monthlyFee: this.condoFees.monthlyFee,
