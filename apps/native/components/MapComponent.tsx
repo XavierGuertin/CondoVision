@@ -255,10 +255,14 @@ export const MapComponent = ({ data }) => {
             provider={PROVIDER_GOOGLE}>
 
             {data.map((item, index) => {
+                const coordinates = {
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                }
                 return <Marker
                     key={index}
                     onPress={() => handlePress()}
-                    coordinate={item.coordinates}>
+                    coordinate={coordinates}>
                 </Marker>
             })}
 

@@ -52,7 +52,9 @@ const App = () => {
           name="PropertyManagement"
           component={PropertyManagementScreen}
         />
-          <Stack.Screen name="OwnerMap" component={OwnerMapScreen} />
+          <Stack.Screen name="OwnerMap" component={OwnerMapScreen} initialParams={{
+            properties: []
+          }} />
         <Stack.Screen name="UserProfile" component={UserProfileScreen} />
         <Stack.Screen
           name="Notifications"
