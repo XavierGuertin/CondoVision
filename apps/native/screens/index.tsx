@@ -18,7 +18,7 @@ export {
   LoginScreen,
   SignupScreen,
   PropertyManagementScreen,
-    OwnerMapScreen,
+  OwnerMapScreen,
   UserProfileScreen,
   NotificationsScreen,
   ReportScreen,
