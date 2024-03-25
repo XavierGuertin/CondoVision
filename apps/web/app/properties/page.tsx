@@ -14,6 +14,7 @@ import {
 const Page = () => {
     const [ownedProperties, setOwnedProperties] = useState<Object[]>([]);
     const [isLoading, setIsLoading] = useState<Boolean>(true);
+    const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
     const [selectedProperty, setSelectedProperty] = useState<Object>();
 
     useEffect(() => {
@@ -93,9 +94,10 @@ const Page = () => {
         <div className="h-screen bg-gradient-to-r from-[#87A8FA] to-[#87CCFA] overflow-hidden">
             <DashboardNav />
             <div className="flex h-full">
-                {isLoading ? <h1>Loading...</h1> : <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} />}
+                {isLoading ? <h1>Loading...</h1> : <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} openModal={setIsModalOpen} />}
                 {isLoading ? <h1>Loading...</h1> : <PropertyComponent selectedProperty={selectedProperty} />}
             </div>
+            {isModalOpen && <h1 className="text-3xl bg-red-500 p-8">ModalCreated</h1>}
         </div>
     );
 };
