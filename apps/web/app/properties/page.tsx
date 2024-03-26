@@ -10,6 +10,7 @@ import {
     PropertyList,
     PropertyComponent,
     CreatePropertyModal,
+    CreateUnitModal,
 } from "@ui/index";
 
 
@@ -19,9 +20,9 @@ const Page = () => {
     const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
     const [selectedProperty, setSelectedProperty] = useState<Object>();
     // Get user created properties.
-    const [propertyId, setPropertyId] = useState('');
-    const [unitCount, setUnitCount] = useState(0);
-    const [currentUnit, setCurrentUnit] = useState(0); // Start with 0 to not display 
+    const [propertyId, setPropertyId] = useState('s');
+    const [unitCount, setUnitCount] = useState(1);
+    const [currentUnit, setCurrentUnit] = useState(1); // Start with 0 to not display 
 
     const handlePropertySaved = async (propertyName: unknown, address: unknown) => {
         const propertiesRef = collection(db, 'properties');
@@ -32,6 +33,15 @@ const Page = () => {
             setUnitCount(doc.data().unitCount);
             setCurrentUnit(1); // Start adding units after property is saved
         });
+    };
+
+    const handleUnitSaved = () => {
+        if (currentUnit < unitCount) {
+            setCurrentUnit(currentUnit + 1); // Prepare for next unit
+        } else {
+            alert('All units for this property have been added!');
+            setIsModalOpen(false);
+        }
     };
 
     useEffect(() => {
@@ -117,8 +127,19 @@ const Page = () => {
             {isModalOpen && <div className="absolute top-0 h-screen w-screen bg-black bg-opacity-20">
                 <div className="flex flex-col h-full items-center justify-center z-20">
                     <div className="w-1/2 h-4/5 bg-blue-100 rounded-lg p-4 flex flex-col">
-                        <button onClick={() => setIsModalOpen(false)} className="self-end flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full w-8 h-9"><IoClose className="text-2xl" /></button>
-                        <CreatePropertyModal onPropertySaved={handlePropertySaved} />
+                        {propertyId === '' ? (
+                            <>
+                                <button onClick={() => setIsModalOpen(false)} className="self-end flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full w-8 h-9">
+                                    <IoClose className="text-2xl" />
+                                </button>
+                                <CreatePropertyModal onPropertySaved={handlePropertySaved} />
+                            </>
+                        ) : currentUnit > 0 && currentUnit <= unitCount ? (
+                            <>
+                                <CreateUnitModal propertyId={propertyId} onUnitSaved={handleUnitSaved} />
+                            </>)
+                            : null}
+
                     </div>
                 </div>
             </div>}
