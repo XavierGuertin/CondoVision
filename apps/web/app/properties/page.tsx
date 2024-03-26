@@ -98,8 +98,8 @@ const Page = () => {
                 {isLoading ? <h1>Loading...</h1> : <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} setModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />}
                 {isLoading ? <h1>Loading...</h1> : <PropertyComponent selectedProperty={selectedProperty} />}
             </div>
-            {isModalOpen && <div onClick={() => setIsModalOpen(false)} className="bg-black absolute top-0 h-screen w-screen bg-opacity-20">
-                <CreatePropertyModal />
+            {isModalOpen && <div className="absolute top-0 h-screen w-screen">
+                <CreatePropertyModal onPropertySaved={(propertyName: string, address: string) => { }} />
             </div>}
         </div>
     );
