@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect, useState } from "react";
+import { IoClose } from 'react-icons/io5'
 import { db } from "@web/firebase";
-import { getDocs, collection } from "firebase/firestore";
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import CondoUnitAdapter from "../../../native/components/CondoUnitAdapter";
 import PropertyAdapter from "../../../native/components/PropertyAdapter";
 import {
@@ -17,6 +18,21 @@ const Page = () => {
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
     const [selectedProperty, setSelectedProperty] = useState<Object>();
+    // Get user created properties.
+    const [propertyId, setPropertyId] = useState('');
+    const [unitCount, setUnitCount] = useState(0);
+    const [currentUnit, setCurrentUnit] = useState(0); // Start with 0 to not display 
+
+    const handlePropertySaved = async (propertyName: unknown, address: unknown) => {
+        const propertiesRef = collection(db, 'properties');
+        const q = query(propertiesRef, where("propertyName", "==", propertyName), where("address", "==", address));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            setPropertyId(doc.id);
+            setUnitCount(doc.data().unitCount);
+            setCurrentUnit(1); // Start adding units after property is saved
+        });
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -98,8 +114,13 @@ const Page = () => {
                 {isLoading ? <h1>Loading...</h1> : <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} setModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />}
                 {isLoading ? <h1>Loading...</h1> : <PropertyComponent selectedProperty={selectedProperty} />}
             </div>
-            {isModalOpen && <div className="absolute top-0 h-screen w-screen">
-                <CreatePropertyModal onPropertySaved={(propertyName: string, address: string) => { }} />
+            {isModalOpen && <div className="absolute top-0 h-screen w-screen bg-black bg-opacity-20">
+                <div className="flex flex-col h-full items-center justify-center z-20">
+                    <div className="w-1/2 h-4/5 bg-blue-100 rounded-lg p-4 flex flex-col">
+                        <button onClick={() => setIsModalOpen(false)} className="self-end flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full w-8 h-9"><IoClose className="text-2xl" /></button>
+                        <CreatePropertyModal onPropertySaved={handlePropertySaved} />
+                    </div>
+                </div>
             </div>}
         </div>
     );

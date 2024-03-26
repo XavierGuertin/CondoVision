@@ -72,51 +72,43 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
     };
 
     return (
-        <div className="flex flex-col h-full items-center justify-center z-20">
-            <div className="w-1/2 h-4/5 bg-blue-100 rounded-lg p-4 flex flex-col">
-                <h1 className="text-2xl font-bold text-center">Create Property</h1>
-                <form className="flex flex-col h-full justify-around">
-                    <div className="flex flex-col">
-                        <label className="text-lg font-semibold">Property Name</label>
-                        <input className="border border-gray-300 rounded-lg p-2" type="text"
-                            placeholder="Enter Property Name"
-                            value={property.propertyName}
-                            onChange={(text) => handleInputChange("propertyName", text.target.value)}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="text-lg font-semibold">Address</label>
-                        <input className="border border-gray-300 rounded-lg p-2" type="text"
-                            placeholder="Enter Address"
-                            value={property.address}
-                            onChange={(text) => handleInputChange("address", text.target.value)}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="text-lg font-semibold">Unit Count</label>
-                        <input className="border border-gray-300 rounded-lg p-2" type="number"
-                            value={property.unitCount}
-                            onChange={(text) => handleInputChange("unitCount", Number(text.target.value))}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="text-lg font-semibold">Locker Count</label>
-                        <input className="border border-gray-300 rounded-lg p-2" type="number"
-                            value={property.lockerCount}
-                            onChange={(text) => handleInputChange("lockerCount", Number(text.target.value))}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <label className="text-lg font-semibold">Parking Count</label>
-                        <input className="border border-gray-300 rounded-lg p-2" type="number"
-                            value={property.parkingCount}
-                            onChange={(text) => handleInputChange("parkingCount", Number(text.target.value))}
-                        />
-                    </div>
-                    <button className="bg-blue-500 text-white rounded-lg p-2 mt-4" onClick={saveCondoProperty}>Create Property</button>
-                </form>
-            </div>
-        </div>
+        <>
+            <h1 className="text-2xl font-bold text-center">Create Property</h1><form className="flex flex-col h-full justify-around">
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Property Name</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Property Name"
+                        value={property.propertyName}
+                        onChange={(text) => handleInputChange("propertyName", text.target.value)} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Address</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Address"
+                        value={property.address}
+                        onChange={(text) => handleInputChange("address", text.target.value)} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Unit Count</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="number"
+                        value={property.unitCount}
+                        onChange={(text) => handleInputChange("unitCount", Number(text.target.value))} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Locker Count</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="number"
+                        value={property.lockerCount}
+                        onChange={(text) => handleInputChange("lockerCount", Number(text.target.value))} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Parking Count</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="number"
+                        value={property.parkingCount}
+                        onChange={(text) => handleInputChange("parkingCount", Number(text.target.value))} />
+                </div>
+                <button className="bg-blue-500 text-white rounded-lg p-2 mt-4" onClick={saveCondoProperty}>Create Property</button>
+            </form>
+        </>
     )
 }
 
