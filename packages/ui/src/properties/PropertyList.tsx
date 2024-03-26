@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "../button";
 
-const PropertyList = ({ ownedProperties, inView, setSelectedProperty, openModal }: any) => {
+const PropertyList = ({ ownedProperties, inView, setSelectedProperty, isModalOpen, setModalOpen }: any) => {
     const [selected, setSelected] = useState<string>(ownedProperties?.length > 0 ? ownedProperties[0].id : '');
-    const [isModalOpenAddProperty, setIsModalOpenAddProperty] = useState(false);
-
-    const toggleModalAddProperty = () => {
-        setIsModalOpenAddProperty(!isModalOpenAddProperty);
-    };
-
 
     return (
         <div className={`${inView} min-w-36`}>
@@ -17,8 +11,7 @@ const PropertyList = ({ ownedProperties, inView, setSelectedProperty, openModal 
             </h1>
             <div className="mr-8 ml-1 -mt-2">
                 <Button onClick={() => {
-                    toggleModalAddProperty();
-                    openModal(isModalOpenAddProperty);
+                    setModalOpen(!isModalOpen);
                 }} text={"Add Unit"} />
             </div>
             {ownedProperties?.map((property: any) => {

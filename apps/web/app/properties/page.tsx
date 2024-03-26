@@ -8,6 +8,7 @@ import {
     DashboardNav,
     PropertyList,
     PropertyComponent,
+    CreatePropertyModal,
 } from "@ui/index";
 
 
@@ -94,10 +95,12 @@ const Page = () => {
         <div className="h-screen bg-gradient-to-r from-[#87A8FA] to-[#87CCFA] overflow-hidden">
             <DashboardNav />
             <div className="flex h-full">
-                {isLoading ? <h1>Loading...</h1> : <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} openModal={setIsModalOpen} />}
+                {isLoading ? <h1>Loading...</h1> : <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} setModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />}
                 {isLoading ? <h1>Loading...</h1> : <PropertyComponent selectedProperty={selectedProperty} />}
             </div>
-            {isModalOpen && <h1 className="text-3xl bg-red-500 p-8">ModalCreated</h1>}
+            {isModalOpen && <div onClick={() => setIsModalOpen(false)} className="bg-black absolute top-0 h-screen w-screen bg-opacity-20">
+                <CreatePropertyModal />
+            </div>}
         </div>
     );
 };

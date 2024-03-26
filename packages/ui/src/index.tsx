@@ -11,6 +11,7 @@ import DashboardCard from "./dashboard/DashboardCard";
 import PropertyList from "./properties/PropertyList";
 import PropertyComponent from "./properties/PropertyComponent";
 import DefaultFinanceCard from "./finance/DefaultFinanceCard";
+import CreatePropertyModal from "./properties/CreatePropertyModal";
 
 export {
     Navbar,
@@ -26,4 +27,5 @@ export {
     PropertyList,
     PropertyComponent,
     DefaultFinanceCard,
+    CreatePropertyModal,
 };
