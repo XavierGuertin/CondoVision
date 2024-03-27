@@ -22,24 +22,6 @@ describe('Create a property', () => {
     //     cy.get('div').contains('Add Property').should('be.visible');
     // });
 
-
-    // it('should fill out the form after clicking "Add Property"', () => {
-    //     cy.on('window:alert', (str) => {
-    //         expect(str).to.equal(`Condo property saved successfully!`);
-    //     });
-
-    //     cy.visit('/properties');
-    //     cy.get('div').contains('Add Property').click();
-
-    //     // Fill out the form
-    //     cy.get('input[placeholder="Enter Property Name"]').type('Test Property');
-    //     cy.get('input[placeholder="Enter Address"]').type('123 Test Street');
-    //     cy.get('input[value="1"]').type('1');
-
-    //     // Submit the form
-    //     cy.get('button[type="submit"]').click();
-    // });
-
     // it('should fill out the unit form after clicking "Create Property"', () => {
     //     cy.on('window:alert', (str) => {
     //         expect(str).to.equal(`Condo property saved successfully!`);
