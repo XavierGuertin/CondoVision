@@ -68,7 +68,7 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
     return (
         <>
             <h1 className="text-2xl font-bold text-center">Create Property</h1>
-            <form className="flex flex-col h-full justify-around" onSubmit={(e) => {
+            <form className="flex flex-col h-full justify-around overflow-y-auto" onSubmit={(e) => {
                 e.preventDefault();
                 saveCondoProperty();
             }}>

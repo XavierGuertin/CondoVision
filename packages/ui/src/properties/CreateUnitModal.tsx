@@ -80,7 +80,7 @@ const CreateUnitModal: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSaved
     return (
         <>
             <h1 className="text-2xl font-bold text-center">Add a Unit</h1>
-            <form className="flex flex-col h-full justify-around" onSubmit={(e) => {
+            <form className="flex flex-col h-full justify-start overflow-y-auto" onSubmit={(e) => {
                 e.preventDefault();
                 saveCondoUnit();
             }}>

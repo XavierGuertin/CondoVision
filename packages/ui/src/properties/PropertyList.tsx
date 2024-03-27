@@ -13,7 +13,7 @@ const PropertyList = ({ ownedProperties, inView, setSelectedProperty, isModalOpe
                 (<div className="mr-8 ml-1 -mt-2">
                     <Button onClick={() => {
                         setModalOpen(!isModalOpen);
-                    }} text={"Add Unit"} />
+                    }} text={"Add Property"} />
                 </div>) : null
             }
             {ownedProperties?.map((property: any) => {
