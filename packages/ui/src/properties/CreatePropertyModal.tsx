@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { db } from '@web/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
-
 // Defines the shape of a CondoProperty object.
 type CondoProperty = {
     propertyName: string;
@@ -13,20 +12,22 @@ type CondoProperty = {
     owner: string;
 };
 
+const initialCondoState: CondoProperty = {
+    propertyName: '',
+    unitCount: 1,
+    parkingCount: 0,
+    lockerCount: 0,
+    address: '',
+    owner: '',
+};
+
 // Props definition for AddCondoPropertyForm component.
 type CreatePropertyModalProps = {
     onPropertySaved: (propertyName: string, address: string) => void;
 };
 
 const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySaved }) => {
-    const [property, setProperty] = useState<CondoProperty>({
-        propertyName: '',
-        unitCount: 1,
-        parkingCount: 0,
-        lockerCount: 0,
-        address: '',
-        owner: '',
-    });
+    const [property, setProperty] = useState<CondoProperty>(initialCondoState);
 
     const handleInputChange = (field: keyof CondoProperty, value: any) => {
         setProperty((prevProperty) => ({
@@ -56,14 +57,7 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
             property.owner = userId;
             await addDoc(collection(db, "properties"), property);
             alert("Condo property saved successfully!");
-            setProperty({
-                propertyName: "",
-                unitCount: 0,
-                parkingCount: 0,
-                lockerCount: 0,
-                address: "",
-                owner: "",
-            }); // Reset form after successful save
+            setProperty(initialCondoState); // Reset form after successful save
             onPropertySaved(property.propertyName, property.address);
         } catch (error) {
             console.error("Error saving condo property:", error);

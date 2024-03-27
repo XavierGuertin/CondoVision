@@ -136,11 +136,10 @@ const Page = () => {
                                 <CreatePropertyModal onPropertySaved={handlePropertySaved} />
                             </>
                         ) : currentUnit > 0 && currentUnit <= unitCount ? (
-                            <>
-                                <CreateUnitModal propertyId={propertyId} onUnitSaved={handleUnitSaved} />
-                            </>)
-                            : null}
-
+                            <CreateUnitModal propertyId={propertyId} onUnitSaved={handleUnitSaved} />
+                        )
+                            : null
+                        }
                     </div>
                 </div>
             </div>}
