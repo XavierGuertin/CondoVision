@@ -9,11 +9,13 @@ const PropertyList = ({ ownedProperties, inView, setSelectedProperty, isModalOpe
             <h1 className="text-2xl font-bold text-white pb-2 pl-2">
                 Properties list
             </h1>
-            <div className="mr-8 ml-1 -mt-2">
-                <Button onClick={() => {
-                    setModalOpen(!isModalOpen);
-                }} text={"Add Unit"} />
-            </div>
+            {localStorage.getItem('userRole') === 'Condo Management Company' ?
+                (<div className="mr-8 ml-1 -mt-2">
+                    <Button onClick={() => {
+                        setModalOpen(!isModalOpen);
+                    }} text={"Add Unit"} />
+                </div>) : null
+            }
             {ownedProperties?.map((property: any) => {
                 return (
                     <div key={property.id} className={`pl-2 py-4 border-b border-blue-500  ${selected == property.id ? 'bg-blue-500' : 'cursor-pointer'}`} onClick={() => {

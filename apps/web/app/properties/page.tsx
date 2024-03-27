@@ -41,6 +41,7 @@ const Page = () => {
         } else {
             alert('All units for this property have been added!');
             setIsModalOpen(false);
+            window.location.reload();
         }
     };
 

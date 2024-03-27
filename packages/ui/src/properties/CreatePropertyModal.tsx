@@ -21,7 +21,7 @@ type CreatePropertyModalProps = {
 const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySaved }) => {
     const [property, setProperty] = useState<CondoProperty>({
         propertyName: '',
-        unitCount: 0,
+        unitCount: 1,
         parkingCount: 0,
         lockerCount: 0,
         address: '',
@@ -55,7 +55,7 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
 
             property.owner = userId;
             await addDoc(collection(db, "properties"), property);
-            //alert("Condo property saved successfully!");
+            alert("Condo property saved successfully!");
             setProperty({
                 propertyName: "",
                 unitCount: 0,
@@ -79,34 +79,37 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
                 saveCondoProperty();
             }}>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Property Name</label>
+                    <label className="text-lg font-semibold">Property Name *</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="text"
                         placeholder="Enter Property Name"
                         value={property.propertyName}
                         onChange={(text) => handleInputChange("propertyName", text.target.value)} />
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Address</label>
+                    <label className="text-lg font-semibold">Address *</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="text"
                         placeholder="Enter Address"
                         value={property.address}
                         onChange={(text) => handleInputChange("address", text.target.value)} />
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Unit Count</label>
+                    <label className="text-lg font-semibold">Unit Count *</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="number"
+                        min="1"
                         value={property.unitCount}
                         onChange={(text) => handleInputChange("unitCount", Number(text.target.value))} />
                 </div>
                 <div className="flex flex-col">
                     <label className="text-lg font-semibold">Locker Count</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="number"
+                        min="0"
                         value={property.lockerCount}
                         onChange={(text) => handleInputChange("lockerCount", Number(text.target.value))} />
                 </div>
                 <div className="flex flex-col">
                     <label className="text-lg font-semibold">Parking Count</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="number"
+                        min="0"
                         value={property.parkingCount}
                         onChange={(text) => handleInputChange("parkingCount", Number(text.target.value))} />
                 </div>
