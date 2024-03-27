@@ -19,10 +19,10 @@ const Page = () => {
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
     const [selectedProperty, setSelectedProperty] = useState<Object>();
-    // Get user created properties.
-    const [propertyId, setPropertyId] = useState('s');
-    const [unitCount, setUnitCount] = useState(1);
-    const [currentUnit, setCurrentUnit] = useState(1); // Start with 0 to not display 
+    /*** Used for creating the right amount of units and to pair them properly.*/
+    const [propertyId, setPropertyId] = useState('');
+    const [unitCount, setUnitCount] = useState(0);
+    const [currentUnit, setCurrentUnit] = useState(0); // Start with 0 to not display 
 
     const handlePropertySaved = async (propertyName: unknown, address: unknown) => {
         const propertiesRef = collection(db, 'properties');

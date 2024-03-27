@@ -55,7 +55,7 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
 
             property.owner = userId;
             await addDoc(collection(db, "properties"), property);
-            alert("Condo property saved successfully!");
+            //alert("Condo property saved successfully!");
             setProperty({
                 propertyName: "",
                 unitCount: 0,
@@ -73,7 +73,11 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
 
     return (
         <>
-            <h1 className="text-2xl font-bold text-center">Create Property</h1><form className="flex flex-col h-full justify-around">
+            <h1 className="text-2xl font-bold text-center">Create Property</h1>
+            <form className="flex flex-col h-full justify-around" onSubmit={(e) => {
+                e.preventDefault();
+                saveCondoProperty();
+            }}>
                 <div className="flex flex-col">
                     <label className="text-lg font-semibold">Property Name</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="text"
@@ -106,7 +110,7 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
                         value={property.parkingCount}
                         onChange={(text) => handleInputChange("parkingCount", Number(text.target.value))} />
                 </div>
-                <button className="bg-blue-500 text-white rounded-lg p-2 mt-4" onClick={saveCondoProperty}>Create Property</button>
+                <button className="bg-blue-500 text-white rounded-lg p-2 mt-4" type='submit'>Create Property</button>
             </form>
         </>
     )

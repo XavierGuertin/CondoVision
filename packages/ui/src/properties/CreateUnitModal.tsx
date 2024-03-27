@@ -79,40 +79,68 @@ const CreateUnitModal: React.FC<CondoUnitFormProps> = ({ propertyId, onUnitSaved
 
     return (
         <>
-            <h1 className="text-2xl font-bold text-center">Add a Unit</h1><form className="flex flex-col h-full justify-around">
+            <h1 className="text-2xl font-bold text-center">Add a Unit</h1>
+            <form className="flex flex-col h-full justify-around" onSubmit={(e) => {
+                e.preventDefault();
+                saveCondoUnit();
+            }}>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Property Name</label>
+                    <label className="text-lg font-semibold">Unit ID *</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="text"
-                        placeholder="Enter Property Name"
-                        value={property.propertyName}
-                        onChange={(text) => handleInputChange("propertyName", text.target.value)} />
+                        placeholder="Enter Unit ID"
+                        value={unit.unitId}
+                        onChange={(text) => handleInputChange("unitId", text.target.value)} />
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Address</label>
+                    <label className="text-lg font-semibold">Size *</label>
                     <input className="border border-gray-300 rounded-lg p-2" type="text"
-                        placeholder="Enter Address"
-                        value={property.address}
-                        onChange={(text) => handleInputChange("address", text.target.value)} />
+                        placeholder="Enter Unit Size"
+                        value={unit.size}
+                        onChange={(text) => handleInputChange("size", text.target.value)} />
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Unit Count</label>
-                    <input className="border border-gray-300 rounded-lg p-2" type="number"
-                        value={property.unitCount}
-                        onChange={(text) => handleInputChange("unitCount", Number(text.target.value))} />
+                    <label className="text-lg font-semibold">Owner</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Owner"
+                        value={unit.owner}
+                        onChange={(text) => handleInputChange("owner", text.target.value)} />
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Locker Count</label>
-                    <input className="border border-gray-300 rounded-lg p-2" type="number"
-                        value={property.lockerCount}
-                        onChange={(text) => handleInputChange("lockerCount", Number(text.target.value))} />
+                    <label className="text-lg font-semibold">Occupant Name</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Occupant Name"
+                        value={unit.occupantInfo.name}
+                        onChange={(text) => handleInputChange('occupantInfo', { ...unit.occupantInfo, name: text.target.value })} />
                 </div>
                 <div className="flex flex-col">
-                    <label className="text-lg font-semibold">Parking Count</label>
-                    <input className="border border-gray-300 rounded-lg p-2" type="number"
-                        value={property.parkingCount}
-                        onChange={(text) => handleInputChange("parkingCount", Number(text.target.value))} />
+                    <label className="text-lg font-semibold">Occupant Contact</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Occupant Contact"
+                        value={unit.occupantInfo.contact}
+                        onChange={(text) => handleInputChange('occupantInfo', { ...unit.occupantInfo, contact: text.target.value })} />
                 </div>
-                <button className="bg-blue-500 text-white rounded-lg p-2 mt-4" onClick={() => console.log()}>Create Property</button>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Monthly Condo Fees *</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Monthly Condo Fees"
+                        value={unit.condoFees.monthlyFee}
+                        onChange={(text) => handleInputChange('condoFees', { ...unit.condoFees, monthlyFee: text.target.value })} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Parking Spot ID</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Parking Spot ID"
+                        value={unit.parkingSpotId}
+                        onChange={(text) => handleInputChange('parkingSpotId', text.target.value)} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Locker ID</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                        placeholder="Enter Locker ID"
+                        value={unit.lockerId}
+                        onChange={(text) => handleInputChange('lockerId', text.target.value)} />
+                </div>
+                <button className="bg-blue-500 text-white rounded-lg p-2 mt-4" type="submit">Save Condo Unit</button>
             </form>
         </>
     );
