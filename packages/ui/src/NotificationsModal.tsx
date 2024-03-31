@@ -3,6 +3,28 @@ import { IoClose } from 'react-icons/io5'
 import { auth, db } from "@web/firebase";
 import { doc, getDocs, collection, updateDoc } from "firebase/firestore";
 
+// Request Box Component
+const RequestBox = ({ onRequestSubmit }: any) => {
+    const [title, setTitle] = useState('');
+    const [message, setMessage] = useState('');
+
+    const handleSubmit = () => {
+        onRequestSubmit(title, message);
+        setTitle('');
+        setMessage('');
+    };
+
+    return (
+        <div className="notification-box mt-3 ml-3">
+            <div className="content">
+                <input type="text" value={title} className="w-1/2 mb-2" onChange={(e) => setTitle(e.target.value)} placeholder=" Title" />
+                <textarea value={message} className="w-full" onChange={(e) => setMessage(e.target.value)} placeholder=" Message" />
+            </div>
+            <button onClick={handleSubmit} className="px-2 py-1">Submit Request</button>
+        </div>
+    );
+};
+
 // Custom hook for fetching notifications
 const useNotifications = () => {
     const [notifications, setNotifications] = useState([
@@ -43,6 +65,15 @@ const NotificationsModal = ({ onClose }: any) => {
         const notificationDocRef = doc(db, "users", uid, "notifications", id.toString());
         await updateDoc(notificationDocRef, { markAsRead: true });
     };
+
+    const [isRequestBoxVisible, setRequestBoxVisible] = useState(false);
+
+    const handleRequestSubmit = (title: string, message: string) => {
+        // Handle the request submission here
+        console.log(title, message);
+        setRequestBoxVisible(false);
+    };
+
     return (
         <div className="fixed z-10 right-0 top-10 bottom-10 mt-20 w-1/4 max-sm:w-3/4 xs:w-3/4 sm:w-1/3 md:w-1/4 lg:w-1/5 bg-white p-6 overflow-auto rounded-lg shadow-xl transition-all duration-500 delay-200 transform translate-x-full ease-out transition-medium m-4 border-black border-2"
             style={{ transform: 'translateX(0)', height: 'calc(85%)' }}>
@@ -64,6 +95,9 @@ const NotificationsModal = ({ onClose }: any) => {
                     </div>
                 ))}
             </div>
+            {!isRequestBoxVisible && <button onClick={() => setRequestBoxVisible(true)} className="request-button px-2 py-1">Make a Request</button>}
+            {isRequestBoxVisible && <button onClick={() => setRequestBoxVisible(false)} className="request-button px-2 py-1">Cancel</button>}
+            {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} />}
         </div>
     );
 };
