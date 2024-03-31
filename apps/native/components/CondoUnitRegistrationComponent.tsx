@@ -18,16 +18,16 @@ const CondoUnitRegistration = () => {
     useEffect(() => {
         const fetchUserEmail = async () => {
             const storedEmail = await AsyncStorage.getItem('userEmail');
-            if (storedEmail) {
-                setUserEmail(storedEmail);
-            } else {
+            //if (storedEmail) {
+            //    setUserEmail(storedEmail);
+            //} else {
                 const auth = getAuth();
                 const user = auth.currentUser;
                 if (user) {
                     setUserEmail(user.email || '');
                     await AsyncStorage.setItem('userEmail', user.email || '');
                 }
-            }
+            //}
         };
 
         fetchUserEmail();
