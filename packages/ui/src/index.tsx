@@ -9,6 +9,7 @@ import { Button } from "./button";
 import DashboardNav from "./DashboardNav";
 import DashboardCard from "./dashboard/DashboardCard";
 import PropertyList from "./properties/PropertyList";
+import PropertyListFinance from "./properties/PropertyListFinance";
 import PropertyComponent from "./properties/PropertyComponent";
 import DefaultFinanceCard from "./finance/DefaultFinanceCard";
 import CreatePropertyModal from "./properties/CreatePropertyModal";
@@ -26,6 +27,7 @@ export {
     DashboardNav,
     DashboardCard,
     PropertyList,
+    PropertyListFinance,
     PropertyComponent,
     DefaultFinanceCard,
     CreatePropertyModal,
