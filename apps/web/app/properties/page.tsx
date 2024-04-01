@@ -19,7 +19,7 @@ const Page = () => {
     const [ownedProperties, setOwnedProperties] = useState<Object[]>([]);
     const [isLoading, setIsLoading] = useState<Boolean>(true);
     const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
-    const [selectedProperty, setSelectedProperty] = useState<Object>();
+    const [selectedProperty, setSelectedProperty] = useState<any>();
     /*** Used for creating the right amount of units and to pair them properly.*/
     const [propertyId, setPropertyId] = useState('');
     const [unitCount, setUnitCount] = useState(0);
