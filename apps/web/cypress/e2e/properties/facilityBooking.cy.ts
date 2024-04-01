@@ -12,7 +12,6 @@ describe('Facility Booking Process', () => {
         cy.visit('/properties');
 
         // Click on a specific property, replace '1234' with the actual property name/text in your app
-        cy.wait(40000);
         cy.get('div').contains('1234').click();
 
         // Click the 'Book Facility' button
