@@ -55,15 +55,43 @@ const useNotifications = () => {
     return { notifications, setNotifications };
 };
 
-const NotificationsModal = ({ onClose }: any) => {
-    const { notifications, setNotifications } = useNotifications();
+const NotificationsModal = ({onClose}: any) => {
+    const {notifications, setNotifications} = useNotifications();
+    const [properties, setProperties] = useState([]);
+
+    useEffect(() => {
+        const fetchProperties = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const {uid} = user;
+                const propertiesCollectionRef = collection(db, "properties");
+                const querySnapshot = await getDocs(propertiesCollectionRef);
+                let propertiesData: any = [];
+
+                for (let propertyDoc of querySnapshot.docs) {
+                    const condoUnitsCollectionRef = collection(propertyDoc.ref, "condoUnits");
+                    const condoUnitsSnapshot = await getDocs(condoUnitsCollectionRef);
+
+                    for (let condoUnitDoc of condoUnitsSnapshot.docs) {
+                        if (condoUnitDoc.data().owner === uid) {
+                            propertiesData.push({id: propertyDoc.id, ...propertyDoc.data()});
+                            break; // Break the loop as soon as we find a matching condo unit
+                        }
+                    }
+                }
+
+                setProperties(propertiesData);
+            }
+        };
+        fetchProperties();
+    }, []);
 
     const markAsRead = async (id: number) => {
         setNotifications(notifications.filter(notification => notification.id !== id));
         const uid = auth.currentUser?.uid;
         if (!uid) return;
         const notificationDocRef = doc(db, "users", uid, "notifications", id.toString());
-        await updateDoc(notificationDocRef, { markAsRead: true });
+        await updateDoc(notificationDocRef, {markAsRead: true});
     };
 
     const [isRequestBoxVisible, setRequestBoxVisible] = useState(false);
