@@ -110,9 +110,30 @@ const NotificationsModal = ({onClose}: any) => {
 
     const [isRequestBoxVisible, setRequestBoxVisible] = useState(false);
 
-    const handleRequestSubmit = (title: string, message: string) => {
-        // Handle the request submission here
-        console.log(title, message);
+    const handleRequestSubmit = async (title: string, message: string, propertyId: string) => {
+        const user = auth.currentUser;
+        if (!user) return;
+        const {uid} = user;
+
+        const newRequest = {
+            userUID: uid,
+            propertyUID: propertyId,
+            title: title,
+            message: message,
+            status: "created"
+        };
+
+        userRequests.push(newRequest);
+        try {
+            const requestsCollectionRef = collection(db, "requests");
+            await addDoc(requestsCollectionRef, newRequest);
+            console.log("New request added");
+            alert("Request submitted successfully!");
+        } catch (error) {
+            console.error("Error adding new request: ", error);
+            alert("Error submitting request. Please try again later.");
+        }
+
         setRequestBoxVisible(false);
     };
 
