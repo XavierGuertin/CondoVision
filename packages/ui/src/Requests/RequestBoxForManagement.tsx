@@ -1,3 +1,18 @@
+/**
+ * RequestsModal Component
+ *
+ * Overall view of the feature:
+ * A user can submit a request linked to a condo unit they own. Once submitted, the request's status becomes "created" and it awaits a response from the condo management company.
+ * Only the management company that owns the property associated with the requested condo unit can view the submitted request.
+ * The management company has the option to either accept or reject the request. Regardless of the decision, they must provide a response message.
+ * After the request has been either accepted or rejected, the user will be notified of the status change and can view the management company's response message.
+ * If desired, the user has the option to delete the request.
+ *
+ * Specific to this class:
+ * This component is only accessible for the management company role. It displays a modal that contains the `RequestBoxForManagement` component, which handles the request-related functionalities.
+ */
+
+
 import React, {useEffect, useState} from 'react';
 import {auth, db} from "@web/firebase";
 import {collection, getDocs, updateDoc} from "firebase/firestore";

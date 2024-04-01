@@ -1,3 +1,24 @@
+/**
+ * RequestsModal Component
+ *
+ * This component serves as a modal for handling various requests within a React application.
+ * It primarily functions as a UI element that presents request-related information to the user,
+ * allowing for an interactive and responsive design.
+ *
+ * Key Functionalities:
+ * - Utilizes a modal design pattern to display requests information in a floating, focused UI element.
+ * - Incorporates the `IoClose` icon from `react-icons` to provide a user-friendly mechanism to close the modal.
+ * - Integrates with the `RequestBoxForManagement` sub-component to handle specific request-related functionalities.
+ *
+ * Styling:
+ * - Applies Tailwind CSS for styling, ensuring a responsive and modern design across various device sizes.
+ * - Uses fixed positioning, z-index, and overflow properties to ensure the modal is properly displayed and functional.
+ *
+ * Usage:
+ * Include `<RequestsModal />` in your component tree and manage its visibility through state to incorporate a responsive requests handling modal in your application.
+ */
+
+
 import React from 'react';
 import {IoClose} from 'react-icons/io5'
 import RequestBoxForManagement from './RequestBoxForManagement';

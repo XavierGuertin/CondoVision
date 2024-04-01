@@ -1,8 +1,31 @@
+/**
+ * NotificationsModal Component
+ *
+ * This component is designed to manage and display notifications within a React application,
+ * leveraging Firebase for data storage and operations.
+ *
+ * User's notifications are fetched from Firestore and displayed in a modal window.
+ * The user's can also make requests that are based on a specific unit and that can be approved or rejected by condo management companies.
+ *
+ * It makes use of React hooks for state management,including `useState` for local component state and `useEffect` for side effects.
+ *
+ * Key Functionalities:
+ * - Interacts with Firebase Firestore for CRUD operations on notifications data.
+ * - Utilizes `IoClose` from `react-icons` for UI elements.
+ * - Implements a RequestBox sub-component for handling notification requests, with properties passed as props.
+ *
+ * Dependencies:
+ * - React and React Icons for UI construction and iconography.
+ * - Firebase and Firestore for backend data management.
+ *
+ * Usage:
+ * Import and include `<NotificationsModal />` in your component tree to enable notification management
+ * within your application.
+ */
 import React, {useEffect, useState} from 'react';
 import {IoClose} from 'react-icons/io5'
 import {auth, db} from "@web/firebase";
-import {addDoc, collection, getDocs, updateDoc, deleteDoc} from "firebase/firestore";
-import { doc, getDoc } from "firebase/firestore";
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc} from "firebase/firestore";
 
 // Request Box Component
 const RequestBox = ({onRequestSubmit, properties}: any) => {
@@ -23,12 +46,14 @@ const RequestBox = ({onRequestSubmit, properties}: any) => {
     return (
         <div className="notification-box mt-3 ml-3">
             <div className="content">
-                <input type="text" value={title} className="w-full mb-2 border-2 pl-1" onChange={(e) => setTitle(e.target.value)}
+                <input type="text" value={title} className="w-full mb-2 border-2 pl-1"
+                       onChange={(e) => setTitle(e.target.value)}
                        placeholder=" Title"/>
                 <textarea value={message} className="w-full border-2 pl-1" onChange={(e) => setMessage(e.target.value)}
                           placeholder=" Message"/>
                 <p>Select the property</p>
-                <select value={selectedProperty} className="border-2" onChange={(e) => setSelectedProperty(e.target.value)}>
+                <select value={selectedProperty} className="border-2"
+                        onChange={(e) => setSelectedProperty(e.target.value)}>
                     {properties.map((property: any) => (
                         <option key={property.id} value={property.id}>{property.propertyName}</option>
                     ))}
@@ -138,7 +163,6 @@ const NotificationsModal = ({onClose}: any) => {
     };
 
 
-
     // Custom hook for fetching user's requests
     const useUserRequests = () => {
         const [userRequests, setUserRequests] = useState([]);
@@ -154,9 +178,9 @@ const NotificationsModal = ({onClose}: any) => {
 
                     for (let document of querySnapshot.docs) {
                         if (document.data().userUID === uid) {
-                            let request : any = {id: document.id, ...document.data()};
+                            let request: any = {id: document.id, ...document.data()};
                             const propertyRef = doc(db, "properties", request.propertyUID);
-                            const propertyDoc : any = await getDoc(propertyRef);
+                            const propertyDoc: any = await getDoc(propertyRef);
                             request.propertyName = propertyDoc.data().propertyName;
                             requestData.push(request);
                         }
@@ -227,11 +251,12 @@ const NotificationsModal = ({onClose}: any) => {
 
             <div className="flex flex-col items-center">
                 <h2 className="text-3xl font-semibold text-gray-800 mb-4 mt-3">Your Requests</h2>
-                {userRequests.map((request : any) => (
+                {userRequests.map((request: any) => (
                     <div key={request.id} className="notification-box">
                         <div className="content">
                             <p><strong>Title:</strong> {request.title}</p>
-                            <p style={{ color: request.status === 'accepted' ? 'green' : request.status === 'rejected' ? 'red' : 'black' }}><strong>Status:</strong> {request.status}</p>
+                            <p style={{color: request.status === 'accepted' ? 'green' : request.status === 'rejected' ? 'red' : 'black'}}>
+                                <strong>Status:</strong> {request.status}</p>
                             {expandedRequestId === request.id && (
                                 <>
                                     <p><strong>Message:</strong> {request.message}</p>
