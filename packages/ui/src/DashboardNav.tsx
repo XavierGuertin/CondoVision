@@ -6,6 +6,7 @@ import Image from "next/image";
 import UserProfileModal from './UserProfileModal';
 import NotificationsModal from "./NotificationsModal";
 import { collection, getDocs } from "firebase/firestore";
+import RequestsModal from "./Requests/RequestsModal";
 
 const DashboardNav = () => {
     const [active, setActive] = useState("Dashboard");
@@ -14,6 +15,10 @@ const DashboardNav = () => {
     const [isModalOpenUser, setIsModalOpenUser] = useState(false);
     const [isModalOpenNotifications, setIsModalOpenNotifications] = useState(false);
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+    let userRole: any;
+    if (typeof window !== 'undefined') {
+        userRole = window.localStorage.getItem('userRole');
+    }
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -32,7 +37,6 @@ const DashboardNav = () => {
                         notificationsData.push({ id: doc.id, ...doc.data() });
                     }
                 });
-                console.log('notificationsData', notificationsData);
                 setUnreadNotificationsCount(notificationsData.length);
             }
         };
@@ -112,7 +116,8 @@ const DashboardNav = () => {
                 ))}
             </ul>
             {isModalOpenUser && <UserProfileModal user={authUser} onClose={toggleModalUser} />}
-            {isModalOpenNotifications && <NotificationsModal user={authUser} onClose={toggleModalNotifications} />}
+            {isModalOpenNotifications && userRole != 'Condo Management Company' && <NotificationsModal user={authUser} onClose={toggleModalNotifications} />}
+            {isModalOpenNotifications && userRole === 'Condo Management Company' && <RequestsModal user={authUser} onClose={toggleModalNotifications} />}
         </nav>
     );
 };
