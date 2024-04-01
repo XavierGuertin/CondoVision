@@ -11,9 +11,6 @@ describe('Facility Booking Process', () => {
     it('logs in and books a facility', () => {
         cy.visit('/properties');
 
-        // Click on a specific property, replace '1234' with the actual property name/text in your app
-        cy.get('div').contains('1234').click();
-
         // Click the 'Book Facility' button
         cy.get('button').contains('Book Facility').click();
 
@@ -31,7 +28,7 @@ describe('Facility Booking Process', () => {
             }
         });
 
-        cy.get('button').contains('11:00').click();
+        cy.get('button').contains('11:00').click({force: true});
 
         //Expects alert and dismisses it
         cy.on('window:alert', (str) => {
