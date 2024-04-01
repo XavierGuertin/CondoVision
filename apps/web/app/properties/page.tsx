@@ -11,6 +11,7 @@ import {
     PropertyComponent,
     CreatePropertyModal,
     CreateUnitModal,
+    FacilityBookingPage
 } from "@ui/index";
 
 
@@ -23,7 +24,12 @@ const Page = () => {
     const [propertyId, setPropertyId] = useState('');
     const [unitCount, setUnitCount] = useState(0);
     const [currentUnit, setCurrentUnit] = useState(0); // Start with 0 to not display 
+    const [showBookingModal, setShowBookingModal] = useState(false);
 
+    // Function to toggle the booking modal
+    const toggleBookingModal = () => {
+        setShowBookingModal(!showBookingModal);
+    };
     const handlePropertySaved = async (propertyName: unknown, address: unknown) => {
         const propertiesRef = collection(db, 'properties');
         const q = query(propertiesRef, where("propertyName", "==", propertyName), where("address", "==", address));
@@ -122,9 +128,33 @@ const Page = () => {
         <div className="h-screen bg-gradient-to-r from-[#87A8FA] to-[#87CCFA] overflow-hidden">
             <DashboardNav />
             <div className="flex h-full">
-                {isLoading ? <h1>Loading...</h1> : <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} setModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />}
-                {isLoading ? <h1>Loading...</h1> : <PropertyComponent selectedProperty={selectedProperty} />}
+                {isLoading ? (
+                    <h1>Loading...</h1>
+                ) : (
+                    <PropertyList ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty}
+                                  setModalOpen={setIsModalOpen} isModalOpen={isModalOpen}/>
+                )}
+                {!isLoading ? (
+                    <PropertyComponent
+                        selectedProperty={selectedProperty}
+                        onBookFacilityClick={toggleBookingModal}
+                    />
+                ) : (
+                    <h1>Loading...</h1>
+                )}
             </div>
+            {showBookingModal && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="my-modal">
+                    <div className="relative top-20 mx-auto p-5 border w-3/4 shadow-lg rounded-md bg-gray-300">
+                        <FacilityBookingPage propertyId={selectedProperty?.id} />
+                        <button
+                            onClick={toggleBookingModal}
+                            className="absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-black text-sm z-50">
+                            X
+                        </button>
+                    </div>
+                </div>
+            )}
             {isModalOpen && <div className="absolute top-0 h-screen w-screen bg-black bg-opacity-20">
                 <div className="flex flex-col h-full items-center justify-center z-20">
                     <div className="w-1/2 h-4/5 bg-blue-100 rounded-lg p-4 flex flex-col">
