@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {auth, db} from "@web/firebase";
-import {collection, doc, getDoc, getDocs, updateDoc} from "firebase/firestore";
+import {collection, getDocs, updateDoc} from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 
 // Custom hook for fetching requests
 const useRequests = () => {
@@ -36,9 +37,9 @@ const useRequests = () => {
 
 // Request Box Component for Management
 const RequestBoxForManagement = () => {
-    const {requests, setRequests} = useRequests();
-    const [responses, setResponses]: any = useState({});
-    const [properties, setProperties] = useState([]);
+    const { requests, setRequests } = useRequests();
+    const [responses, setResponses] : any = useState({});
+    const [, setProperties] = useState([]);
 
     useEffect(() => {
         const fetchProperties = async () => {
@@ -62,7 +63,7 @@ const RequestBoxForManagement = () => {
     }, []);
 
     const handleResponseChange = (id: number, value: string) => {
-        setResponses((prev: any) => ({...prev, [id]: value}));
+        setResponses((prev : any) => ({ ...prev, [id]: value }));
     };
 
     const handleAccept = async (id: number, response: string) => {
@@ -71,7 +72,7 @@ const RequestBoxForManagement = () => {
             return;
         }
         const requestDocRef = doc(db, "requests", id.toString());
-        await updateDoc(requestDocRef, {status: "accepted", response: response});
+        await updateDoc(requestDocRef, { status: "accepted", response: response });
         setRequests(requests.filter((request: any) => request.id !== id));
     };
 
@@ -81,7 +82,7 @@ const RequestBoxForManagement = () => {
             return;
         }
         const requestDocRef = doc(db, "requests", id.toString());
-        await updateDoc(requestDocRef, {status: "rejected", response: response});
+        await updateDoc(requestDocRef, { status: "rejected", response: response });
         setRequests(requests.filter((request: any) => request.id !== id));
     };
 
@@ -95,16 +96,13 @@ const RequestBoxForManagement = () => {
                             <p><strong>Message:</strong> {request.message}</p>
                             <p><strong>Property:</strong> {request.propertyName}</p>
                             <p><strong>Contact:</strong> {request.userEmail}</p>
-                            <textarea value={responses[request.id] || ''} className="w-full border-2 pl-1"
-                                      onChange={(e) => handleResponseChange(request.id, e.target.value)}
+                            <textarea value={responses[request.id] || ''} className="w-full border-2 pl-1" onChange={(e) => handleResponseChange(request.id, e.target.value)}
                                       placeholder=" Response"/>
                         </div>
                         <div className="button-container">
-                            <button onClick={() => handleAccept(request.id, responses[request.id])}
-                                    className="accept-button px-2 py-1">Accept
+                            <button onClick={() => handleAccept(request.id, responses[request.id])} className="accept-button px-2 py-1">Accept
                             </button>
-                            <button onClick={() => handleReject(request.id, responses[request.id])}
-                                    className="reject-button px-2 py-1">Reject
+                            <button onClick={() => handleReject(request.id, responses[request.id])} className="reject-button px-2 py-1">Reject
                             </button>
                         </div>
                     </div>
