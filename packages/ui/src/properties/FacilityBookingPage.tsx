@@ -9,6 +9,9 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+interface FacilityBookingPageProps {
+    propertyId: string;
+}
 // @ts-ignore
 const FacilityBookingPage = ({ propertyId }) => {
     const [facilities, setFacilities] = useState([]);
@@ -103,7 +106,7 @@ const FacilityBookingPage = ({ propertyId }) => {
             <h2 className="text-2xl font-bold text-center mb-6">Booking System</h2>
             {facilities.length > 0 ? (
                 <div>
-                    {facilities.map((facility, facilityIndex) => (
+                    {facilities.map((facility:any, facilityIndex:any) => (
                         <div key={facility.facilityName} className="mb-4">
                             <h3 className="text-xl font-semibold mb-2">{facility.facilityName}</h3>
                             <div className="flex flex-wrap gap-2 mb-4">
@@ -125,7 +128,7 @@ const FacilityBookingPage = ({ propertyId }) => {
                         </div>
                     ))}
                     <div className="mb-4">
-                        <DatePicker selected={selectedDate} onChange={(date) => setSelectedDate(date)} wrapperClassName="date-picker" />
+                        <DatePicker selected={selectedDate} onChange={(date:Date) => setSelectedDate(date)} wrapperClassName="date-picker" />
                     </div>
                     <button onClick={confirmBooking} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Book
