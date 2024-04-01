@@ -74,6 +74,59 @@ const NotificationsModal = ({ onClose }: any) => {
         setRequestBoxVisible(false);
     };
 
+
+
+    // Custom hook for fetching user's requests
+    const useUserRequests = () => {
+        const [userRequests, setUserRequests] = useState([]);
+
+        useEffect(() => {
+            const fetchUserRequests = async () => {
+                const user = auth.currentUser;
+                if (user) {
+                    const {uid} = user;
+                    const requestsCollectionRef = collection(db, "requests");
+                    const querySnapshot = await getDocs(requestsCollectionRef);
+                    let requestData: any = [];
+
+                    for (let document of querySnapshot.docs) {
+                        if (document.data().userUID === uid) {
+                            let request : any = {id: document.id, ...document.data()};
+                            const propertyRef = doc(db, "properties", request.propertyUID);
+                            const propertyDoc : any = await getDoc(propertyRef);
+                            request.propertyName = propertyDoc.data().propertyName;
+                            requestData.push(request);
+                        }
+                    }
+
+                    setUserRequests(requestData);
+                }
+            };
+            fetchUserRequests();
+        }, []);
+
+        const handleDeleteRequest = async (id: number) => {
+            const requestDocRef = doc(db, "requests", id.toString());
+            await deleteDoc(requestDocRef);
+            setUserRequests(userRequests.filter((request: any) => request.id !== id));
+        };
+
+        return {userRequests, setUserRequests, handleDeleteRequest};
+    };
+
+    const {userRequests, handleDeleteRequest}: any = useUserRequests();
+
+    const [expandedRequestId, setExpandedRequestId] = useState(null);
+
+    const handleExpandCollapseClick = (id: number) => {
+        if (expandedRequestId === id) {
+            setExpandedRequestId(null);
+        } else {
+            // @ts-ignore
+            setExpandedRequestId(id);
+        }
+    };
+
     return (
         <div
             className="fixed z-10 right-0 top-10 bottom-10 mt-20 w-1/4 max-sm:w-3/4 xs:w-3/4 sm:w-1/3 md:w-1/4 lg:w-1/5 bg-white p-6 overflow-auto rounded-lg shadow-xl transition-all duration-500 delay-200 transform translate-x-full ease-out transition-medium m-4 border-black border-2"
@@ -92,13 +145,6 @@ const NotificationsModal = ({ onClose }: any) => {
                             <p><strong>{notification.category.toUpperCase()}</strong></p>
                             <p>{notification.message}</p>
                         </div>
-                        <button onClick={() => markAsRead(notification.id)} className="px-2 py-1">Mark as read</button>
-                    </div>
-                ))}
-            </div>
-            {!isRequestBoxVisible && <button onClick={() => setRequestBoxVisible(true)} className="request-button px-2 py-1">Make a Request</button>}
-            {isRequestBoxVisible && <button onClick={() => setRequestBoxVisible(false)} className="request-button px-2 py-1">Cancel</button>}
-            {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} />}
                         <button onClick={() => markAsRead(notification.id)}
                                 className="notification-box-button px-2 py-1">Mark as read
                         </button>
