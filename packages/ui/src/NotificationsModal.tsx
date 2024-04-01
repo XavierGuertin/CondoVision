@@ -75,12 +75,13 @@ const NotificationsModal = ({ onClose }: any) => {
     };
 
     return (
-        <div className="fixed z-10 right-0 top-10 bottom-10 mt-20 w-1/4 max-sm:w-3/4 xs:w-3/4 sm:w-1/3 md:w-1/4 lg:w-1/5 bg-white p-6 overflow-auto rounded-lg shadow-xl transition-all duration-500 delay-200 transform translate-x-full ease-out transition-medium m-4 border-black border-2"
-            style={{ transform: 'translateX(0)', height: 'calc(85%)' }}>
+        <div
+            className="fixed z-10 right-0 top-10 bottom-10 mt-20 w-1/4 max-sm:w-3/4 xs:w-3/4 sm:w-1/3 md:w-1/4 lg:w-1/5 bg-white p-6 overflow-auto rounded-lg shadow-xl transition-all duration-500 delay-200 transform translate-x-full ease-out transition-medium m-4 border-black border-2"
+            style={{transform: 'translateX(0)', height: 'calc(85%)'}}>
             <div className="flex justify-end">
                 <button onClick={onClose}
-                    className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold rounded-full w-10 h-10">
-                    <IoClose className="text-2xl" />
+                        className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold rounded-full w-10 h-10">
+                    <IoClose className="text-2xl"/>
                 </button>
             </div>
             <div className="flex flex-col items-center">
@@ -98,6 +99,51 @@ const NotificationsModal = ({ onClose }: any) => {
             {!isRequestBoxVisible && <button onClick={() => setRequestBoxVisible(true)} className="request-button px-2 py-1">Make a Request</button>}
             {isRequestBoxVisible && <button onClick={() => setRequestBoxVisible(false)} className="request-button px-2 py-1">Cancel</button>}
             {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} />}
+                        <button onClick={() => markAsRead(notification.id)}
+                                className="notification-box-button px-2 py-1">Mark as read
+                        </button>
+                    </div>
+                ))}
+            </div>
+            {!isRequestBoxVisible &&
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <button onClick={() => setRequestBoxVisible(true)} className="request-button px-2 py-1">Make a
+                        Request
+                    </button>
+                </div>
+            }
+            {isRequestBoxVisible && <button onClick={() => setRequestBoxVisible(false)}
+                                            className="request-button px-2 py-1">Cancel</button>}
+            {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} properties={properties}/>}
+
+            <div className="flex flex-col items-center">
+                <h2 className="text-3xl font-semibold text-gray-800 mb-4 mt-3">Your Requests</h2>
+                {userRequests.map((request : any) => (
+                    <div key={request.id} className="notification-box">
+                        <div className="content">
+                            <p><strong>Title:</strong> {request.title}</p>
+                            <p style={{ color: request.status === 'accepted' ? 'green' : request.status === 'rejected' ? 'red' : 'black' }}><strong>Status:</strong> {request.status}</p>
+                            {expandedRequestId === request.id && (
+                                <>
+                                    <p><strong>Message:</strong> {request.message}</p>
+                                    <p><strong>Property:</strong> {request.propertyName}</p>
+                                    <p><strong>Response:</strong> {request.response}</p>
+                                    {(request.status === 'accepted' || request.status === 'rejected') && (
+                                        <button onClick={() => handleDeleteRequest(request.id)}
+                                                className="delete-request-button px-2 py-1">
+                                            Delete Request
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                        <button onClick={() => handleExpandCollapseClick(request.id)}
+                                className="notification-box-button px-2 py-1">
+                            {expandedRequestId === request.id ? 'Collapse' : 'Expand'}
+                        </button>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
