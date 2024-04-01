@@ -11,6 +11,7 @@ import DashboardCard from "./dashboard/DashboardCard";
 import PropertyList from "./properties/PropertyList";
 import PropertyListFinance from "./properties/PropertyListFinance";
 import PropertyComponent from "./properties/PropertyComponent";
+import FinanceComponent from "./properties/FinanceComponent";
 import DefaultFinanceCard from "./finance/DefaultFinanceCard";
 import CreatePropertyModal from "./properties/CreatePropertyModal";
 import CreateUnitModal from "./properties/CreateUnitModal";
@@ -28,6 +29,7 @@ export {
     DashboardCard,
     PropertyList,
     PropertyListFinance,
+    FinanceComponent,
     PropertyComponent,
     DefaultFinanceCard,
     CreatePropertyModal,

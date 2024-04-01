@@ -5,10 +5,11 @@ import { db } from "@web/firebase";
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import CondoUnitAdapter from "../../../native/components/CondoUnitAdapter";
 import PropertyAdapter from "../../../native/components/PropertyAdapter";
+
 import {
     DashboardNav,
     PropertyListFinance,
-    PropertyComponent,
+    FinanceComponent,
 } from "@ui/index";
 
 
@@ -101,7 +102,7 @@ const Page = () => {
             <DashboardNav />
             <div className="flex h-full">
                 {isLoading ? <h1>Loading...</h1> : <PropertyListFinance ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} setModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />}
-                {isLoading ? <h1>Loading...</h1> : <PropertyComponent selectedProperty={selectedProperty} />}
+                {isLoading ? <h1>Loading...</h1> : <FinanceComponent selectedProperty={selectedProperty} />}
             </div>
         </div>
     );
