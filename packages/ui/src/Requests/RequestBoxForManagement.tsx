@@ -3,6 +3,38 @@ import {auth, db} from "@web/firebase";
 import {collection, getDocs, updateDoc} from "firebase/firestore";
 import { getDoc, doc } from "firebase/firestore";
 
+// Custom hook for fetching requests
+const useRequests = () => {
+    const [requests, setRequests] = useState([]);
+
+    useEffect(() => {
+        const fetchRequests = async () => {
+            const requestsCollectionRef = collection(db, "requests");
+            const querySnapshot = await getDocs(requestsCollectionRef);
+            let requestData: any = [];
+
+            for (let document of querySnapshot.docs) {
+                if (document.data().status === "created") {
+                    const propertyDocRef = doc(db, "properties", document.data().propertyUID);
+                    const propertyDoc = await getDoc(propertyDocRef);
+                    const userDocRef = doc(db, "users", document.data().userUID);
+                    const userDoc = await getDoc(userDocRef);
+                    if (propertyDoc.exists() && userDoc.exists()) {
+                        const propertyName = propertyDoc.data().propertyName;
+                        const userEmail = userDoc.data().email;
+                        requestData.push({id: document.id, propertyName, userEmail, ...document.data()});
+                    }
+                }
+            }
+
+            setRequests(requestData);
+        };
+        fetchRequests();
+    }, []);
+
+    return {requests, setRequests};
+};
+
 // Request Box Component for Management
 const RequestBoxForManagement = () => {
 return (
