@@ -37,7 +37,32 @@ const useRequests = () => {
 
 // Request Box Component for Management
 const RequestBoxForManagement = () => {
-return (
+    const { requests, setRequests } = useRequests();
+    const [responses, setResponses] : any = useState({});
+    const [properties, setProperties] = useState([]);
+
+    useEffect(() => {
+        const fetchProperties = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const {uid} = user;
+                const propertiesCollectionRef = collection(db, "properties");
+                const querySnapshot = await getDocs(propertiesCollectionRef);
+                let propertiesData: any = [];
+
+                querySnapshot.forEach(document => {
+                    if (document.data().owner === uid) {
+                        propertiesData.push({id: document.id, ...document.data()});
+                    }
+                });
+                setProperties(propertiesData);
+                console.log(propertiesData)
+            }
+        };
+        fetchProperties();
+    }, []);
+
+    return (
     <div>
         {requests.map((request: any) => {
             return (
