@@ -145,7 +145,7 @@ const Page = () => {
             </div>
             {showBookingModal && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="my-modal">
-                    <div className="relative top-20 mx-auto p-5 border w-3/4 shadow-lg rounded-md bg-gray-300">
+                    <div className="relative top-20 mx-auto p-5 border w-3/4 shadow-lg rounded-md bg-blue-200">
                         <FacilityBookingPage propertyId={selectedProperty?.id} />
                         <button
                             onClick={toggleBookingModal}
