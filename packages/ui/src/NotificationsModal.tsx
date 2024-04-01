@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { IoClose } from 'react-icons/io5'
-import { auth, db } from "@web/firebase";
-import { doc, getDocs, collection, updateDoc } from "firebase/firestore";
+import React, {useEffect, useState} from 'react';
+import {IoClose} from 'react-icons/io5'
+import {auth, db} from "@web/firebase";
+import {addDoc, collection, getDocs, updateDoc, deleteDoc} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 // Request Box Component
-const RequestBox = ({ onRequestSubmit }: any) => {
+const RequestBox = ({onRequestSubmit, properties}: any) => {
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
+    const [selectedProperty, setSelectedProperty] = useState(properties[0]?.id || '');
+
+    useEffect(() => {
+        setSelectedProperty(properties[0]?.id || '');
+    }, [properties]);
 
     const handleSubmit = () => {
-        onRequestSubmit(title, message);
+        onRequestSubmit(title, message, selectedProperty);
         setTitle('');
         setMessage('');
     };
@@ -17,10 +23,18 @@ const RequestBox = ({ onRequestSubmit }: any) => {
     return (
         <div className="notification-box mt-3 ml-3">
             <div className="content">
-                <input type="text" value={title} className="w-1/2 mb-2" onChange={(e) => setTitle(e.target.value)} placeholder=" Title" />
-                <textarea value={message} className="w-full" onChange={(e) => setMessage(e.target.value)} placeholder=" Message" />
+                <input type="text" value={title} className="w-full mb-2 border-2 pl-1" onChange={(e) => setTitle(e.target.value)}
+                       placeholder=" Title"/>
+                <textarea value={message} className="w-full border-2 pl-1" onChange={(e) => setMessage(e.target.value)}
+                          placeholder=" Message"/>
+                <p>Select the property</p>
+                <select value={selectedProperty} className="border-2" onChange={(e) => setSelectedProperty(e.target.value)}>
+                    {properties.map((property: any) => (
+                        <option key={property.id} value={property.id}>{property.propertyName}</option>
+                    ))}
+                </select>
             </div>
-            <button onClick={handleSubmit} className="px-2 py-1">Submit Request</button>
+            <button onClick={handleSubmit} className="send-request-button px-2 py-1">Submit Request</button>
         </div>
     );
 };
@@ -28,21 +42,21 @@ const RequestBox = ({ onRequestSubmit }: any) => {
 // Custom hook for fetching notifications
 const useNotifications = () => {
     const [notifications, setNotifications] = useState([
-        { id: 1, category: 'Notification', message: 'There is no notification at the moment.' }
+        {id: 1, category: 'Notification', message: 'There is no notification at the moment.'}
     ]);
 
     useEffect(() => {
         const fetchUserProfileAndAuthData = async () => {
             const user = auth.currentUser;
             if (user) {
-                const { uid } = user;
+                const {uid} = user;
                 const notificationsCollectionRef = collection(db, "users", uid, "notifications");
                 const querySnapshot = await getDocs(notificationsCollectionRef);
                 let notificationsData: any = [];
 
-                querySnapshot.forEach(doc => {
-                    if (!doc.data().markAsRead) {
-                        notificationsData.push({ id: doc.id, ...doc.data() });
+                querySnapshot.forEach(document => {
+                    if (!document.data().markAsRead) {
+                        notificationsData.push({id: document.id, ...document.data()});
                     }
                 });
 
@@ -52,7 +66,7 @@ const useNotifications = () => {
         fetchUserProfileAndAuthData();
     }, []);
 
-    return { notifications, setNotifications };
+    return {notifications, setNotifications};
 };
 
 const NotificationsModal = ({onClose}: any) => {
