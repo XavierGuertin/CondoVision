@@ -256,8 +256,8 @@ export const MapComponent = ({ data }) => {
 
             {data.map((item, index) => {
                 const coordinates = {
-                    latitude: item.latitude,
-                    longitude: item.longitude,
+                    latitude: parseFloat(item.latitude),
+                    longitude: parseFloat(item.longitude),
                 }
                 return <Marker
                     key={index}
