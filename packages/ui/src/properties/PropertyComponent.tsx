@@ -14,19 +14,21 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
                 <div className="">
                     <h1 className="text-2xl font-bold text-white py-2 pl-2 capitalize">{selectedProperty.propertyName}</h1>
                     <p className="pl-2">Address: {selectedProperty.address}</p>
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-                        onClick={onBookFacilityClick}
-                    >
-                        Book Facility
-                    </button>
-                    {/* Use a button to toggle the AddFacilityModal visibility */}
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mt-2"
-                        onClick={toggleAddFacilityModal}
-                    >
-                        Add Facility
-                    </button>
+                    <div className="flex space-x-2">
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                            onClick={onBookFacilityClick}
+                        >
+                            Book Facility
+                        </button>
+                        <button
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                            onClick={toggleAddFacilityModal}
+                        >
+                            Add Facility
+                        </button>
+                    </div>
+
                 </div>
                 <div className="w-full h-full pl-2">
                     <h1 className="text-2xl font-bold text-white py-2">Finance</h1>
@@ -35,9 +37,9 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
                 {/* Conditionally render the AddFacilityModal based on the state
                     Pass the isVisible and onClose props to control the modal */}
                 {showAddFacilityModal && (
-                    <AddFacilityModal 
-                        propertyId={selectedProperty.id} 
-                        isVisible={showAddFacilityModal} 
+                    <AddFacilityModal
+                        propertyId={selectedProperty.id}
+                        isVisible={showAddFacilityModal}
                         onClose={toggleAddFacilityModal}
                     />
                 )}
