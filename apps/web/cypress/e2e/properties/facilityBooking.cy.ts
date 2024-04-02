@@ -9,6 +9,7 @@ describe('Facility Booking Process', () => {
     });
 
     it('logs in and books a facility', () => {
+        cy.visit('/dashboard');
         cy.visit('/properties');
 
         // Click the 'Book Facility' button
