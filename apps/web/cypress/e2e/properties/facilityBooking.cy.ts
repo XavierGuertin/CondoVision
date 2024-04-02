@@ -6,13 +6,21 @@ describe('Facility Booking Process', () => {
         cy.get('[name=emailSignIn]').type('ali@gmail.com');
         cy.get('[name=passwordSignIn]').type('12341234');
         cy.get('[name=submitSignIn]').click();
+
+        cy.wait(1000);
+    });
+
+    afterEach(() => {
+        cy.visit('/');
+        cy.wait(1000);
+        cy.get('[name=signOutButton]').click();
     });
 
     it('logs in and books a facility', () => {
         cy.visit('/dashboard');
         cy.visit('/properties');
 
-        cy.wait(10000);
+        cy.wait(5000);
         // Click the 'Book Facility' button
         cy.get('button').contains('Book Facility').click();
 
