@@ -12,6 +12,7 @@ describe('Facility Booking Process', () => {
         cy.visit('/dashboard');
         cy.visit('/properties');
 
+        cy.wait(1000);
         // Click the 'Book Facility' button
         cy.get('button').contains('Book Facility').click();
 
