@@ -94,7 +94,7 @@ const CondoProfileScreen = () => {
   }, []);
 
   const handleMapPress = () => {
-    navigation.navigate("OwnerMap", {
+    navigation.navigate("Map", {
       properties: ownedProperties,
     })
   }
@@ -106,7 +106,7 @@ const CondoProfileScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Condo Profiles</Text>
-        <TouchableOpacity style={styles.mapButton} onPress={handleMapPress}>
+        <TouchableOpacity id={"mapBtn"} style={styles.mapButton} onPress={handleMapPress}>
           <Text style={styles.mapText}>Map</Text>
         </TouchableOpacity>
       </View>

@@ -260,6 +260,7 @@ export const MapComponent = ({ data }) => {
                     longitude: parseFloat(item.longitude),
                 }
                 return <Marker
+                    id={"pressablePin"}
                     key={index}
                     onPress={() => handlePress()}
                     coordinate={coordinates}>

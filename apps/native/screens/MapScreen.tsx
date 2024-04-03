@@ -6,7 +6,7 @@ import {collection, getDocs, query} from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
-export function OwnerMapScreen({ navigation, route }) {
+export function MapScreen({ navigation, route }) {
 
     const [ownedUnits, setOwnedUnits] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -66,7 +66,7 @@ export function OwnerMapScreen({ navigation, route }) {
         <View style={styles.container}>
             {/* Send user back to wherever they came from */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
+                <TouchableOpacity id={"goBackBtn"} onPress={() => navigation.goBack()} style={styles.headerIcon}>
                     <FontAwesome5 name="times" size={24} color="#000" />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Building Locations</Text>
@@ -117,4 +117,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default OwnerMapScreen;
+export default MapScreen;

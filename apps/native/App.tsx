@@ -4,7 +4,7 @@ import {
   LoginScreen,
   SignupScreen,
   PropertyManagementScreen,
-  OwnerMapScreen,
+  MapScreen,
   UserProfileScreen,
   NotificationsScreen,
   ReportScreen,
@@ -52,7 +52,7 @@ const App = () => {
           name="PropertyManagement"
           component={PropertyManagementScreen}
         />
-          <Stack.Screen name="OwnerMap" component={OwnerMapScreen} initialParams={{
+          <Stack.Screen name="Map" component={MapScreen} initialParams={{
             properties: []
           }} />
         <Stack.Screen name="UserProfile" component={UserProfileScreen} />
