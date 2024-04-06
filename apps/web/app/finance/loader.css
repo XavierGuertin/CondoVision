@@ -1,0 +1,10 @@
+.loader {
+    /* Define the size of the loader */
+    width: 476px;
+    height: 498px;
+    /* Set the background image to your spinning wheel loader GIF */
+    background-image: url('../../public/loader.gif');
+    /* Center the loader horizontally and vertically */
+    background-position: center;
+    background-repeat: no-repeat;
+}

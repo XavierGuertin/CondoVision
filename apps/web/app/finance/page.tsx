@@ -5,19 +5,19 @@ import { db } from "@web/firebase";
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import CondoUnitAdapter from "../../../native/components/CondoUnitAdapter";
 import PropertyAdapter from "../../../native/components/PropertyAdapter";
+import dynamic from 'next/dynamic';
 
 import {
-    DashboardNav,
     PropertyListFinance,
     FinanceComponent,
 } from "@ui/index";
 
+const DashboardNav = dynamic(() => import('../../../../packages/ui/src/DashboardNav'), { ssr: false });
 
-
-const Page = () => {
+const Page = ({ user, onClose }: any) => {
     const [ownedProperties, setOwnedProperties] = useState<Object[]>([]);
-    const [isLoading, setIsLoading] = useState<Boolean>(true);
-    const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedProperty, setSelectedProperty] = useState<Object>();
     /*** Used for creating the right amount of units and to pair them properly.*/
     const [propertyId, setPropertyId] = useState('');

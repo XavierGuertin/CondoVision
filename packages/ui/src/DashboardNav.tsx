@@ -7,18 +7,37 @@ import UserProfileModal from './UserProfileModal';
 import NotificationsModal from "./NotificationsModal";
 import { collection, getDocs } from "firebase/firestore";
 import RequestsModal from "./Requests/RequestsModal";
+import FinancePage from "../../../apps/web/app/finance/page";
+import { useRouter } from 'next/router';
 
 const DashboardNav = () => {
-    const [active, setActive] = useState("Dashboard");
-    const [lastActive, setLastActive] = useState("Dashboard");
     const [authUser] = useAuthState(auth);
     const [isModalOpenUser, setIsModalOpenUser] = useState(false);
     const [isModalOpenNotifications, setIsModalOpenNotifications] = useState(false);
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+    const [isFinanceOpen, setIsFinanceOpen] = useState(false);
     let userRole: any;
     if (typeof window !== 'undefined') {
         userRole = window.localStorage.getItem('userRole');
     }
+    const [active, setActive] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.localStorage.getItem('active') || 'Dashboard';
+        }
+        return 'Dashboard';
+    });
+    const [lastActive, setLastActive] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.localStorage.getItem('lastActive') || 'Dashboard';
+        }
+        return 'Dashboard';
+    });
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.localStorage.setItem('active', active);
+        }
+    }, [active]);
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -62,6 +81,15 @@ const DashboardNav = () => {
         }
     };
 
+    const toggleFinance = () => {
+        setIsFinanceOpen(!isFinanceOpen);
+        if (!isFinanceOpen) {
+            setLastActive(active);
+        } else {
+            setActive(lastActive);
+        }
+    };
+
     return (
         <nav className="w-full flex py-2 justify-between items-center navbar bg-gradient-to-r bg-[#87A8FA] to-[#87CCFA] border-b border-[#87A8FA]">
             <a href="/dashboard">
@@ -82,6 +110,9 @@ const DashboardNav = () => {
                             setActive(nav.title);
                             if (nav.id === 'userProfile') {
                                 toggleModalUser();
+                            }
+                            if (nav.id === 'finance') {
+                                toggleFinance();
                             }
                             if (nav.id === 'notifications') {
                                 toggleModalNotifications();
@@ -105,7 +136,15 @@ const DashboardNav = () => {
                             : null
                         }
 
-                        {nav.id != 'userProfile' && nav.id != 'notifications' ?
+                        {nav.id === 'finance' ?
+                            <a href={`/${nav.id}`} className="flex">
+                                {React.createElement(nav.logo, { size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}` })}
+                                <p className={`flex items-center ${active === nav.title ? 'text-blue-500' : ''}`}>{nav.title}</p>
+                            </a>
+                            : null
+                        }
+
+                        {nav.id != 'userProfile' && nav.id != 'notifications' && nav.id != 'finance' ?
                             <a href={`/${nav.id}`} className="flex">
                                 {React.createElement(nav.logo, { size: 25, className: `mr-2 ${active === nav.title ? 'text-blue-500' : ''}` })}
                                 <p className={`flex items-center ${active === nav.title ? 'text-blue-500' : ''}`}>{nav.title}</p>

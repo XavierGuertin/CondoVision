@@ -42,6 +42,7 @@
     "react-firebase-hooks": "^5.1.1",
     "react-native-elements": "^3.4.3",
     "react-native-picker-select": "^9.0.1",
+    "react-router-dom": "^6.22.3",
     "tailwindcss": "  ^3.4.1",
     "uuid": "^9.0.1"
   }
