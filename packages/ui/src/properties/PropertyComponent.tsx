@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import DefaultFinanceCard from "../finance/DefaultFinanceCard";
 import AddFacilityModal from "./AddFacilitiesModal";
-import CondoFinancialStatusModal from "./CondoFinancialStatusModal";
 
 const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
   const [showAddFacilityModal, setShowAddFacilityModal] = useState(false);
@@ -13,10 +12,6 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
   // Toggle the visibility of the AddFacilityModal
   const toggleAddFacilityModal = () =>
     setShowAddFacilityModal(!showAddFacilityModal);
-
-  const toggleCondoFinanceStatusModal = () => {
-    setShowCondoFinanceStatus(!showCondoFinanceStatus);
-  };
 
   addEventListener("hideCondoFinanceStatus", () => {
     setShowCondoFinanceStatus(false);
@@ -75,11 +70,6 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
           />
         )}
         {showCondoFinanceStatus && (
-          // <CondoFinancialStatusModal
-          //   condo={currentCondo}
-          //   isVisible={showCondoFinanceStatus}
-          //   onClose={toggleCondoFinanceStatusModal}
-          // />
           <div className="w-full h-full pl-2">
             <h1 className="text-2xl font-bold text-white py-2">Finance</h1>
             <DefaultFinanceCard
