@@ -1,5 +1,6 @@
 interface CondoFees {
   includes: string[];
+  isPayed: boolean;
   monthlyFee: number;
 }
 
@@ -43,6 +44,7 @@ class CondoUnitAdapter {
       id: this.id,
       condoFees: {
         includes: this.condoFees.includes,
+        isPayed: this.condoFees.isPayed,
         monthlyFee: this.condoFees.monthlyFee,
       },
       lockerId: this.lockerId,
