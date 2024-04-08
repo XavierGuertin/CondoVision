@@ -70,8 +70,8 @@ const UserPropertyForm = ({ onFormSubmit, condoUnitID, propertyID }) => {
             <RNPickerSelect
                 onValueChange={(value) => setStatus(value)}
                 items={[
-                    { label: 'Owner', value: 'owner' },
-                    { label: 'Renter', value: 'renter' },
+                    { label: 'Owner', value: 'Owner' },
+                    { label: 'Renter', value: 'Renter' },
                 ]}
                 placeholder={{
                     label: 'Select user status...',

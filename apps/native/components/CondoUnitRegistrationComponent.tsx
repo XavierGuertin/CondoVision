@@ -72,7 +72,7 @@ const CondoUnitRegistration = () => {
             onChangeText={setRegistrationKey}
         />
         <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-            <Text style={styles.buttonText}>Register Property</Text>
+            <Text style={styles.buttonText}>Register Condo Unit</Text>
         </TouchableOpacity>
         </View>
     );
