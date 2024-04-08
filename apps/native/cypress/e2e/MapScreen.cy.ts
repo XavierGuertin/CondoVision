@@ -16,12 +16,8 @@
         })
         it("Overall Functionality", () => {
             cy.get("[id=mapBtn]").click()
-            // Click x button
+            cy.get("[id=openedMapBtn]").click()
             cy.get("[id=goBackBtn]").click()
-
-            cy.get("[id=mapBtn]").click()
-            // Click existing pin
-            cy.get("[id=pressablePin]").click()
         })
     })
 }
