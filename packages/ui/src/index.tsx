@@ -13,6 +13,7 @@ import PropertyComponent from "./properties/PropertyComponent";
 import DefaultFinanceCard from "./finance/DefaultFinanceCard";
 import CreatePropertyModal from "./properties/CreatePropertyModal";
 import CreateUnitModal from "./properties/CreateUnitModal";
+import FacilityBookingPage from "./properties/FacilityBookingPage";
 
 export {
     Navbar,
@@ -30,4 +31,5 @@ export {
     DefaultFinanceCard,
     CreatePropertyModal,
     CreateUnitModal,
+    FacilityBookingPage
 };
