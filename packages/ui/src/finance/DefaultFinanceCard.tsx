@@ -3,15 +3,46 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 
 type Props = {
-  //   url: string;
-  condo: object;
+  condo: {
+    id: number;
+    condoFees: {
+      includes: [];
+      isPayed: boolean;
+      monthlyFee: string;
+    };
+    lockerId: string;
+    occupantInfo: {
+      contact: string;
+      name: string;
+    };
+    owner: string;
+    parkingSpotId: string;
+    size: string;
+    unitId: string;
+  };
   property: object;
 };
 
-const DefaultFinanceCard = ({ /*url,*/ condo, property }: Props) => {
+type Payment = {
+  id: string;
+  condoId: string;
+  propertyId: string;
+  payer: string;
+  propertyOwner: string;
+  payment: {
+    date: {
+      nanoseconds: number;
+      seconds: number;
+    };
+    amount: number;
+    isOnTime: boolean;
+  };
+};
+
+const DefaultFinanceCard = ({ condo }: Props) => {
   const initialValue = [{}];
 
-  const [payments, setPayments] = useState(initialValue);
+  const [payments, setPayments] = useState(Array<Payment>);
   const [loading, setLoading] = useState(true);
 
   const secondsToDate = (seconds: number) => {
@@ -31,11 +62,11 @@ const DefaultFinanceCard = ({ /*url,*/ condo, property }: Props) => {
 
       console.log(paymentDocs);
 
-      const paymentList: object[] = [];
+      const paymentList: Array<Payment> = [];
       paymentDocs.forEach((paymentDoc) => {
         const data = paymentDoc.data();
 
-        const paymentObject = {
+        const paymentObject: Payment = {
           id: paymentDoc.id,
           condoId: data.condoId,
           propertyId: data.propertyId,
@@ -47,6 +78,7 @@ const DefaultFinanceCard = ({ /*url,*/ condo, property }: Props) => {
             isOnTime: data.payment.isOnTime,
           },
         };
+
         paymentList.push(paymentObject);
       });
       console.log("Payments:");

@@ -2,10 +2,45 @@ import React, { useState } from "react";
 import DefaultFinanceCard from "../finance/DefaultFinanceCard";
 import AddFacilityModal from "./AddFacilitiesModal";
 
+type Condo = {
+  id: number;
+  condoFees: {
+    includes: [];
+    isPayed: boolean;
+    monthlyFee: string;
+  };
+  lockerId: string;
+  occupantInfo: {
+    contact: string;
+    name: string;
+  };
+  owner: string;
+  parkingSpotId: string;
+  size: string;
+  unitId: string;
+};
+
 const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
+  const condo: Condo = {
+    id: -1,
+    condoFees: {
+      includes: [],
+      isPayed: false,
+      monthlyFee: "1",
+    },
+    lockerId: "",
+    occupantInfo: {
+      contact: "",
+      name: "",
+    },
+    owner: "",
+    parkingSpotId: "",
+    size: "",
+    unitId: "",
+  };
   const [showAddFacilityModal, setShowAddFacilityModal] = useState(false);
   const [showCondoFinanceStatus, setShowCondoFinanceStatus] = useState(false);
-  const [currentCondo, setCurrentCondo] = useState({});
+  const [currentCondo, setCurrentCondo] = useState(condo);
   console.log("Selected Property:");
   console.log(selectedProperty);
 
@@ -43,7 +78,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
           Condo Units
         </h1>
         <div className="flex flex-row">
-          {selectedProperty.units.map((condo) => (
+          {selectedProperty.units.map((condo: Condo) => (
             <button
               key={condo.id}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
@@ -56,12 +91,6 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
             </button>
           ))}
         </div>
-        {/* <div className="w-full h-full pl-2">
-          <h1 className="text-2xl font-bold text-white py-2">Finance</h1>
-          <DefaultFinanceCard url="#" />
-        </div> */}
-        {/* Conditionally render the AddFacilityModal based on the state
-                    Pass the isVisible and onClose props to control the modal */}
         {showAddFacilityModal && (
           <AddFacilityModal
             propertyId={selectedProperty.id}
@@ -73,7 +102,6 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
           <div className="w-full h-full pl-2">
             <h1 className="text-2xl font-bold text-white py-2">Finance</h1>
             <DefaultFinanceCard
-              url="#"
               condo={currentCondo}
               property={selectedProperty}
             />
