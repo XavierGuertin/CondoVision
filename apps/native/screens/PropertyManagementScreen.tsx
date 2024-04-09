@@ -47,6 +47,7 @@ const CondoProfileScreen = () => {
               condoId,
               {
                 includes: condoData.condoFees.includes,
+                isPayed: condoData.condoFees.isPayed,
                 monthlyFee: condoData.condoFees.monthlyFee,
               },
               condoData.lockerId,
@@ -101,7 +102,11 @@ const CondoProfileScreen = () => {
       <ScrollView id="propertyView" style={styles.flexibleContainer}>
         {ownedProperties.length > 0 ? (
           ownedProperties.map((property) => (
-            <PropertyProfileComponent id="propertyProfileComponent" data={property} key={property.id} />
+            <PropertyProfileComponent
+              id="propertyProfileComponent"
+              data={property}
+              key={property.id}
+            />
           ))
         ) : (
           <Text style={styles.noCondosText}>No Condos were found.</Text>
