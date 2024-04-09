@@ -10,6 +10,8 @@ type CondoProperty = {
     lockerCount: number;
     address: string;
     owner: string;
+    latitude: string;
+    longitude: string;
 };
 
 const initialCondoState: CondoProperty = {
@@ -19,6 +21,8 @@ const initialCondoState: CondoProperty = {
     lockerCount: 0,
     address: '',
     owner: '',
+    latitude: '',
+    longitude: '',
 };
 
 // Props definition for AddCondoPropertyForm component.
@@ -106,6 +110,20 @@ const CreatePropertyModal: React.FC<CreatePropertyModalProps> = ({ onPropertySav
                         min="0"
                         value={property.parkingCount}
                         onChange={(text) => handleInputChange("parkingCount", Number(text.target.value))} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Latitude</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                           min="0"
+                           value={property.latitude}
+                           onChange={(text) => handleInputChange("latitude", text.target.value)} />
+                </div>
+                <div className="flex flex-col">
+                    <label className="text-lg font-semibold">Longitude</label>
+                    <input className="border border-gray-300 rounded-lg p-2" type="text"
+                           min="0"
+                           value={property.longitude}
+                           onChange={(text) => handleInputChange("longitude", text.target.value)} />
                 </div>
                 <button className="bg-blue-500 text-white rounded-lg p-2 mt-4" type='submit'>Create Property</button>
             </form>

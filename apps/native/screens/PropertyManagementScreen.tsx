@@ -6,6 +6,7 @@ import {
   ScrollView,
   SafeAreaView,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { Button } from "@native/components/button";
 import { useNavigation } from "@react-navigation/native";
@@ -71,6 +72,8 @@ const CondoProfileScreen = () => {
               propertyData.parkingCount,
               propertyData.propertyName,
               propertyData.unitCount,
+              propertyData.latitude,
+              propertyData.longitude,
               unitList
             );
             propertyList.push(property.toJSON());
@@ -91,6 +94,12 @@ const CondoProfileScreen = () => {
     fetchData();
   }, []);
 
+  const handleMapPress = () => {
+    navigation.navigate("Map", {
+      properties: ownedProperties,
+    })
+  }
+
   if (isLoading)
     return <ActivityIndicator style={styles.loading} size="large" />;
 
@@ -98,6 +107,9 @@ const CondoProfileScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Condo Profiles</Text>
+        <TouchableOpacity id={"mapBtn"} style={styles.mapButton} onPress={handleMapPress}>
+          <Text style={styles.mapText}>Map</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView id="propertyView" style={styles.flexibleContainer}>
         {ownedProperties.length > 0 ? (
@@ -132,9 +144,13 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
+  headerContainer : {
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+  },
   header: {
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
     paddingHorizontal: 20,
@@ -162,6 +178,19 @@ const styles = StyleSheet.create({
     margin: 30,
     marginBottom: 100,
   },
+  mapButton: {
+    backgroundColor: '#2074df',
+    width: 'auto',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    alignItems: 'center',
+    marginRight: 20,
+    borderRadius: 10,
+  },
+  mapText: {
+    color: 'white',
+    fontWeight: "500",
+  }
 });
 
 export default CondoProfileScreen;
