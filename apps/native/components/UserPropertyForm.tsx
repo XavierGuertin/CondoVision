@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { db } from '@native/firebase';
-import { addDoc, collection, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, setDoc, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 
 /**
  * Validates an email address against a standard pattern.
@@ -23,7 +23,7 @@ const isValidEmail = (email) => {
  * @param {Function} props.onFormSubmit - Callback function to handle form submission.
  * @param {string} props.propertyID - The ID of the property being registered.
  */
-const UserPropertyForm = ({ onFormSubmit, propertyID }) => {
+const UserPropertyForm = ({ onFormSubmit, condoUnitID, propertyID }) => {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
 
@@ -39,25 +39,25 @@ const UserPropertyForm = ({ onFormSubmit, propertyID }) => {
                 return;
             }
 
-            const q = query(collection(db, "RegistrationKeys"), where("email", "==", email), where("propertyID", "==", propertyID));
+            const q = query(collection(db, "RegistrationKeys"), where("email", "==", email), where("condoUnitID", "==", condoUnitID));
             const querySnapshot = await getDocs(q);
 
             if (!querySnapshot.empty) {
                 const docRef = querySnapshot.docs[0].ref;
 
                 // Update the existing record
-                await setDoc(docRef, { email, status, key, propertyID, isUsed: false }, { merge: true });
+                await setDoc(docRef, { email, status, key, condoUnitID, propertyID, isUsed: false }, { merge: true });
                 Alert.alert('Update Successful', 'Registration Key has been sent');
             } else {
                 // Add a new record if no duplicate is found
-                await addDoc(collection(db, "RegistrationKeys"), { email, status, key, propertyID, isUsed: false });
+                await addDoc(collection(db, "RegistrationKeys"), { email, status, key, condoUnitID, propertyID, isUsed: false });
                 Alert.alert('Submission Successful', 'Registration Key has been sent');
             }
         } else {
             Alert.alert('Please fill in all fields.');
         }
     };
-
+   
     return (
         <View style={styles.container}>
             <TextInput
@@ -70,8 +70,8 @@ const UserPropertyForm = ({ onFormSubmit, propertyID }) => {
             <RNPickerSelect
                 onValueChange={(value) => setStatus(value)}
                 items={[
-                    { label: 'Owner', value: 'owner' },
-                    { label: 'Renter', value: 'renter' },
+                    { label: 'Owner', value: 'Owner' },
+                    { label: 'Renter', value: 'Renter' },
                 ]}
                 placeholder={{
                     label: 'Select user status...',

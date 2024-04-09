@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   SafeAreaView,
+  ScrollView,
   View,
   Image,
   Text,
@@ -10,8 +11,9 @@ import {
   Button,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { doc, getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc } from "firebase/firestore";
 import { db } from "web/firebase";
+import UserPropertyForm from "@native/components/UserPropertyForm";
 
 /**
  * Screen to display the description of a condo unit.
@@ -19,15 +21,26 @@ import { db } from "web/firebase";
 export default function CondoUnitDescriptionScreen() {
   const [unit, setUnit] = useState(Object); // Initialize unit state as an empty object
   const [unitId, setUnitId] = useState(String); // Initialize unitId state as an empty string
+  const [propertyId, setPropertyId] = useState(String) // Initialize propertyId as an empty string
   const [loading, setLoading] = useState(true); // State to track loading status
 
   const navigation = useNavigation(); // Hook to access navigation
+
+  const handleFormSubmit = async (formData) => {
+    try {
+      const docRef = await addDoc(collection(db, "RegistrationKeys"), formData);
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   useEffect(() => {
     const fetchId = async () => {
       await AsyncStorage.multiGet(["propertyId", "unitId"]).then((list) => {
         const pid = list.at(0)?.at(1);
         const unid = list.at(1)?.at(1);
+        setPropertyId(pid);
         setUnitId(unid);
         console.log(pid, " ", unid);
         getDoc(doc(db, `properties/${pid}/condoUnits/${unid}`)).then((snap) => {
@@ -48,73 +61,84 @@ export default function CondoUnitDescriptionScreen() {
     unit.condoFees.includes.map(
       (included: string) => (includesString += included + ", ")
     );
-    return includesString.slice(0, includesString.length - 2); //Removing teh ", " at the end of the final string
+    return includesString.slice(0, includesString.length - 2); //Removing the ", " at the end of the final string
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        {!loading ? (
-          <>
-            <View style={styles.backButtonContainer}>
-              <Button
-                testID="backBtn"
-                title="Back"
-                onPress={() => navigation.navigate("PropertyManagement")}
-              ></Button>
-            </View>
-            <View style={styles.unitDescriptionContainer}>
-              <View style={styles.imageContainer}>
-                <Image
-                  style={styles.image}
-                  source={require("../../../public/logo.png")}
-                ></Image>
+    <SafeAreaView 
+    style={styles.container}
+    contentContainerStyle={styles.expandedContent}>
+      <ScrollView
+      style={styles.expandedScrollView}
+      contentContainerStyle = {styles.expandedContent}>
+        <View style={styles.header}>
+          {!loading ? (
+            <>
+              <View style={styles.backButtonContainer}>
+                <Button
+                  testID="backBtn"
+                  title="Back"
+                  onPress={() => navigation.navigate("PropertyManagement")}
+                ></Button>
               </View>
-              <View style={styles.unitDescription}>
-                <View style={styles.titleContainer}>
-                  <Text id="title" style={styles.title}>
-                    {unitId}
-                  </Text>
+              <View style={styles.unitDescriptionContainer}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    style={styles.image}
+                    source={require("../../../public/logo.png")}
+                  ></Image>
                 </View>
-                <Text style={styles.subtitle}>
-                  Included in Condo Fees: {includesText()}
-                </Text>
-                <Text style={styles.subtitle}>
-                  Monthly Fee: {unit.condoFees.monthlyFee}
-                </Text>
-                <Text style={styles.subtitle}>Locker Id: {unit.lockerId}</Text>
-                <Text style={styles.subtitle}>
-                  Occupant Name: {unit.occupantInfo.name}
-                </Text>
-                <Text style={styles.subtitle}>
-                  Occupant Contact: {unit.occupantInfo.contact}
-                </Text>
-                <Text style={styles.subtitle}>
-                  Parking Spot Id: {unit.parkingSpotId}
-                </Text>
-                <Text style={styles.subtitle}>Size: {unit.size}</Text>
-                <Text style={styles.subtitle}>Unit Id: {unit.unitId}</Text>
-                <Button
-                  testID="feeBtn"
-                  title="Fees"
-                  onPress={() =>
-                    navigation.navigate("CondoPaymentFeeStatusAndHistoryScreen")
-                  }
-                />
-                <Button
-                  testID="feeCalculationBtn"
-                  title="See Calculated Fees"
-                  onPress={() =>
-                    navigation.navigate("CondoFeeCalculationScreen")
-                  }
-                />
+                <View style={styles.unitDescription}>
+                  <View style={styles.titleContainer}>
+                    <Text id="title" style={styles.title}>
+                      {unitId}
+                    </Text>
+                  </View>
+                  <Text style={styles.subtitle}>
+                    Included in Condo Fees: {includesText()}
+                  </Text>
+                  <Text style={styles.subtitle}>
+                    Monthly Fee: {unit.condoFees.monthlyFee}
+                  </Text>
+                  <Text style={styles.subtitle}>Locker Id: {unit.lockerId}</Text>
+                  <Text style={styles.subtitle}>
+                    Occupant Name: {unit.occupantInfo.name}
+                  </Text>
+                  <Text style={styles.subtitle}>
+                    Occupant Contact: {unit.occupantInfo.contact}
+                  </Text>
+                  <Text style={styles.subtitle}>
+                    Parking Spot Id: {unit.parkingSpotId}
+                  </Text>
+                  <Text style={styles.subtitle}>Size: {unit.size}</Text>
+                  <Text style={styles.subtitle}>Unit Id: {unit.unitId}</Text>
+                  <UserPropertyForm
+                    onFormSubmit={handleFormSubmit}
+                    condoUnitID={unitId}
+                    propertyID={propertyId}
+                  />
+                  <Button
+                    testID="feeBtn"
+                    title="Fees"
+                    onPress={() =>
+                      navigation.navigate("CondoPaymentFeeStatusAndHistoryScreen")
+                    }
+                  />
+                  <Button
+                    testID="feeCalculationBtn"
+                    title="See Calculated Fees"
+                    onPress={() =>
+                      navigation.navigate("CondoFeeCalculationScreen")
+                    }
+                  />
+                </View>
               </View>
-            </View>
-          </>
-        ) : (
-          <Text style={styles.subtitle}>Loading... </Text>
-        )}
-      </View>
+            </>
+          ) : (
+            <Text style={styles.subtitle}>Loading... </Text>
+          )}
+        </View>
+      </ScrollView>  
     </SafeAreaView>
   );
 }
@@ -125,6 +149,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "flex-start",
+  },
+  expandedScrollView: {
+    paddingBottom: 20,
   },
   header: {
     flexDirection: "column",
@@ -160,4 +187,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: "center",
   },
+  expandedContent: {
+    paddingBottom: 20,
+  }
 });
