@@ -76,7 +76,7 @@ const Page = () => {
           condoUnitsSnapshot.forEach((condoUnitDoc) => {
             const condoData = condoUnitDoc.data();
             const condoId = condoUnitDoc.id;
-            
+
             const condoUnit = new CondoUnitAdapter(
               condoId,
               {
