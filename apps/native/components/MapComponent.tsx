@@ -16,9 +16,7 @@ export const MapComponent = ({ data }) => {
         latitudeDelta: 0.3,
         longitudeDelta: 0.4,
     }
-
-    {/* Adding all properties passed in prop
-    (HERE) Have to change the navigate so that it brings you to the property profile !!! */}
+    
     const handlePress = () => {
         navigation.navigate("PropertyManagement");
     }
@@ -256,10 +254,11 @@ export const MapComponent = ({ data }) => {
 
             {data.map((item, index) => {
                 const coordinates = {
-                    latitude: item.latitude,
-                    longitude: item.longitude,
+                    latitude: parseFloat(item.latitude),
+                    longitude: parseFloat(item.longitude),
                 }
                 return <Marker
+                    id={"pressablePin"}
                     key={index}
                     onPress={() => handlePress()}
                     coordinate={coordinates}>

@@ -3,7 +3,7 @@
 // Utilizes Firebase for data storage and AsyncStorage for local storage of user-specific details.
 
 import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import {SafeAreaView, ScrollView, View, Text, TextInput, Button, StyleSheet} from 'react-native';
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,6 +16,8 @@ type CondoProperty = {
   lockerCount: number;
   address: string;
   owner: string;
+  latitude: string;
+  longitude: string;
 };
 
 // Props definition for AddCondoPropertyForm component.
@@ -31,6 +33,8 @@ const AddCondoPropertyForm: React.FC<AddCondoPropertyFormProps> = ({ onPropertyS
     lockerCount: 0,
     address: '',
     owner: '',
+    latitude: '',
+    longitude: '',
   });
 
   // Handles input changes for form fields, updating the property state.
@@ -64,6 +68,8 @@ const AddCondoPropertyForm: React.FC<AddCondoPropertyFormProps> = ({ onPropertyS
         lockerCount: 0,
         address: "",
         owner: "",
+        latitude: "",
+        longitude: "",
       }); // Reset form after successful save
       onPropertySaved(property.propertyName, property.address);
     } catch (error) {
@@ -73,74 +79,100 @@ const AddCondoPropertyForm: React.FC<AddCondoPropertyFormProps> = ({ onPropertyS
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Add New Condo Property</Text>
-      <View>
-        <Text style={styles.label}>
-          Property Name <Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Property Name"
-          value={property.propertyName}
-          onChangeText={(text) => handleInputChange("propertyName", text)}
-        />
-      </View>
-      <View>
-        <Text style={styles.label}>
-          Unit Count <Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Unit Count"
-          keyboardType="numeric"
-          value={property.unitCount.toString()}
-          onChangeText={(text) =>
-            handleInputChange("unitCount", parseInt(text) || 0)
-          }
-        />
-      </View>
-      <View>
-        <Text style={styles.label}>Parking Count</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Parking Count"
-          keyboardType="numeric"
-          value={property.parkingCount.toString()}
-          onChangeText={(text) =>
-            handleInputChange("parkingCount", parseInt(text) || 0)
-          }
-        />
-      </View>
-      <View>
-        <Text style={styles.label}>Locker Count</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Locker Count"
-          keyboardType="numeric"
-          value={property.lockerCount.toString()}
-          onChangeText={(text) =>
-            handleInputChange("lockerCount", parseInt(text) || 0)
-          }
-        />
-      </View>
-      <View>
-        <Text style={styles.label}>
-          Address <Text style={styles.mandatory}>*</Text>
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Address"
-          value={property.address}
-          onChangeText={(text) => handleInputChange("address", text)}
-        />
-      </View>
-      <Button
-        testID="savePropertyBtn"
-        title="Save Property"
-        onPress={saveCondoProperty}
-      />
-    </ScrollView>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.header}>Add New Condo Property</Text>
+        <ScrollView>
+          <View>
+            <Text style={styles.label}>
+              Property Name <Text style={styles.mandatory}>*</Text>
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Property Name"
+              value={property.propertyName}
+              onChangeText={(text) => handleInputChange("propertyName", text)}
+            />
+          </View>
+          <View>
+            <Text style={styles.label}>
+              Unit Count <Text style={styles.mandatory}>*</Text>
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Unit Count"
+              keyboardType="numeric"
+              value={property.unitCount.toString()}
+              onChangeText={(text) =>
+                handleInputChange("unitCount", parseInt(text) || 0)
+              }
+            />
+          </View>
+          <View>
+            <Text style={styles.label}>Parking Count</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Parking Count"
+              keyboardType="numeric"
+              value={property.parkingCount.toString()}
+              onChangeText={(text) =>
+                handleInputChange("parkingCount", parseInt(text) || 0)
+              }
+            />
+          </View>
+          <View>
+            <Text style={styles.label}>Locker Count</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Locker Count"
+              keyboardType="numeric"
+              value={property.lockerCount.toString()}
+              onChangeText={(text) =>
+                handleInputChange("lockerCount", parseInt(text) || 0)
+              }
+            />
+          </View>
+          <View>
+            <Text style={styles.label}>
+              Address <Text style={styles.mandatory}>*</Text>
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Address"
+              value={property.address}
+              onChangeText={(text) => handleInputChange("address", text)}
+            />
+          </View>
+          <View>
+            <Text style={styles.label}>
+              Latitude <Text style={styles.mandatory}>*</Text>
+            </Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Enter Latitude"
+                value={property.latitude}
+                onChangeText={(text) => handleInputChange("latitude", text)}
+            />
+          </View>
+          <View>
+            <Text style={styles.label}>
+              Longitude <Text style={styles.mandatory}>*</Text>
+            </Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Enter Longitude"
+                value={property.longitude}
+                onChangeText={(text) => handleInputChange("longitude", text)}
+            />
+          </View>
+        </ScrollView>
+        <View style={styles.addUnitBtn}>
+          <Button
+              testID="savePropertyBtn"
+              title="Save Property"
+              onPress={saveCondoProperty}
+          />
+        </View>
+      </SafeAreaView>
   );
 };
 
@@ -163,6 +195,10 @@ const styles = StyleSheet.create({
   },
   mandatory: {
     color: "red",
+  },
+  addUnitBtn: {
+    margin: 30,
+    marginBottom: 100,
   },
 });
 
