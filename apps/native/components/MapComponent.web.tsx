@@ -1,14 +1,11 @@
 import React from 'react';
-import MapView from "@teovilla/react-native-web-maps";
 import {SafeAreaView, StyleSheet, TouchableOpacity, Text} from "react-native";
-import { useNavigation } from '@react-navigation/native';
 
 export const MapComponent = ({ data }) => {
 
     type Nav = {
         navigate: (value: string) => void;
     }
-    const navigation = useNavigation<Nav>();
 
     const montrealCoord = {
         latitude: 45.50148637849399,
@@ -27,26 +24,6 @@ export const MapComponent = ({ data }) => {
                 <Text style={styles.modalButtonText}>No Map Here</Text>
             </TouchableOpacity>
         </SafeAreaView>
-        // <MapView
-        //     initialRegion={montrealCoord}
-        //     //customMapStyle={mapStyle}
-        //     //style={styles.mapView}
-        //     provider={"google"}>
-        //
-        //     {/*{data.map((item, index) => {*/}
-        //     {/*    const coordinates = {*/}
-        //     {/*        latitude: parseFloat(item.latitude),*/}
-        //     {/*        longitude: parseFloat(item.longitude),*/}
-        //     {/*    }*/}
-        //     {/*    return <Marker*/}
-        //     {/*        id={"pressablePin"}*/}
-        //     {/*        key={index}*/}
-        //     {/*        onPress={() => handlePress()}*/}
-        //     {/*        coordinate={coordinates}>*/}
-        //     {/*    </Marker>*/}
-        //     {/*})}*/}
-        //
-        // </MapView>
     );
 }
 
