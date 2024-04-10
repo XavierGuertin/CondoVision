@@ -1,35 +1,47 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
-import CondoUnitRegistration from '../components/CondoUnitRegistrationComponent'; // Import CondoUnitRegistration component
+import CondoUnitRegistration from '@native/components/CondoUnitRegistrationComponent'; // Adjust path as necessary
+import UserCondoUnitsList from '@native/components/UserCondoUnitsList'; // Adjust path as necessary
 
-/**
- * Screen component for registering a new condo unit.
- * This component renders a header text and the CondoUnitRegistration component,
- * which contains the form for registering a condo unit.
- */
 const CondoUnitRegistrationScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header text indicating the purpose of the screen */}
-      <Text style={styles.headerText}>Register Your Property</Text>
-      {/* Condo unit registration form component */}
-      <CondoUnitRegistration />
+      <View style={styles.registrationContainer}>
+        <Text style={styles.headerText}>Register Your Condo Unit</Text>
+        <CondoUnitRegistration />
+      </View>
+      <View style={styles.listContainer}>
+        <Text style={styles.subHeaderText}>Your Condo Units</Text>
+        <UserCondoUnitsList />
+      </View>
     </SafeAreaView>
   );
 };
 
-// StyleSheet for the CondoUnitRegistrationScreen component
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Use the entire screen
-    alignItems: 'center', // Center items horizontally
-    justifyContent: 'center', // Center items vertically
-    padding: 20, // Padding around the edges
+    flex: 1,
+    marginTop: 20,
+  },
+  registrationContainer: {
+    alignItems: 'center',
+    paddingBottom: 0,
+  },
+  listContainer: {
+    marginLeft: 20,
+    flex: 1,
   },
   headerText: {
-    fontSize: 24, // Font size for the header text
-    fontWeight: 'bold', // Bold font weight for emphasis
-    marginBottom: 20, // Margin at the bottom for spacing
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  subHeaderText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 20,
   },
 });
 

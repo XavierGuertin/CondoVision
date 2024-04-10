@@ -181,11 +181,6 @@ export const PropertyProfileComponent = ({
               ))}
             </View>
           </View>
-          <UserPropertyForm
-            onFormSubmit={handleFormSubmit}
-            propertyID={data.id}
-          />
-          {/** This will need to be changed for when the CONDO UNIT SCREENS are added */}
           <View style={styles.detailSection}>
             <EmployeeListModal propertyId={data.id} />
           </View>

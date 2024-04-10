@@ -10,6 +10,8 @@ class PropertyAdapter {
   private parkingCount: number;
   private propertyName: string;
   private unitCount: number;
+  private latitude: string;
+  private longitude: string;
   private units: Object[];
 
   /**
@@ -31,6 +33,8 @@ class PropertyAdapter {
     parkingCount: number,
     propertyName: string,
     unitCount: number,
+    latitude: string,
+    longitude: string,
     units: Object[],
   ) {
     this.id = id;
@@ -40,6 +44,8 @@ class PropertyAdapter {
     this.parkingCount = parkingCount;
     this.propertyName = propertyName;
     this.unitCount = unitCount;
+    this.latitude = latitude;
+    this.longitude = longitude;
     this.units = units;
   }
 
@@ -56,6 +62,8 @@ class PropertyAdapter {
       parkingCount: this.parkingCount,
       propertyName: this.propertyName,
       unitCount: this.unitCount,
+      latitude: this.latitude,
+      longitude: this.longitude,
       units: this.units,
     };
   };
