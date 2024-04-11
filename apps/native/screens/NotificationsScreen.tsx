@@ -1,126 +1,322 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { auth, db } from '../firebase';
+import {View, Text, ScrollView, TextInput, Button} from 'react-native';
+import { auth, db } from "@native/firebase";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import Picker from 'react-native-picker-select';
+import { StyleSheet } from 'react-native';
 
-/**
- * Screen component for displaying notifications. Currently placeholders,
- * but includes setup for user profile fetching and updating.
- * 
- * @param {Object} navigation - Navigation prop for routing.
- */
-const NotificationsScreen = ({ navigation }: any) => {
-    const [userProfile, setUserProfile] = useState({
-        email: '',
-        username: '',
-        role: '',
-        phoneNumber: '',
-    });
+// Request Box Component
+// @ts-ignore
+const RequestBox = ({ onRequestSubmit, properties }) => {
+    properties = properties || [];
+    const [title, setTitle] : any = useState('');
+    const [message, setMessage] : any = useState('');
+    const [selectedProperty, setSelectedProperty] : any = useState(properties[0]?.id || '');
 
     useEffect(() => {
-        // Fetches user profile data from Firestore and updates local state.
-        const fetchUserProfileAndAuthData = async () => {
-            const user = auth.currentUser;
-            if (user) {
-                const {uid, email, displayName, photoURL} = user;
-                // Fetch additional user profile data from Firestore
-                const docRef = doc(db, "users", uid);
-                const docSnap = await getDoc(docRef);
+        setSelectedProperty(properties[0]?.id || '');
+    }, [properties]);
 
-                if (docSnap.exists()) {
-                    const userData = docSnap.data();
-                    setUserProfile(prevState => ({
-                        ...prevState,
-                        email: userData.email || email, // Prefer Firestore email, fallback to Auth if unavailable
-                        username: userData.username || displayName,
-                        role: userData.role,
-                        phoneNumber: userData.phoneNumber,
-                    }));
-                } else {
-                    console.log("No Firestore document for user!");
-                    // @ts-ignore
-                    setUserProfile(prevState => ({
-                        ...prevState,
-                        email: email,
-                        username: displayName,
-                    }));
-                }
-            }
-        };
-
-        fetchUserProfileAndAuthData();
-    }, []);
-
-    // Placeholder for updating user profile information.
-    const handleUpdate = async () => {
-        const userUID = await AsyncStorage.getItem('userUID');
-        if (userUID) {
-            const userRef = doc(db, 'users', userUID);
-            try {
-                await updateDoc(userRef, {
-                    ...userProfile,
-                });
-                alert('Profile updated successfully');
-            } catch (error) {
-                console.error("Error updating document: ", error);
-                alert('Failed to update profile');
-            }
-        }
+    const handleSubmit = () => {
+        onRequestSubmit(title, message, selectedProperty);
+        setTitle('');
+        setMessage('');
     };
 
-    // Renders the screen's UI components.
+    const propertyItems = properties.map((property:any) => ({
+        label: property.propertyName,
+        value: property.id,
+        key: property.id
+    }));
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Notification Center</Text>
-            <Text>Hasn't been developed yet</Text>
+        <View style={styles.notificationBox}>
+            <Text>Select the property</Text>
+            <Picker
+                items={propertyItems}
+                value={selectedProperty}
+                onValueChange={(itemValue) => setSelectedProperty(itemValue)}
+            />
+            <TextInput value={title} onChangeText={setTitle} placeholder="Title" />
+            <TextInput value={message} onChangeText={setMessage} placeholder="Message" />
+            <View style={styles.sendRequestButton}>
+                <Button title="Submit Request" onPress={handleSubmit} />
+            </View>
         </View>
     );
 };
 
-// Style definitions for the NotificationsScreen component.
+// Custom hook for fetching notifications
+const useNotifications = () => {
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const { uid } = user;
+                const notificationsCollectionRef = collection(db, "users", uid, "notifications");
+                const querySnapshot = await getDocs(notificationsCollectionRef);
+                let notificationsData : any = [];
+
+                querySnapshot.forEach(document => {
+                    if (!document.data().markAsRead) {
+                        notificationsData.push({ id: document.id, ...document.data() });
+                    }
+                });
+
+                setNotifications(notificationsData);
+            }
+        };
+        fetchNotifications();
+    }, []);
+
+    return { notifications, setNotifications };
+};
+
+const NotificationsScreen = () => {
+    const { notifications, setNotifications } = useNotifications();
+    const [properties, setProperties] = useState([]);
+
+    useEffect(() => {
+        const fetchProperties = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const { uid } = user;
+                const propertiesCollectionRef = collection(db, "properties");
+                const querySnapshot = await getDocs(propertiesCollectionRef);
+                let propertiesData : any= [];
+
+                for (let propertyDoc of querySnapshot.docs) {
+                    const condoUnitsCollectionRef = collection(propertyDoc.ref, "condoUnits");
+                    const condoUnitsSnapshot = await getDocs(condoUnitsCollectionRef);
+
+                    for (let condoUnitDoc of condoUnitsSnapshot.docs) {
+                        if (condoUnitDoc.data().owner === uid) {
+                            propertiesData.push({ id: propertyDoc.id, ...propertyDoc.data() });
+                            break;
+                        }
+                    }
+                }
+                console.log(propertiesData)
+                setProperties(propertiesData);
+            }
+        };
+        fetchProperties();
+    }, []);
+
+    const markAsRead = async (id : any) => {
+        setNotifications(notifications.filter((notification:any) => notification.id !== id));
+        const uid = auth.currentUser?.uid;
+        if (!uid) return;
+        const notificationDocRef = doc(db, "users", uid, "notifications", id.toString());
+        await updateDoc(notificationDocRef, { markAsRead: true });
+    };
+
+    const [isRequestBoxVisible, setRequestBoxVisible] = useState(false);
+
+    const handleRequestSubmit = async (title: any, message: any, propertyId: any) => {
+        const user = auth.currentUser;
+        if (!user) return;
+        const { uid } = user;
+
+        const newRequest = {
+            userUID: uid,
+            propertyUID: propertyId,
+            title: title,
+            message: message,
+            status: "created"
+        };
+
+        try {
+            const requestsCollectionRef = collection(db, "requests");
+            await addDoc(requestsCollectionRef, newRequest);
+            alert("Request submitted successfully!");
+        } catch (error) {
+            alert("Error submitting request. Please try again later.");
+        }
+
+        setRequestBoxVisible(false);
+    };
+
+    // Custom hook for fetching user's requests
+    const useUserRequests = () => {
+        const [userRequests, setUserRequests] = useState([]);
+
+        useEffect(() => {
+            const fetchUserRequests = async () => {
+                const user = auth.currentUser;
+                if (user) {
+                    const { uid } = user;
+                    const requestsCollectionRef = collection(db, "requests");
+                    const querySnapshot = await getDocs(requestsCollectionRef);
+                    let requestData : any = [];
+
+                    for (let document of querySnapshot.docs) {
+                        if (document.data().userUID === uid) {
+                            let request : any = { id: document.id, ...document.data() };
+                            const propertyRef = doc(db, "properties", request.propertyUID);
+                            const propertyDoc : any = await getDoc(propertyRef);
+                            request.propertyName = propertyDoc.data().propertyName;
+                            requestData.push(request);
+                        }
+                    }
+
+                    setUserRequests(requestData);
+                }
+            };
+            fetchUserRequests();
+        }, []);
+
+        const handleDeleteRequest = async (id:any) => {
+            const requestDocRef = doc(db, "requests", id.toString());
+            await deleteDoc(requestDocRef);
+            setUserRequests(userRequests.filter((request:any) => request.id !== id));
+        };
+
+        return { userRequests, handleDeleteRequest };
+    };
+
+    const { userRequests, handleDeleteRequest } = useUserRequests();
+
+    const [expandedRequestId, setExpandedRequestId] = useState(null);
+
+    const handleExpandCollapseClick = (id : any) => {
+        if (expandedRequestId === id) {
+            setExpandedRequestId(null);
+        } else {
+            setExpandedRequestId(id);
+        }
+    };
+
+    const getStatusStyle = (status:any) => {
+        switch (status) {
+            case 'accepted':
+                return { color: 'green', fontWeight: 'bold'};
+            case 'refused':
+                return { color: 'red', fontWeight: 'bold' };
+            default:
+                return {};
+        }
+    };
+
+    return (
+        <ScrollView>
+            <View>
+                <Text style={styles.title}>Notifications Center</Text>
+                {notifications.map((notification:any) => (
+                    <View key={notification.id} style={styles.notificationBox}>
+                        <Text style={styles.notificationTitle}>{notification.category.toUpperCase()}</Text>
+                        <Text style={styles.notificationContent}>{notification.message}</Text>
+                        <View style={styles.notificationBoxButton}>
+                            <Button title="Mark as read" onPress={() => markAsRead(notification.id)} />
+                        </View>
+                    </View>
+                ))}
+            </View>
+            {!isRequestBoxVisible &&
+                <View style={styles.requestButton}>
+                    <Button title="Make a Request" onPress={() => setRequestBoxVisible(true)} />
+                </View>
+            }
+            {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} properties={properties} />}
+            <View>
+                <Text style={styles.title}>Your Requests</Text>
+                {userRequests.map((request:any) => (
+                    <View key={request.id} style={styles.notificationBox}>
+                        <Text style={styles.notificationTitle}>Title: {request.title}</Text>
+                        <Text style={[styles.notificationContent, getStatusStyle(request.status)]}>Status: {request.status}</Text>
+                        {expandedRequestId === request.id && (
+                            <>
+                                <Text style={styles.notificationContent}>Message: {request.message}</Text>
+                                <Text style={styles.notificationContent}>Property: {request.propertyName}</Text>
+                                <Text style={styles.notificationContent}>Response: {request.response}</Text>
+                                {(request.status === 'accepted' || request.status === 'rejected') && (
+                                    <View style={styles.requestButton}>
+                                        <Button title="Delete Request" onPress={() => handleDeleteRequest(request.id)} />
+                                    </View>
+                                )}
+                            </>
+                        )}
+                        <View style={styles.requestButton}>
+                            <Button title={expandedRequestId === request.id ? 'Collapse' : 'Expand'} onPress={() => handleExpandCollapseClick(request.id)} />
+                        </View>
+                    </View>
+                ))}
+                <View style={{ height: 100 }} />
+            </View>
+        </ScrollView>
+    );
+};
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
-        marginBottom: 60,
+    notificationBox: {
+        position: 'relative',
+        backgroundColor: '#f8f9fa',
+        borderRadius: 15,
+        padding: 20,
+        marginBottom: 15,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+        borderWidth: 1,
+        borderColor: '#e0e0e0',
+        fontSize: 16,
+        fontWeight: '500',
+        width: '80%',
+        alignSelf: 'center',
+    },
+    notificationBoxButton: {
+        position: 'absolute',
+        top: 7,
+        right: 5,
+        color: 'white',
+        padding: 3,
+        textAlign: 'center',
+        fontSize: 12,
+        borderRadius: 5,
+        width: '40%',
+        alignSelf: 'center',
+        marginBottom: 10
+    },
+    sendRequestButton: {
+        alignSelf: 'flex-end',
+        marginTop: -25,
+        backgroundColor: '#53a6ec',
+        color: 'white',
+        padding: 3,
+        textAlign: 'center',
+        fontSize: 12,
+        borderRadius: 5,
+    },
+    requestButton: {
+        top: 7,
+        marginLeft: 15,
+        color: 'white',
+        padding: 3,
+        textAlign: 'center',
+        fontSize: 12,
+        borderRadius: 5,
+        width: '50%',
+        alignSelf: 'center',
+        marginBottom: 10
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 25,
         marginBottom: 20,
     },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginBottom: 20,
-    },
-    info: {
-        fontSize: 18,
-        marginBottom: 10,
-    },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        width: '80%',
-    },
-    logoutButton: {
-        padding: 0,
-        marginRight: -130,
-        marginLeft: 130,
-        marginBottom: 150,
-        marginTop: -150,
-    },
-    logoutButtonText: {
+    notificationTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#2074df',
+        marginBottom: 10,
+    },
+    notificationContent: {
+        marginBottom: 10,
     },
 });
 
-export default NotificationsScreen
+export default NotificationsScreen;
