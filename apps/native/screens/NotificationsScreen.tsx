@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import {View, Text, ScrollView, TextInput, Button} from 'react-native';
-import { auth, db } from "@native/firebase";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {auth, db} from "@native/firebase";
+import {addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc} from "firebase/firestore";
 import Picker from 'react-native-picker-select';
-import { StyleSheet } from 'react-native';
 
 // Request Box Component
 // @ts-ignore
-const RequestBox = ({ onRequestSubmit, properties }) => {
+const RequestBox = ({onRequestSubmit, properties}) => {
     properties = properties || [];
-    const [title, setTitle] : any = useState('');
-    const [message, setMessage] : any = useState('');
-    const [selectedProperty, setSelectedProperty] : any = useState(properties[0]?.id || '');
+    const [title, setTitle]: any = useState('');
+    const [message, setMessage]: any = useState('');
+    const [selectedProperty, setSelectedProperty]: any = useState(properties[0]?.id || '');
 
     useEffect(() => {
         setSelectedProperty(properties[0]?.id || '');
@@ -23,7 +22,7 @@ const RequestBox = ({ onRequestSubmit, properties }) => {
         setMessage('');
     };
 
-    const propertyItems = properties.map((property:any) => ({
+    const propertyItems = properties.map((property: any) => ({
         label: property.propertyName,
         value: property.id,
         key: property.id
@@ -32,8 +31,8 @@ const RequestBox = ({ onRequestSubmit, properties }) => {
     return (
         <View style={styles.notificationBox}>
             <Text style={styles.label}>Select the property</Text>
-            <TextInput style={styles.input} value={title} onChangeText={setTitle} placeholder="Title" />
-            <TextInput style={styles.input} value={message} onChangeText={setMessage} placeholder="Message" />
+            <TextInput style={styles.input} value={title} onChangeText={setTitle} placeholder="Title"/>
+            <TextInput style={styles.input} value={message} onChangeText={setMessage} placeholder="Message"/>
             <Text style={styles.label}>Select the property</Text>
             <Picker
                 style={{
@@ -45,9 +44,9 @@ const RequestBox = ({ onRequestSubmit, properties }) => {
                 value={selectedProperty}
                 onValueChange={(itemValue) => setSelectedProperty(itemValue)}
             />
-            <View style={styles.sendRequestButton}>
-                <Button title="Submit Request" onPress={handleSubmit} />
-            </View>
+            <TouchableOpacity style={styles.sendRequestButton} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Submit Request</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -60,14 +59,14 @@ const useNotifications = () => {
         const fetchNotifications = async () => {
             const user = auth.currentUser;
             if (user) {
-                const { uid } = user;
+                const {uid} = user;
                 const notificationsCollectionRef = collection(db, "users", uid, "notifications");
                 const querySnapshot = await getDocs(notificationsCollectionRef);
-                let notificationsData : any = [];
+                let notificationsData: any = [];
 
                 querySnapshot.forEach(document => {
                     if (!document.data().markAsRead) {
-                        notificationsData.push({ id: document.id, ...document.data() });
+                        notificationsData.push({id: document.id, ...document.data()});
                     }
                 });
 
@@ -77,21 +76,21 @@ const useNotifications = () => {
         fetchNotifications();
     }, []);
 
-    return { notifications, setNotifications };
+    return {notifications, setNotifications};
 };
 
 const NotificationsScreen = () => {
-    const { notifications, setNotifications } = useNotifications();
+    const {notifications, setNotifications} = useNotifications();
     const [properties, setProperties] = useState([]);
 
     useEffect(() => {
         const fetchProperties = async () => {
             const user = auth.currentUser;
             if (user) {
-                const { uid } = user;
+                const {uid} = user;
                 const propertiesCollectionRef = collection(db, "properties");
                 const querySnapshot = await getDocs(propertiesCollectionRef);
-                let propertiesData : any= [];
+                let propertiesData: any = [];
 
                 for (let propertyDoc of querySnapshot.docs) {
                     const condoUnitsCollectionRef = collection(propertyDoc.ref, "condoUnits");
@@ -99,7 +98,7 @@ const NotificationsScreen = () => {
 
                     for (let condoUnitDoc of condoUnitsSnapshot.docs) {
                         if (condoUnitDoc.data().owner === uid) {
-                            propertiesData.push({ id: propertyDoc.id, ...propertyDoc.data() });
+                            propertiesData.push({id: propertyDoc.id, ...propertyDoc.data()});
                             break;
                         }
                     }
@@ -110,12 +109,12 @@ const NotificationsScreen = () => {
         fetchProperties();
     }, []);
 
-    const markAsRead = async (id : any) => {
-        setNotifications(notifications.filter((notification:any) => notification.id !== id));
+    const markAsRead = async (id: any) => {
+        setNotifications(notifications.filter((notification: any) => notification.id !== id));
         const uid = auth.currentUser?.uid;
         if (!uid) return;
         const notificationDocRef = doc(db, "users", uid, "notifications", id.toString());
-        await updateDoc(notificationDocRef, { markAsRead: true });
+        await updateDoc(notificationDocRef, {markAsRead: true});
     };
 
     const [isRequestBoxVisible, setRequestBoxVisible] = useState(false);
@@ -123,9 +122,9 @@ const NotificationsScreen = () => {
     const handleRequestSubmit = async (title: any, message: any, propertyId: any) => {
         const user = auth.currentUser;
         if (!user) return;
-        const { uid } = user;
+        const {uid} = user;
 
-        const newRequest : any = {
+        const newRequest: any = {
             userUID: uid,
             propertyUID: propertyId,
             title: title,
@@ -139,11 +138,11 @@ const NotificationsScreen = () => {
 
             // Fetch the property name
             const propertyRef = doc(db, "properties", newRequest.propertyUID);
-            const propertyDoc : any = await getDoc(propertyRef);
+            const propertyDoc: any = await getDoc(propertyRef);
             newRequest.propertyName = propertyDoc.data().propertyName;
 
             // Add the new request to the userRequests state
-            setUserRequests((prevRequests:any) => [...prevRequests, { id: docRef.id, ...newRequest }]);
+            setUserRequests((prevRequests: any) => [...prevRequests, {id: docRef.id, ...newRequest}]);
 
             alert("Request submitted successfully!");
         } catch (error) {
@@ -163,16 +162,16 @@ const NotificationsScreen = () => {
             const fetchUserRequests = async () => {
                 const user = auth.currentUser;
                 if (user) {
-                    const { uid } = user;
+                    const {uid} = user;
                     const requestsCollectionRef = collection(db, "requests");
                     const querySnapshot = await getDocs(requestsCollectionRef);
-                    let requestData : any = [];
+                    let requestData: any = [];
 
                     for (let document of querySnapshot.docs) {
                         if (document.data().userUID === uid) {
-                            let request : any = { id: document.id, ...document.data() };
+                            let request: any = {id: document.id, ...document.data()};
                             const propertyRef = doc(db, "properties", request.propertyUID);
-                            const propertyDoc : any = await getDoc(propertyRef);
+                            const propertyDoc: any = await getDoc(propertyRef);
                             request.propertyName = propertyDoc.data().propertyName;
                             requestData.push(request);
                         }
@@ -184,20 +183,20 @@ const NotificationsScreen = () => {
             fetchUserRequests();
         }, []);
 
-        const handleDeleteRequest = async (id:any) => {
+        const handleDeleteRequest = async (id: any) => {
             const requestDocRef = doc(db, "requests", id.toString());
             await deleteDoc(requestDocRef);
-            setUserRequests(userRequests.filter((request:any) => request.id !== id));
+            setUserRequests(userRequests.filter((request: any) => request.id !== id));
         };
 
-        return { userRequests, setUserRequests, handleDeleteRequest };
+        return {userRequests, setUserRequests, handleDeleteRequest};
     };
 
-    const { userRequests, setUserRequests, handleDeleteRequest } = useUserRequests();
+    const {userRequests, setUserRequests, handleDeleteRequest} = useUserRequests();
 
     const [expandedRequestId, setExpandedRequestId] = useState(null);
 
-    const handleExpandCollapseClick = (id : any) => {
+    const handleExpandCollapseClick = (id: any) => {
         if (expandedRequestId === id) {
             setExpandedRequestId(null);
         } else {
@@ -205,66 +204,71 @@ const NotificationsScreen = () => {
         }
     };
 
-    const getStatusStyle = (status:any) => {
+    const getStatusStyle = (status: any) => {
         switch (status) {
             case 'accepted':
-                return { color: 'green', fontWeight: 'bold' as const };
+                return {color: 'green', fontWeight: 'bold' as const};
             case 'refused':
-                return { color: 'red', fontWeight: 'bold' as const };
+                return {color: 'red', fontWeight: 'bold' as const};
             default:
-                return { fontWeight: undefined };
+                return {fontWeight: undefined};
         }
     };
 
     return (
         <ScrollView>
             <View>
-                <Text style={styles.title}>Notifications Center</Text>
-                {notifications.map((notification:any) => (
+                <Text style={styles.mainTitle}>Notifications Center</Text>
+                {notifications.map((notification: any) => (
                     <View key={notification.id} style={styles.notificationBox}>
                         <Text style={styles.notificationTitle}>{notification.category.toUpperCase()}</Text>
                         <Text style={styles.notificationContent}>{notification.message}</Text>
-                        <View style={styles.notificationBoxButton}>
-                            <Button title="Mark as read" onPress={() => markAsRead(notification.id)} />
-                        </View>
+                        <TouchableOpacity style={styles.notificationBoxButton}
+                                          onPress={() => markAsRead(notification.id)}>
+                            <Text style={styles.buttonText}>Mark as read</Text>
+                        </TouchableOpacity>
                     </View>
                 ))}
             </View>
             {!isRequestBoxVisible &&
-                <View style={styles.requestButton}>
-                    <Button title="Make a Request" onPress={() => setRequestBoxVisible(true)} />
-                </View>
+                <TouchableOpacity style={styles.makeRequestButton} onPress={() => setRequestBoxVisible(true)}>
+                    <Text style={styles.buttonText}>Make a Request</Text>
+                </TouchableOpacity>
             }
             {isRequestBoxVisible &&
-                <View style={styles.requestButton}>
-                    <Button title="Cancel" onPress={() => setRequestBoxVisible(false)} />
-                </View>
+                <TouchableOpacity style={styles.makeRequestButton} onPress={() => setRequestBoxVisible(false)}>
+                    <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
             }
-            {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} properties={properties} />}
+            {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} properties={properties}/>}
             <View>
                 <Text style={styles.title}>Your Requests</Text>
-                {userRequests.map((request:any) => (
+                {userRequests.map((request: any) => (
                     <View key={request.id} style={styles.notificationBox}>
                         <Text style={styles.notificationTitle}>Title: {request.title}</Text>
-                        <Text style={[styles.notificationContent, getStatusStyle(request.status)]}>Status: {request.status}</Text>
+                        <Text
+                            style={[styles.notificationContent, getStatusStyle(request.status)]}>Status: {request.status}</Text>
                         {expandedRequestId === request.id && (
                             <>
                                 <Text style={styles.notificationContent}>Message: {request.message}</Text>
                                 <Text style={styles.notificationContent}>Property: {request.propertyName}</Text>
                                 <Text style={styles.notificationContent}>Response: {request.response}</Text>
                                 {(request.status === 'accepted' || request.status === 'rejected') && (
-                                    <View style={styles.requestButton}>
-                                        <Button title="Delete Request" onPress={() => handleDeleteRequest(request.id)} />
-                                    </View>
+                                    <TouchableOpacity style={styles.requestButton}
+                                                      onPress={() => handleDeleteRequest(request.id)}>
+                                        <Text style={styles.buttonText}>Delete Request</Text>
+                                    </TouchableOpacity>
                                 )}
                             </>
                         )}
-                        <View style={styles.requestButton}>
-                            <Button title={expandedRequestId === request.id ? 'Collapse' : 'Expand'} onPress={() => handleExpandCollapseClick(request.id)} />
-                        </View>
+                        <TouchableOpacity style={styles.requestButton}
+                                          onPress={() => handleExpandCollapseClick(request.id)}>
+                            <Text
+                                style={styles.buttonText}>{expandedRequestId === request.id ? 'Collapse' : 'Expand'}</Text>
+                        </TouchableOpacity>
                     </View>
                 ))}
-                <View style={{ height: 100 }} />
+                <View style={{height: 100}}/>
             </View>
         </ScrollView>
     );
@@ -278,7 +282,7 @@ const styles = StyleSheet.create({
         padding: 20,
         marginBottom: 15,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
+        shadowOffset: {width: 0, height: 10},
         shadowOpacity: 0.1,
         shadowRadius: 20,
         borderWidth: 1,
@@ -290,12 +294,14 @@ const styles = StyleSheet.create({
     },
     notificationBoxButton: {
         position: 'absolute',
-        top: 7,
-        right: 5,
+        top: 10,
+        right: 10,
         color: 'white',
         padding: 3,
         textAlign: 'center',
+        backgroundColor: '#2196F3',
         fontSize: 12,
+        justifyContent: 'center',
         borderRadius: 5,
         width: '40%',
         alignSelf: 'center',
@@ -305,15 +311,38 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: 'white',
         padding: 3,
+        backgroundColor: '#2196F3',
+        justifyContent: 'center',
         textAlign: 'center',
         fontSize: 12,
         borderRadius: 5,
+        width: '50%',
+        height: 35,
     },
-    requestButton: {
+    makeRequestButton: {
         top: 7,
+        height: 35,
         marginLeft: 15,
+        marginBottom: 20,
+        backgroundColor: '#2196F3',
         color: 'white',
         padding: 3,
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontSize: 12,
+        borderRadius: 5,
+        width: '30%',
+        alignSelf: 'center',
+    },
+
+    requestButton: {
+        top: 7,
+        height: 35,
+        marginLeft: 15,
+        backgroundColor: '#2196F3',
+        color: 'white',
+        padding: 3,
+        justifyContent: 'center',
         textAlign: 'center',
         fontSize: 12,
         borderRadius: 5,
@@ -321,11 +350,18 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginBottom: 10
     },
+    mainTitle: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 50,
+        marginBottom: 20,
+    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginTop: 25,
+        marginTop: 15,
         marginBottom: 20,
     },
     notificationTitle: {
@@ -353,6 +389,11 @@ const styles = StyleSheet.create({
         borderColor: '#6e6e6e',
         marginBottom: 10,
         borderRadius: 5,
+    },
+    buttonText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 16,
     },
 });
 
