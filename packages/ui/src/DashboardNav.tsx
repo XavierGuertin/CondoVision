@@ -15,6 +15,7 @@ const DashboardNav = () => {
     const [isModalOpenUser, setIsModalOpenUser] = useState(false);
     const [isModalOpenNotifications, setIsModalOpenNotifications] = useState(false);
     const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
     const [isFinanceOpen, setIsFinanceOpen] = useState(false);
     let userRole: any;
     if (typeof window !== 'undefined') {
@@ -41,6 +42,7 @@ const DashboardNav = () => {
 
     useEffect(() => {
         const fetchNotifications = async () => {
+            setIsLoading(true);
             if (authUser) {
                 const { uid } = authUser;
 
@@ -58,6 +60,7 @@ const DashboardNav = () => {
                 });
                 setUnreadNotificationsCount(notificationsData.length);
             }
+            setIsLoading(false);
         };
 
         fetchNotifications();
@@ -154,9 +157,9 @@ const DashboardNav = () => {
                     </li>
                 ))}
             </ul>
-            {isModalOpenUser && <UserProfileModal user={authUser} onClose={toggleModalUser} />}
-            {isModalOpenNotifications && userRole != 'Condo Management Company' && <NotificationsModal user={authUser} onClose={toggleModalNotifications} />}
-            {isModalOpenNotifications && userRole === 'Condo Management Company' && <RequestsModal user={authUser} onClose={toggleModalNotifications} />}
+            {!isLoading && isModalOpenUser && <UserProfileModal user={authUser} onClose={toggleModalUser} />}
+            {!isLoading && isModalOpenNotifications && userRole != 'Condo Management Company' && <NotificationsModal user={authUser} onClose={toggleModalNotifications} setUnreadNotificationsCount={setUnreadNotificationsCount} />}
+            {!isLoading && isModalOpenNotifications && userRole === 'Condo Management Company' && <RequestsModal user={authUser} onClose={toggleModalNotifications} />}
         </nav>
     );
 };
