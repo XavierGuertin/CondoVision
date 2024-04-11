@@ -94,7 +94,7 @@ const useNotifications = () => {
     return {notifications, setNotifications};
 };
 
-const NotificationsModal = ({onClose}: any) => {
+const NotificationsModal = ({onClose, setUnreadNotificationsCount}: any) => {
     const {notifications, setNotifications} = useNotifications();
     const [properties, setProperties] = useState([]);
 
@@ -131,6 +131,7 @@ const NotificationsModal = ({onClose}: any) => {
         if (!uid) return;
         const notificationDocRef = doc(db, "users", uid, "notifications", id.toString());
         await updateDoc(notificationDocRef, {markAsRead: true});
+        setUnreadNotificationsCount((prevCount:any) => Math.max(prevCount - 1, 0));
     };
 
     const [isRequestBoxVisible, setRequestBoxVisible] = useState(false);
