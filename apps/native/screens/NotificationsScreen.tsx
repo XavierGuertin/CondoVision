@@ -104,7 +104,6 @@ const NotificationsScreen = () => {
                         }
                     }
                 }
-                console.log(propertiesData)
                 setProperties(propertiesData);
             }
         };
@@ -126,7 +125,7 @@ const NotificationsScreen = () => {
         if (!user) return;
         const { uid } = user;
 
-        const newRequest = {
+        const newRequest : any = {
             userUID: uid,
             propertyUID: propertyId,
             title: title,
@@ -136,18 +135,29 @@ const NotificationsScreen = () => {
 
         try {
             const requestsCollectionRef = collection(db, "requests");
-            await addDoc(requestsCollectionRef, newRequest);
+            const docRef = await addDoc(requestsCollectionRef, newRequest);
+
+            // Fetch the property name
+            const propertyRef = doc(db, "properties", newRequest.propertyUID);
+            const propertyDoc : any = await getDoc(propertyRef);
+            newRequest.propertyName = propertyDoc.data().propertyName;
+
+            // Add the new request to the userRequests state
+            setUserRequests((prevRequests:any) => [...prevRequests, { id: docRef.id, ...newRequest }]);
+
             alert("Request submitted successfully!");
         } catch (error) {
             alert("Error submitting request. Please try again later.");
+            console.log(error);
         }
 
         setRequestBoxVisible(false);
     };
 
     // Custom hook for fetching user's requests
+    // Custom hook for fetching user's requests
     const useUserRequests = () => {
-        const [userRequests, setUserRequests] = useState([]);
+        const [userRequests, setUserRequests] = useState<any>([]);
 
         useEffect(() => {
             const fetchUserRequests = async () => {
@@ -180,10 +190,10 @@ const NotificationsScreen = () => {
             setUserRequests(userRequests.filter((request:any) => request.id !== id));
         };
 
-        return { userRequests, handleDeleteRequest };
+        return { userRequests, setUserRequests, handleDeleteRequest };
     };
 
-    const { userRequests, handleDeleteRequest } = useUserRequests();
+    const { userRequests, setUserRequests, handleDeleteRequest } = useUserRequests();
 
     const [expandedRequestId, setExpandedRequestId] = useState(null);
 
@@ -198,11 +208,11 @@ const NotificationsScreen = () => {
     const getStatusStyle = (status:any) => {
         switch (status) {
             case 'accepted':
-                return { color: 'green', fontWeight: 'bold'};
+                return { color: 'green', fontWeight: 'bold' as const };
             case 'refused':
-                return { color: 'red', fontWeight: 'bold' };
+                return { color: 'red', fontWeight: 'bold' as const };
             default:
-                return {};
+                return { fontWeight: undefined };
         }
     };
 
@@ -223,6 +233,11 @@ const NotificationsScreen = () => {
             {!isRequestBoxVisible &&
                 <View style={styles.requestButton}>
                     <Button title="Make a Request" onPress={() => setRequestBoxVisible(true)} />
+                </View>
+            }
+            {isRequestBoxVisible &&
+                <View style={styles.requestButton}>
+                    <Button title="Cancel" onPress={() => setRequestBoxVisible(false)} />
                 </View>
             }
             {isRequestBoxVisible && <RequestBox onRequestSubmit={handleRequestSubmit} properties={properties} />}
