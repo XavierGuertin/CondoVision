@@ -13,7 +13,7 @@
             cy.get(`[id=propertyTitle]`).contains("Demo").click()
         });
 
-        it("interact with 'Add Facilities' modal", () => {
+        it("interact with 'Add Facility' modal", () => {
             cy.get("[id=openFacilitiesModalBtn]").click()
             cy.get("[id=closeFacilitiesModalBtn]").click()
         })
