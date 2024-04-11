@@ -1,3 +1,27 @@
+/**
+ * NotificationsScreen Component
+ *
+ * This component is designed to manage and display notifications within a React application,
+ * leveraging Firebase for data storage and operations.
+ *
+ * User's notifications are fetched from Firestore and displayed in the notification screen of the native app.
+ * The user's can also make requests that are based on a specific unit and that can be approved or rejected by condo management companies.
+ *
+ * It makes use of React hooks for state management,including `useState` for local component state and `useEffect` for side effects.
+ *
+ * Key Functionalities:
+ * - Interacts with Firebase Firestore for CRUD operations on notifications data.
+ * - Utilizes `IoClose` from `react-icons` for UI elements.
+ * - Implements a RequestBox sub-component for handling notification requests, with properties passed as props.
+ *
+ * Dependencies:
+ * - React and React Icons for UI construction and iconography.
+ * - Firebase and Firestore for backend data management.
+ *
+ * Usage:
+ * Import and include `<NotificationsScreen />` in your component tree to enable notification management
+ * within your application.
+ */
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {auth, db} from "@native/firebase";
