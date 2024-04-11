@@ -36,6 +36,7 @@ const PropertyList = ({
               setSelected(property.id);
               setSelectedProperty(property);
               dispatchEvent(new Event("hideCondoFinanceStatus"));
+              dispatchEvent(new Event("hideCondoFeeCalcStatus"));
             }}
           >
             <h1 className="font-bold text-xl capitalize">
