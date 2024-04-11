@@ -31,14 +31,20 @@ const RequestBox = ({ onRequestSubmit, properties }) => {
 
     return (
         <View style={styles.notificationBox}>
-            <Text>Select the property</Text>
+            <Text style={styles.label}>Select the property</Text>
+            <TextInput style={styles.input} value={title} onChangeText={setTitle} placeholder="Title" />
+            <TextInput style={styles.input} value={message} onChangeText={setMessage} placeholder="Message" />
+            <Text style={styles.label}>Select the property</Text>
             <Picker
+                style={{
+                    inputIOS: styles.input,
+                    inputAndroid: styles.input,
+                    inputWeb: styles.input,
+                }}
                 items={propertyItems}
                 value={selectedProperty}
                 onValueChange={(itemValue) => setSelectedProperty(itemValue)}
             />
-            <TextInput value={title} onChangeText={setTitle} placeholder="Title" />
-            <TextInput value={message} onChangeText={setMessage} placeholder="Message" />
             <View style={styles.sendRequestButton}>
                 <Button title="Submit Request" onPress={handleSubmit} />
             </View>
@@ -281,9 +287,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     sendRequestButton: {
-        alignSelf: 'flex-end',
-        marginTop: -25,
-        backgroundColor: '#53a6ec',
+        alignSelf: 'center',
         color: 'white',
         padding: 3,
         textAlign: 'center',
@@ -316,6 +320,24 @@ const styles = StyleSheet.create({
     },
     notificationContent: {
         marginBottom: 10,
+    },
+    input: {
+        borderWidth: 2,
+        borderColor: '#6e6e6e',
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 5,
+    },
+    label: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        marginBottom: 5,
+    },
+    picker: {
+        borderWidth: 2,
+        borderColor: '#6e6e6e',
+        marginBottom: 10,
+        borderRadius: 5,
     },
 });
 
