@@ -70,7 +70,7 @@ const DefaultCondoFeeCalcCard = ({ condo }: Props) => {
             <h1 className="text-4xl mb-4">Condo Fee Calculation:</h1>
             <div className="flex flex-col space-y-4 w-full">
                 <Row label="Condo Dimensions (Ft²)" value={condoData.unitSize + " Ft²"} multiplier={condoData.monthlyFeePerSize + " $/Unit"} result={totalCondoFee} />
-                <Row label="Parking Spot Count" value={condoData.parkingSpotCount} multiplier={condoData.parkingFeePerSpot + " $/Spot"} result={totalParkingFee} />
+                <Row label="Parking Spot Count" value={condoData.parkingSpotCount + " spot"} multiplier={condoData.parkingFeePerSpot + " $/Spot"} result={totalParkingFee} />
                 <TotalRow label="Total Fees" result={totalMonthlyFee} />
             </div>
         </div>
@@ -85,17 +85,19 @@ type RowProps = {
   };
 
 // Helper component for each row
+// Helper component for each row
 const Row: React.FC<RowProps> = ({ label, value, multiplier, result }) => (
-    <div className="flex items-center justify-between">
-      <div className="font-semibold">{label}:</div>
-      <div className="flex items-center space-x-2">
-        <span>{value}</span>
-        <span>×</span>
-        <span>{multiplier}</span>
+    <div className="flex items-center justify-start">
+      <div className="font-semibold mr-2">{label}:</div>
+      <div className="flex items-center justify-center space-x-2 flex-grow">
+        <span className="bg-blue-100 rounded px-2 py-1">{value}</span>
+        <span className="font-semibold mx-4">×</span>
+        <span className="bg-blue-100 rounded px-2 py-1">{multiplier}</span>
       </div>
       <div className="font-semibold">= ${result}</div>
     </div>
-);
+  );
+  
 
 type TotalRowProps = {
     label: string;
