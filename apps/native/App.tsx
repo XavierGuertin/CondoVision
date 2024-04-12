@@ -58,10 +58,10 @@ const App = () => {
         <Stack.Screen name="UserProfile" component={UserProfileScreen} />
         <Stack.Screen
           name="Notifications"
-          component={CondoUnitRegistrationScreen}
+          component={NotificationsScreen}
         />
         <Stack.Screen name="Report" component={ReportScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Settings" component={CondoUnitRegistrationScreen} />
         <Stack.Screen
           name="AddCondoProfileScreen"
           component={AddCondoProfileScreen}
