@@ -106,6 +106,7 @@ const UserProfileScreen = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await auth.signOut();
+      await AsyncStorage.clear();
       Alert.alert("Logged out successfully");
       navigation.navigate("Login");
     } catch (error) {

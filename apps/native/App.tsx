@@ -1,27 +1,29 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {
-  HomeScreen,
-  LoginScreen,
-  SignupScreen,
-  PropertyManagementScreen,
-  MapScreen,
-  UserProfileScreen,
-  NotificationsScreen,
-  ReportScreen,
-  SettingsScreen,
-  AddCondoProfileScreen,
-  CondoPaymentFeeStatusAndHistoryScreen,
-  CondoFeeCalculationScreen,
-  FacilityBookingScreen,
+    HomeScreen,
+    LoginScreen,
+    SignupScreen,
+    PropertyManagementScreen,
+    MapScreen,
+    UserProfileScreen,
+    NotificationsScreenUser,
+    ReportScreen,
+    SettingsScreen,
+    AddCondoProfileScreen,
+    CondoPaymentFeeStatusAndHistoryScreen,
+    CondoFeeCalculationScreen,
+    FacilityBookingScreen,
 } from "./screens/index"; // screens
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
-  NavigationContainer,
-  useNavigationState,
+    NavigationContainer,
+    useNavigationState,
 } from "@react-navigation/native";
 import Navbar from "@native/components/Navbar";
 import CondoUnitDescriptionScreen from "./screens/CondoUnitDescriptionScreen";
 import CondoUnitRegistrationScreen from "./screens/CondoUnitRegistrationScreen";
+import NotificationsManagementScreen from "@native/screens/NotificationsManagementScreen";
+import NotificationsScreen from "@native/screens/NotificationsScreen";
 
 //enable to suppress warnings/errors in the Android Studio device simulator -> useful for demo recordings
 // import { LogBox  } from 'react-native';
@@ -30,72 +32,80 @@ import CondoUnitRegistrationScreen from "./screens/CondoUnitRegistrationScreen";
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [currentRouteName, setCurrentRouteName] = useState("");
+    const [currentRouteName, setCurrentRouteName] = useState("");
 
-  return (
-    <NavigationContainer
-      onStateChange={(state) => {
-        const routeName = getActiveRouteName(state);
-        setCurrentRouteName(routeName);
-      }}
-    >
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false, // This line hides the header globally
-        }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen
-          name="PropertyManagement"
-          component={PropertyManagementScreen}
-        />
-          <Stack.Screen name="Map" component={MapScreen} initialParams={{
-            properties: []
-          }} />
-        <Stack.Screen name="UserProfile" component={UserProfileScreen} />
-        <Stack.Screen
-          name="Notifications"
-          component={NotificationsScreen}
-        />
-        <Stack.Screen name="Report" component={ReportScreen} />
-        <Stack.Screen name="Settings" component={CondoUnitRegistrationScreen} />
-        <Stack.Screen
-          name="AddCondoProfileScreen"
-          component={AddCondoProfileScreen}
-        />
-        <Stack.Screen
-          name="CondoUnitDescriptionScreen"
-          component={CondoUnitDescriptionScreen}
-        />
-        <Stack.Screen
-          name="CondoPaymentFeeStatusAndHistoryScreen"
-          component={CondoPaymentFeeStatusAndHistoryScreen}
-        />
-        <Stack.Screen
-          name="CondoFeeCalculationScreen"
-          component={CondoFeeCalculationScreen}
-        />
-        <Stack.Screen
-            name="FacilityBookingScreen"
-            component={FacilityBookingScreen}
-        />
-      </Stack.Navigator>
-      <Navbar />
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer
+            onStateChange={(state) => {
+                const routeName = getActiveRouteName(state);
+                setCurrentRouteName(routeName);
+            }}
+        >
+            <Stack.Navigator
+                initialRouteName="Home"
+                screenOptions={{
+                    headerShown: false, // This line hides the header globally
+                }}
+            >
+                <Stack.Screen name="Home" component={HomeScreen}/>
+                <Stack.Screen name="Login" component={LoginScreen}/>
+                <Stack.Screen name="Signup" component={SignupScreen}/>
+                <Stack.Screen
+                    name="PropertyManagement"
+                    component={PropertyManagementScreen}
+                />
+                <Stack.Screen name="Map" component={MapScreen} initialParams={{
+                    properties: []
+                }}/>
+                <Stack.Screen name="UserProfile" component={UserProfileScreen}/>
+                <Stack.Screen
+                    name="Notifications"
+                    component={NotificationsScreen}
+                />
+                <Stack.Screen
+                    name="NotificationsUser"
+                    component={NotificationsScreenUser}
+                />
+                <Stack.Screen
+                    name="NotificationsManagement"
+                    component={NotificationsManagementScreen}
+                />
+                <Stack.Screen name="Report" component={ReportScreen}/>
+                <Stack.Screen name="Settings" component={CondoUnitRegistrationScreen}/>
+                <Stack.Screen
+                    name="AddCondoProfileScreen"
+                    component={AddCondoProfileScreen}
+                />
+                <Stack.Screen
+                    name="CondoUnitDescriptionScreen"
+                    component={CondoUnitDescriptionScreen}
+                />
+                <Stack.Screen
+                    name="CondoPaymentFeeStatusAndHistoryScreen"
+                    component={CondoPaymentFeeStatusAndHistoryScreen}
+                />
+                <Stack.Screen
+                    name="CondoFeeCalculationScreen"
+                    component={CondoFeeCalculationScreen}
+                />
+                <Stack.Screen
+                    name="FacilityBookingScreen"
+                    component={FacilityBookingScreen}
+                />
+            </Stack.Navigator>
+            <Navbar/>
+        </NavigationContainer>
+    );
 };
 
 // Finds the current active route name
 function getActiveRouteName(state: any) {
-  const route = state.routes[state.index];
-  if (route.state) {
-    // Dive into nested navigators
-    return getActiveRouteName(route.state);
-  }
-  return route.name;
+    const route = state.routes[state.index];
+    if (route.state) {
+        // Dive into nested navigators
+        return getActiveRouteName(route.state);
+    }
+    return route.name;
 }
 
 export default App;
