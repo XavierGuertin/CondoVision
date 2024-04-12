@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DefaultFinanceCard from "../finance/DefaultFinanceCard";
 import AddFacilityModal from "./AddFacilitiesModal";
-
+import EmployeeListModalWeb from "./EmployeeListModalWeb"; 
 type Condo = {
   id: number;
   condoFees: {
@@ -39,6 +39,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
     unitId: "",
   };
   const [showAddFacilityModal, setShowAddFacilityModal] = useState(false);
+  const [showEmployeeListModal, setShowEmployeeListModal] = useState(false);
   const [showCondoFinanceStatus, setShowCondoFinanceStatus] = useState(false);
   const [currentCondo, setCurrentCondo] = useState(condo);
   console.log("Selected Property:");
@@ -47,6 +48,9 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
   // Toggle the visibility of the AddFacilityModal
   const toggleAddFacilityModal = () =>
     setShowAddFacilityModal(!showAddFacilityModal);
+
+  // Toggle the visibility of the EmployeeList
+  const toggleEmployeeListModal = () => setShowEmployeeListModal(!showEmployeeListModal);
 
   addEventListener("hideCondoFinanceStatus", () => {
     setShowCondoFinanceStatus(false);
@@ -71,6 +75,12 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
               onClick={toggleAddFacilityModal}
             >
               Add Facility
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+              onClick={toggleEmployeeListModal}
+            >
+              View Employees
             </button>
           </div>
         </div>
@@ -98,6 +108,13 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
             onClose={toggleAddFacilityModal}
           />
         )}
+        {showEmployeeListModal && (
+          <EmployeeListModalWeb
+            propertyId={selectedProperty.id}
+            isVisible={showEmployeeListModal}
+            onClose={toggleEmployeeListModal}
+          />
+        )}
         {showCondoFinanceStatus && (
           <div className="w-full h-full pl-2">
             <h1 className="text-2xl font-bold text-white py-2">Finance</h1>
@@ -113,3 +130,4 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
 };
 
 export default PropertyComponent;
+
