@@ -94,7 +94,7 @@ const Row: React.FC<RowProps> = ({ label, value, multiplier, result }) => (
         <span className="font-semibold mx-4">×</span>
         <span className="bg-blue-100 rounded px-2 py-1">{multiplier}</span>
       </div>
-      <div className="font-semibold">= ${result}</div>
+      <div className="bg-green-200 rounded px-2 py-1 font-semibold">= ${result}</div>
     </div>
   );
   
@@ -106,9 +106,9 @@ type TotalRowProps = {
   
 // Helper component for the total row
 const TotalRow: React.FC<TotalRowProps> = ({ label, result }) => (
-    <div className="flex items-center justify-between pt-4 border-t">
+    <div className="flex items-center justify-between pt-4 border-t w-full">
         <div className="font-bold">{label}:</div>
-        <div className="font-bold">${result}</div>
+        <span className="font-bold bg-green-600 rounded px-2 py-1 text-white text-right">= ${result}</span>
     </div>
 );
 

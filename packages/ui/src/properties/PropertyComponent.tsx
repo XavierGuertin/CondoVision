@@ -58,7 +58,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
   });
   return (
     selectedProperty && (
-      <div className="flex flex-col h-full w-full border-l border-blue-500">
+      <div className="flex flex-col flex-grow overflow-y-auto w-full border-l border-blue-500">
         <div className="">
           <h1 className="text-2xl font-bold text-white py-2 pl-2 capitalize">
             {selectedProperty.propertyName}
