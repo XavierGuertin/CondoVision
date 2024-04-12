@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { db } from '@web/firebase';
-import { doc, getDoc } from 'firebase/firestore';
 
 type Props = {
   condo: {
@@ -34,102 +32,82 @@ const DefaultCondoFeeCalcCard = ({ condo }: Props) => {
     const [condoData, setCondoData] = useState<CondoFeeData | null>(null);
     const [loading, setLoading] = useState(true);
 
-    //styles
-    const style = {
-        condoFeeCard: {
-            width: '90%',
-            margin: 'auto',
-            padding: '20px',
-            backgroundColor: '#f5f5f5',
-            borderRadius: '8px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-        },
-        feeDetail: {
-            margin: '10px 0',
-            fontSize: '16px'
-        },
-        loading: {
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh'
-        }
-    };
-
     // Fetch condo data
     useEffect(() => {
         const fetchData = async () => {
-        // Fetch condo data
-        const data: CondoFeeData = {
-            unitSize: Number(condo.size),
-            monthlyFeePerSize: Number(condo.condoFees.monthlyFee),
-            parkingSpotCount: (condo.parkingSpotId ? 1 : 0),
-            // TODO: fetch parking fee from newly created parkingFee field
-            parkingFeePerSpot: 4,
+            // Fetch condo data
+            const data: CondoFeeData = {
+                unitSize: Number(condo.size),
+                monthlyFeePerSize: Number(condo.condoFees.monthlyFee),
+                parkingSpotCount: condo.parkingSpotId ? 1 : 0,
+                // TODO: fetch parking fee from newly created parkingFee field
+                parkingFeePerSpot: 4,
+            };
+            setCondoData(data);
         };
-        setCondoData(data);
-        };
-        fetchData()
+        fetchData();
         
         setTimeout(() => {
             setLoading(false);
-          }, 200);
-    }, []);
+        }, 200);
+    }, [condo]);
 
     if (loading) {
-        return <div style={style.loading}>Loading...</div>;
+        return <div>Loading...</div>;
     }
 
     if (!condoData) {
         return <div>No data available</div>;
     }
 
+    // Calculate the total fees for convenience
+    const totalCondoFee = condoData.unitSize * condoData.monthlyFeePerSize;
+    const totalParkingFee = condoData.parkingSpotCount * condoData.parkingFeePerSpot;
+    const totalMonthlyFee = totalCondoFee + totalParkingFee;
+
     return (
         <div className="px-8 flex flex-col items-center w-[65vw] h-[20vh] rounded-lg bg-white">
-      {loading ? (
-        <h1>Loading...</h1>
-      ) : (
-        <>
-        <div style={style.condoFeeCard}>
-            <h2>Condo Fee Details</h2>
-            {/* Condo Fee Details */}
-            <div style={style.feeDetail}>
-                <strong>Condo Dimensions (sq.ft.): </strong>
-                <span>{condoData.unitSize}</span>
+            <h1 className="text-4xl">Condo Fee Calculation:</h1>
+            <div className="flex flex-col space-y-4">
+                <Row label="Condo Dimensions (Ft²)" value={condoData.unitSize + " Ft²"} multiplier={condoData.monthlyFeePerSize + " $/Unit"} result={totalCondoFee} />
+                <Row label="Parking Spot Count" value={condoData.parkingSpotCount} multiplier={condoData.parkingFeePerSpot + " $/Spot"} result={totalParkingFee} />
+                <TotalRow label="Total Fees" result={totalMonthlyFee} />
             </div>
-            <div style={style.feeDetail}>
-                <strong>Monthly Condo Fee ($/sq.ft.): </strong>
-                <span>{condoData.monthlyFeePerSize}</span>
-            </div>
-            <div style={style.feeDetail}>
-                <strong>Total Condo Fee: </strong>
-                <span>${condoData.unitSize * condoData.monthlyFeePerSize}</span>
-            </div>
-            {/* Parking Fee Details */}
-            <div style={style.feeDetail}>
-                <strong>Condo Dimensions (sq.ft.): </strong>
-                <span>{condoData.parkingSpotCount}</span>
-            </div>
-            <div style={style.feeDetail}>
-                <strong>Monthly Condo Fee ($/sq.ft.): </strong>
-                <span>{condoData.parkingFeePerSpot}</span>
-            </div>
-            <div style={style.feeDetail}>
-                <strong>Total Parking Fee: </strong>
-                <span>${condoData.parkingSpotCount * condoData.parkingFeePerSpot}</span>
-            </div>
-
-            {/* Total Monthly Fee */}
-            <div style={style.feeDetail}>
-                <strong>Total Parking Fee: </strong>
-                <span>${}</span>
-            </div>
-
         </div>
-        </>
-      )}
-    </div>
     );
 };
+
+type RowProps = {
+    label: string;
+    value: string | number;
+    multiplier: string | number;
+    result: number;
+  };
+
+// Helper component for each row
+const Row: React.FC<RowProps> = ({ label, value, multiplier, result }) => (
+    <div className="flex items-center justify-between">
+      <div className="font-semibold">{label}:</div>
+      <div className="flex items-center space-x-2">
+        <span>{value}</span>
+        <span>×</span>
+        <span>{multiplier}</span>
+      </div>
+      <div className="font-semibold">= ${result}</div>
+    </div>
+);
+
+type TotalRowProps = {
+    label: string;
+    result: number;
+  };
+  
+// Helper component for the total row
+const TotalRow: React.FC<TotalRowProps> = ({ label, result }) => (
+    <div className="flex items-center justify-between pt-4 border-t">
+        <div className="font-bold">{label}:</div>
+        <div className="font-bold">${result}</div>
+    </div>
+);
 
 export default DefaultCondoFeeCalcCard;
