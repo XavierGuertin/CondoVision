@@ -67,8 +67,8 @@ const DefaultCondoFeeCalcCard = ({ condo }: Props) => {
 
     return (
         <div className="px-8 flex flex-col items-center w-[65vw] h-[20vh] rounded-lg bg-white">
-            <h1 className="text-4xl">Condo Fee Calculation:</h1>
-            <div className="flex flex-col space-y-4">
+            <h1 className="text-4xl mb-4">Condo Fee Calculation:</h1>
+            <div className="flex flex-col space-y-4 w-full">
                 <Row label="Condo Dimensions (Ft²)" value={condoData.unitSize + " Ft²"} multiplier={condoData.monthlyFeePerSize + " $/Unit"} result={totalCondoFee} />
                 <Row label="Parking Spot Count" value={condoData.parkingSpotCount} multiplier={condoData.parkingFeePerSpot + " $/Spot"} result={totalParkingFee} />
                 <TotalRow label="Total Fees" result={totalMonthlyFee} />
