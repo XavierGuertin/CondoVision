@@ -129,13 +129,13 @@ const AddFacilityForm: React.FC<AddFacilityFormProps> = ({ propertyId }) => {
 
   return (
   <>
-  <TouchableOpacity style={[styles.modalButton, styles.modalButtonShow]} onPress={show}>
-      <Text style={styles.modalButtonText}>Add Facilities</Text>
+  <TouchableOpacity id = "openFacilitiesModalBtn" style={[styles.modalButton, styles.modalButtonShow]} onPress={show}>
+      <Text style={styles.modalButtonText}>Add Facility</Text>
   </TouchableOpacity>
   <Modal transparent={true} visible={visible} animationType={"fade"} onRequestClose={hide}>
     <SafeAreaView style={[styles.centeredContent, styles.backGround]}>
         <View style={styles.modal}>
-            <TouchableOpacity onPress={hide} style={styles.modalButton}>
+            <TouchableOpacity id = "closeFacilitiesModalBtn" onPress={hide} style={styles.modalButton}>
                 <FontAwesome5  name="times" solid size={24} color="#fff" />
             </TouchableOpacity>
             <TouchableWithoutFeedback>
@@ -156,7 +156,7 @@ const AddFacilityForm: React.FC<AddFacilityFormProps> = ({ propertyId }) => {
                                     onChangeText={(text) => handleInputChange('facilityName', text)}
                                 />
                             </View>
-                            <View style = {styles.fieldView}>
+                            <View id = "openingTimeDropDown" style = {styles.fieldView}>
                                 <Text style={styles.label}>Opening Time</Text>
                                 <DropDownPicker
                                     open={dropOpen}
@@ -175,7 +175,7 @@ const AddFacilityForm: React.FC<AddFacilityFormProps> = ({ propertyId }) => {
                                 />
 
                             </View>
-                            <View style = {styles.fieldView}>
+                            <View id = "closingTimeDropDown" style = {styles.fieldView}>
                                 <Text style={styles.label}>Closing Time</Text>
                                 <DropDownPicker
                                     open={dropClose}
@@ -194,7 +194,7 @@ const AddFacilityForm: React.FC<AddFacilityFormProps> = ({ propertyId }) => {
                                 />
                             </View>
                         </View>
-                        <TouchableOpacity style={styles.button} onPress={saveFacility}>
+                        <TouchableOpacity id="addFacilityBtn" style={styles.button} onPress={saveFacility}>
                             <Text id={'createFacilityBtn'} style={styles.buttonText}>Create Facility</Text>
                         </TouchableOpacity>
                     </View>
