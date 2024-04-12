@@ -76,6 +76,8 @@ const Page = ({ user, onClose }: any) => {
                             propertyData.parkingCount,
                             propertyData.propertyName,
                             propertyData.unitCount,
+                            propertyData.latitude,
+                            propertyData.longitude,
                             unitList
                         );
                         propertyList.push(property.toJSON());
