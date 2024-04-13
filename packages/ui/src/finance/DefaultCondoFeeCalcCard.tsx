@@ -66,9 +66,9 @@ const DefaultCondoFeeCalcCard = ({ condo }: Props) => {
     const totalMonthlyFee = totalCondoFee + totalParkingFee;
 
     return (
-        <div className="px-8 flex flex-col items-center w-[65vw] h-[20vh] rounded-lg bg-white">
-            <h1 className="text-4xl mb-4">Condo Fee Calculation:</h1>
-            <div className="flex flex-col space-y-4 w-full">
+        <div className="flex flex-col items-center w-full max-w-screen-md mx-auto rounded-lg bg-white px-4 sm:px-8 py-4">
+            <h1 className="text-2xl sm:text-4xl my-4">Condo Fee Calculation:</h1>
+            <div className="w-full">
                 <Row label="Condo Dimensions (Ft²)" value={condoData.unitSize + " Ft²"} multiplier={condoData.monthlyFeePerSize + " $/Unit"} result={totalCondoFee} />
                 <Row label="Parking Spot Count" value={condoData.parkingSpotCount + " spot"} multiplier={condoData.parkingFeePerSpot + " $/Spot"} result={totalParkingFee} />
                 <TotalRow label="Total Fees" result={totalMonthlyFee} />
@@ -87,11 +87,11 @@ type RowProps = {
 // Helper component for each row
 // Helper component for each row
 const Row: React.FC<RowProps> = ({ label, value, multiplier, result }) => (
-    <div className="flex items-center justify-start">
-      <div className="font-semibold mr-2">{label}:</div>
-      <div className="flex items-center justify-center space-x-2 flex-grow">
+    <div className="flex flex-wrap items-center justify-between mb-2">
+      <div className="font-semibold w-1/3 sm:w-auto mb-1 sm:mb-0">{label}:</div>
+      <div className="flex items-center justify-center space-x-2 flex-grow mb-1 sm:mb-0">
         <span className="bg-blue-100 rounded px-2 py-1">{value}</span>
-        <span className="font-semibold mx-4">×</span>
+        <span className="font-bold">×</span>
         <span className="bg-blue-100 rounded px-2 py-1">{multiplier}</span>
       </div>
       <div className="bg-green-200 rounded px-2 py-1 font-semibold">= ${result}</div>
@@ -106,9 +106,9 @@ type TotalRowProps = {
   
 // Helper component for the total row
 const TotalRow: React.FC<TotalRowProps> = ({ label, result }) => (
-    <div className="flex items-center justify-between pt-4 border-t w-full">
-        <div className="font-bold">{label}:</div>
-        <span className="font-bold bg-green-600 rounded px-2 py-1 text-white text-right">= ${result}</span>
+    <div className="flex flex-wrap items-center justify-between border-t pt-4 mt-4 pb-2">
+        <div className="font-bold w-full sm:w-auto mb-2 sm:mb-0">{label}:</div>
+        <span className="font-bold bg-green-600 rounded px-2 py-1 text-white w-full sm:w-auto text-center sm:text-right">= ${result}</span>
     </div>
 );
 
