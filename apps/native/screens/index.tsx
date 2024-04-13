@@ -4,7 +4,7 @@ import SignupScreen from "./SignupScreen";
 import PropertyManagementScreen from "./PropertyManagementScreen";
 import MapScreen from "./MapScreen";
 import UserProfileScreen from "./UserProfileScreen";
-import NotificationsScreen from "./NotificationsScreen";
+import NotificationsScreenUser from "./NotificationsScreenUser";
 import ReportScreen from "./ReportScreen";
 import SettingsScreen from "./SettingsScreen";
 import AddCondoProfileScreen from "./AddCondoProfileScreen";
@@ -20,7 +20,7 @@ export {
   PropertyManagementScreen,
   MapScreen,
   UserProfileScreen,
-  NotificationsScreen,
+  NotificationsScreenUser,
   ReportScreen,
   SettingsScreen,
   AddCondoProfileScreen,

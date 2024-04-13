@@ -77,8 +77,6 @@ const CondoProfileScreen = () => {
               unitList
             );
             propertyList.push(property.toJSON());
-            console.log("Loaded property:");
-            console.log(property.toJSON());
             setOwnedProperties(propertyList);
           }
         });
