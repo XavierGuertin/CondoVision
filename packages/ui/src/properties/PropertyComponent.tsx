@@ -41,7 +41,6 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
   };
   const [showAddFacilityModal, setShowAddFacilityModal] = useState(false);
   const [showCondoFinanceStatus, setShowCondoFinanceStatus] = useState(false);
-  const [showCondoFeeCalcStatus, setShowCondoFeeCalcStatus] = useState(false);
   const [currentCondo, setCurrentCondo] = useState(condo);
   console.log("Selected Property:");
   console.log(selectedProperty);
@@ -52,9 +51,6 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
 
   addEventListener("hideCondoFinanceStatus", () => {
     setShowCondoFinanceStatus(false);
-  });
-  addEventListener("hideCondoFeeCalcStatus", () => {
-    setShowCondoFeeCalcStatus(false);
   });
   return (
     selectedProperty && (
@@ -90,7 +86,6 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
               onClick={() => {
                 setCurrentCondo(condo);
                 setShowCondoFinanceStatus(true);
-                setShowCondoFeeCalcStatus(true);
               }}
             >
               {condo.id}
@@ -111,16 +106,12 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
               condo={currentCondo}
               property={selectedProperty}
             />
-          </div>
-        )}
-        {showCondoFeeCalcStatus && (
-          <div className="w-full h-full pl-2">
             <h1 className="text-2xl font-bold text-white py-2">Fee Calculator</h1>
             <DefaultCondoFeeCalcCard 
               condo={currentCondo}
               property={selectedProperty} 
             />
-            </div>
+          </div>
         )}
       </div>
     )
