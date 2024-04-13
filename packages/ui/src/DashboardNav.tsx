@@ -8,7 +8,11 @@ import NotificationsModal from "./NotificationsModal";
 import { collection, getDocs } from "firebase/firestore";
 import RequestsModal from "./Requests/RequestsModal";
 
-const DashboardNav = () => {
+type DashboardNavProps = {
+    className?: string;
+};
+
+const DashboardNav = ({className}: DashboardNavProps) => {
     const [active, setActive] = useState("Dashboard");
     const [lastActive, setLastActive] = useState("Dashboard");
     const [authUser] = useAuthState(auth);
@@ -66,7 +70,7 @@ const DashboardNav = () => {
     };
 
     return (
-        <nav className="w-full flex py-2 justify-between items-center navbar bg-gradient-to-r bg-[#87A8FA] to-[#87CCFA] border-b border-[#87A8FA]">
+        <nav className="w-full flex py-2 justify-between items-center navbar bg-gradient-to-r bg-[#87A8FA] to-[#87CCFA] border-b border-[#87A8FA] ${className}">
             <a href="/dashboard">
                 <Image
                     src="/logoBright.png"

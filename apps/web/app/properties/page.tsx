@@ -129,9 +129,9 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="h-screen bg-gradient-to-r from-[#87A8FA] to-[#87CCFA] overflow-hidden">
-      <DashboardNav />
-      <div className="flex h-full">
+    <div className="flex flex-col h-screen bg-gradient-to-r from-[#87A8FA] to-[#87CCFA] overflow-hidden">
+      <DashboardNav className="flex-shrink-0" />
+      <div className="flex flex-grow overflow-hidden">
         {isLoading ? (
           <h1>Loading...</h1>
         ) : (
@@ -140,12 +140,14 @@ const Page = () => {
             setSelectedProperty={setSelectedProperty}
             setModalOpen={setIsModalOpen}
             isModalOpen={isModalOpen}
+            className="flex-shrink-0"
           />
         )}
         {!isLoading ? (
           <PropertyComponent
             selectedProperty={selectedProperty}
             onBookFacilityClick={toggleBookingModal}
+            className="flex-grow overflow-y-auto"
           />
         ) : (
           <h1>Loading...</h1>
