@@ -140,7 +140,6 @@ const Page = () => {
             setSelectedProperty={setSelectedProperty}
             setModalOpen={setIsModalOpen}
             isModalOpen={isModalOpen}
-            className="flex-shrink-0"
           />
         )}
         {!isLoading ? (

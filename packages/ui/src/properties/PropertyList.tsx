@@ -3,17 +3,17 @@ import { Button } from "../button";
 
 const PropertyList = ({
   ownedProperties,
-  inView,
   setSelectedProperty,
   isModalOpen,
   setModalOpen,
+  className,
 }: any) => {
   const [selected, setSelected] = useState<string>(
     ownedProperties?.length > 0 ? ownedProperties[0].id : "",
   );
 
   return (
-    <div className={`${inView} min-w-36`}>
+    <div className={"min-w-[240px] ${className}"}>
       <h1 className="text-2xl font-bold text-white pb-2 pl-2">
         Properties list
       </h1>
