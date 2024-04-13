@@ -60,7 +60,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
             {selectedProperty.propertyName}
           </h1>
           <p className="pl-2">Address: {selectedProperty.address}</p>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 pl-2">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
               onClick={onBookFacilityClick}
@@ -78,7 +78,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
         <h1 className="mt-3 text-2xl font-bold text-white py-2 pl-2 capitalize">
           Condo Units
         </h1>
-        <div className="flex flex-row">
+        <div className="flex flex-row pl-2">
           {selectedProperty.units.map((condo: Condo) => (
             <button
               key={condo.id}
