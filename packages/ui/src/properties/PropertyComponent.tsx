@@ -54,7 +54,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
   });
   return (
     selectedProperty && (
-      <div className="flex flex-col flex-grow h-screen overflow-y-auto border-l border-blue-500">
+      <div className="flex flex-col flex-grow overflow-y-auto border-l border-blue-500" style={{ height: 'calc(100vh - 10rem)' }}>
         <div className="">
           <h1 className="text-2xl font-bold text-white py-2 pl-2 capitalize">
             {selectedProperty.propertyName}
@@ -78,7 +78,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
         <h1 className="mt-3 text-2xl font-bold text-white py-2 pl-2 capitalize">
           Condo Units
         </h1>
-        <div className="flex flex-row pl-2">
+        <div className="flex flex-row flex-wrap pl-2">
           {selectedProperty.units.map((condo: Condo) => (
             <button
               key={condo.id}
