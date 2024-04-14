@@ -130,7 +130,7 @@ const Page = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-r from-[#87A8FA] to-[#87CCFA] overflow-hidden">
-      <DashboardNav className="flex-shrink-0" />
+      <DashboardNav />
       <div className="flex flex-grow overflow-hidden">
         {isLoading ? (
           <h1>Loading...</h1>
