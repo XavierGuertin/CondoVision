@@ -53,24 +53,9 @@ const FinanceComponent = ({ selectedProperty }: any) => {
           <p className="pl-2">Address: {selectedProperty.address}</p>
         </div>
 
-        <div className="flex flex-row">
-          {selectedProperty.units.map((condo: Condo) => (
-            <button
-              key={condo.id}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-              onClick={() => {
-                setCurrentCondo(condo);
-                setShowCondoFinanceStatus(true);
-              }}
-            >
-              {condo.id}
-            </button>
-          ))}
-        </div>
         <div className="w-full h-full pl-2">
             <h1 className="text-2xl font-bold text-white py-2">Finance</h1>
             <PropertyFinanceCard
-              condo={currentCondo}
               property={selectedProperty}
             />
           </div>

@@ -4,24 +4,9 @@ import React, { useEffect, useState } from "react";
 import './styles.css';
 
 type Props = {
-    condo: {
+    property: {
       id: number;
-      condoFees: {
-        includes: [];
-        isPayed: boolean;
-        monthlyFee: string;
-      };
-      lockerId: string;
-      occupantInfo: {
-        contact: string;
-        name: string;
-      };
-      owner: string;
-      parkingSpotId: string;
-      size: string;
-      unitId: string;
     };
-    property: object;
   };
 
 
@@ -38,10 +23,12 @@ type Payment = {
       };
       amount: number;
       isOnTime: boolean;
+      reason: string;
     };
   };
 
-  const PropertyFinanceCard = ({ condo }: Props) => {
+
+  const PropertyFinanceCard = ({ property }: Props) => {
     const initialValue = [{}];
   
     const [payments, setPayments] = useState(Array<Payment>);
@@ -53,18 +40,22 @@ type Payment = {
       return returnDate.slice(0, returnDate.indexOf("T"));
     };
   
+    const [balance, setBalance] = useState(0);
+
     useEffect(() => {
       const fetchData = async () => {
         // Fetch payments history
         const paymentsSnapshots = await getDocs(
-          query(collection(db, "payments"), where("condoId", "==", condo.id)),
+          query(collection(db, "payments"), where("propertyId", "==", property.id)),
         );
   
         const paymentDocs = paymentsSnapshots.docs;
+        console.log('Fetched documents:', paymentDocs);
   
         console.log(paymentDocs);
   
         const paymentList: Array<Payment> = [];
+        let totalBalance = 0;
         paymentDocs.forEach((paymentDoc) => {
           const data = paymentDoc.data();
   
@@ -78,15 +69,18 @@ type Payment = {
               date: data.payment.date,
               amount: data.payment.amount,
               isOnTime: data.payment.isOnTime,
+              reason: data.payment.reason,
             },
           };
+
+          totalBalance += paymentObject.payment.amount;
   
           paymentList.push(paymentObject);
         });
-        let totalAmount = paymentList.reduce((total, paymentObj) => total + paymentObj.payment.amount, 0);
-        console.log("Total Amount: " + {totalAmount});
-        console.log("Payments:");
-        console.log(paymentList);
+        //let totalAmount = paymentList.reduce((total, paymentObj) => total + paymentObj.payment.amount, 0);
+        //console.log("Total Amount: " + {totalAmount});
+        setBalance(totalBalance);
+        console.log(totalBalance);
         setPayments(paymentList);
       };
       fetchData();
@@ -94,7 +88,7 @@ type Payment = {
       setTimeout(() => {
         setLoading(false);
       }, 200);
-    }, []);
+    }, [property.id]);
 
 
       return (
@@ -108,23 +102,38 @@ type Payment = {
               </tr>
             </thead>
             <tbody>
-              //Still need to properly add the 3 column data from properties
-              {payments.length > 0 ? (
-                payments.map((paymentObj) => (
-                  <tr key={paymentObj.id} className="flex px-8 w-[65vw] flex-row justify-between">
-                    <td>totalAmount</td>
-                    <td></td>
-                    <td>{secondsToDate(paymentObj.payment.date.seconds)}</td>
-                  </tr>
-                ))
-              ):(
+            {(() => {
+              let runningBalance = 0; //Create local variable for balance and initialize to 0, to not double everytime
+              return payments.length > 0 ? (
+                payments.map((paymentObj) => {
+                  runningBalance += paymentObj.payment.amount;
+                  return (
+                    <tr key={paymentObj.id}>
+                      <td>
+                        {paymentObj.payment.amount > 0 ? 
+                          <div className="bg-green-600">
+                            <span className="font-bold">{paymentObj.payment.amount}</span> -{paymentObj.payment.reason} from Unit {paymentObj.condoId}
+                          </div>
+                          :
+                          <div className="bg-red-600">
+                            <span className="font-bold">{paymentObj.payment.amount}</span> -{paymentObj.payment.reason} from Unit {paymentObj.condoId}
+                          </div>
+                        }
+                      </td>
+                      <td>{runningBalance}</td>
+                      <td>{secondsToDate(paymentObj.payment.date.seconds)}</td>
+                    </tr>
+                  );
+                })
+              ) : (
                 <tr>
                   <td colSpan={3}>No history to show</td>
                 </tr>
-              )}
-            </tbody>
+              )
+            })()}
+          </tbody>
           </table>
-  </div>
+        </div>
       );
     };
     

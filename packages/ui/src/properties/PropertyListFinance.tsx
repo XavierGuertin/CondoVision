@@ -10,11 +10,14 @@ const PropertyList = ({ ownedProperties, inView, setSelectedProperty, isModalOpe
             </h1>
             {ownedProperties?.map((property: any) => {
                 return (
-                    <div key={property.id} className={`pl-2 pr-10 py-4 border-b border-blue-500  ${selected == property.id ? 'bg-blue-500' : 'cursor-pointer'}`} onClick={() => {
+                    <div key={property.id} 
+                    className={`pl-2 pr-10 py-4 border-b border-blue-500  ${selected == property.id ? 'bg-blue-500' : 'cursor-pointer'}`} 
+                    onClick={() => {
                         setSelected(property.id);
                         setSelectedProperty(property);
                     }}>
-                        <h1 className="font-bold text-xl capitalize">{property.propertyName}
+                        <h1 className="font-bold text-xl capitalize">
+                            {property.propertyName}
                         </h1>
                         <p>{property.address}</p>
                     </div>
