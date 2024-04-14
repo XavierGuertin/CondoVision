@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import DefaultFinanceCard from "../finance/DefaultFinanceCard";
+import DefaultCondoFeeCalcCard from "../finance/DefaultCondoFeeCalcCard";
 import AddFacilityModal from "./AddFacilitiesModal";
 import EmployeeListModalWeb from "./EmployeeListModalWeb"; 
 type Condo = {
@@ -57,13 +58,13 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
   });
   return (
     selectedProperty && (
-      <div className="flex flex-col h-full w-full border-l border-blue-500">
+      <div className="flex flex-col flex-grow overflow-y-auto border-l border-blue-500" style={{ height: 'calc(100vh - 10rem)' }}>
         <div className="">
           <h1 className="text-2xl font-bold text-white py-2 pl-2 capitalize">
             {selectedProperty.propertyName}
           </h1>
           <p className="pl-2">Address: {selectedProperty.address}</p>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 pl-2">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
               onClick={onBookFacilityClick}
@@ -87,7 +88,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
         <h1 className="mt-3 text-2xl font-bold text-white py-2 pl-2 capitalize">
           Condo Units
         </h1>
-        <div className="flex flex-row">
+        <div className="flex flex-row flex-wrap pl-2">
           {selectedProperty.units.map((condo: Condo) => (
             <button
               key={condo.id}
@@ -121,6 +122,11 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
             <DefaultFinanceCard
               condo={currentCondo}
               property={selectedProperty}
+            />
+            <h1 className="text-2xl font-bold text-white py-2">Fee Calculator</h1>
+            <DefaultCondoFeeCalcCard 
+              condo={currentCondo}
+              property={selectedProperty} 
             />
           </div>
         )}

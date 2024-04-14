@@ -94,7 +94,7 @@ const DashboardNav = () => {
     };
 
     return (
-        <nav className="w-full flex py-2 justify-between items-center navbar bg-gradient-to-r bg-[#87A8FA] to-[#87CCFA] border-b border-[#87A8FA]">
+        <nav className="w-full flex py-2 justify-between items-center navbar bg-gradient-to-r bg-[#87A8FA] to-[#87CCFA] border-b border-[#87A8FA] ${className}">
             <a href="/dashboard">
                 <Image
                     src="/logoBright.png"

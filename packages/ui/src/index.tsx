@@ -13,6 +13,7 @@ import PropertyListFinance from "./properties/PropertyListFinance";
 import PropertyComponent from "./properties/PropertyComponent";
 import FinanceComponent from "./properties/FinanceComponent";
 import DefaultFinanceCard from "./finance/DefaultFinanceCard";
+import DefaultCondoFeeCalcCard from "./finance/DefaultCondoFeeCalcCard";
 import CreatePropertyModal from "./properties/CreatePropertyModal";
 import CreateUnitModal from "./properties/CreateUnitModal";
 import FacilityBookingPage from "./properties/FacilityBookingPage";
@@ -33,6 +34,7 @@ export {
     FinanceComponent,
     PropertyComponent,
     DefaultFinanceCard,
+    DefaultCondoFeeCalcCard,
     CreatePropertyModal,
     CreateUnitModal,
     FacilityBookingPage

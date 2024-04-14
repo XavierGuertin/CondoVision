@@ -26,6 +26,7 @@ const isValidEmail = (email) => {
 const UserPropertyForm = ({ onFormSubmit, condoUnitID, propertyID }) => {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState('');
+    const [regKey, setRegKey] = useState('');
 
     /**
      * Handles form submission by validating inputs and updating or adding registration key document in Firestore.
@@ -53,6 +54,7 @@ const UserPropertyForm = ({ onFormSubmit, condoUnitID, propertyID }) => {
                 await addDoc(collection(db, "RegistrationKeys"), { email, status, key, condoUnitID, propertyID, isUsed: false });
                 Alert.alert('Submission Successful', 'Registration Key has been sent');
             }
+            setRegKey(key); // Update regKey state
         } else {
             Alert.alert('Please fill in all fields.');
         }
@@ -86,6 +88,9 @@ const UserPropertyForm = ({ onFormSubmit, condoUnitID, propertyID }) => {
             >
                 <Text style={styles.buttonText}>Send Registration Key</Text>
             </TouchableOpacity>
+            {regKey && (
+                <Text style={styles.infoText}>Registration Key: {regKey}</Text>
+            )}
         </View>
     );
 };
