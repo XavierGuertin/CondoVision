@@ -50,6 +50,7 @@ const Page = ({ user, onClose }: any) => {
                                 condoId,
                                 {
                                     includes: condoData.condoFees.includes,
+                                    isPayed: condoData.condoFees.isPayed,
                                     monthlyFee: condoData.condoFees.monthlyFee,
                                 },
                                 condoData.lockerId,
