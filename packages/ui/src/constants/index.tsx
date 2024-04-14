@@ -18,10 +18,12 @@ const allDashNavLinks = [
     createDashNavLink("settings", "Settings", IoSettingsOutline),
 ];
 
-let userRole: any;
-if (typeof window !== 'undefined') {
-    userRole = window.localStorage.getItem('userRole');
-}
+let userRole: string|null;
+    try {
+        userRole = window.localStorage.getItem('userRole');
+    } catch (e) {
+        userRole = null;
+    }
 
 export const dashNavLinks = userRole === 'Condo Management Company' ? allDashNavLinks : allDashNavLinks.filter(link => link.id !== "finance");
 

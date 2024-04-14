@@ -8,9 +8,11 @@ const Page = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [active, setActive] = React.useState("Dashboard");
 
-    let userRole: any;
-    if (typeof window !== 'undefined') {
+    let userRole: string|null;
+    try {
         userRole = window.localStorage.getItem('userRole');
+    } catch (e) {
+        userRole = null;
     }
 
         // Simulate data fetching

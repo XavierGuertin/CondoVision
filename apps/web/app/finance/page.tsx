@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { IoClose } from 'react-icons/io5'
 import { db } from "@web/firebase";
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import CondoUnitAdapter from "../../../native/components/CondoUnitAdapter";
+import { collection, getDocs } from 'firebase/firestore';
 import PropertyAdapter from "../../../native/components/PropertyAdapter";
 import dynamic from 'next/dynamic';
 
@@ -19,10 +18,6 @@ const Page = ({ user, onClose }: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [selectedProperty, setSelectedProperty] = useState<Object>();
-    /*** Used for creating the right amount of units and to pair them properly.*/
-    const [propertyId, setPropertyId] = useState('');
-    const [unitCount, setUnitCount] = useState(0);
-    const [currentUnit, setCurrentUnit] = useState(0); // Start with 0 to not display 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,40 +29,10 @@ const Page = ({ user, onClose }: any) => {
 
                 propertiesCollectionSnapshot.forEach(async (propertyDoc) => {
                     const unitList: Object[] = [];
-                    const condoUnitsSnapshot = await getDocs(
-                        collection(db, "properties", propertyDoc.id, "condoUnits")
-                    );
                     const userUID = await localStorage.getItem("userUID");
                     let stopper = true;
                     let propertyData = propertyDoc.data();
 
-                    condoUnitsSnapshot.forEach((condoUnitDoc) => {
-                        let condoData = condoUnitDoc.data();
-                        let condoId = condoUnitDoc.id;
-
-                        if (condoData.owner === userUID && stopper) {
-                            const condoUnit = new CondoUnitAdapter(
-                                condoId,
-                                {
-                                    includes: condoData.condoFees.includes,
-                                    isPayed: condoData.condoFees.isPayed,
-                                    monthlyFee: condoData.condoFees.monthlyFee,
-                                },
-                                condoData.lockerId,
-                                {
-                                    contact: condoData.occupantInfo.contact,
-                                    name: condoData.occupantInfo.name,
-                                },
-                                condoData.owner,
-                                condoData.parkingSpotId,
-                                condoData.size,
-                                condoData.unitId
-                            );
-                            unitList.push(condoUnit.toJSON());
-                            console.log(unitList);
-                            stopper = false;
-                        }
-                    });
                     if (propertyData.owner === userUID) {
                         const property = new PropertyAdapter(
                             propertyDoc.id,

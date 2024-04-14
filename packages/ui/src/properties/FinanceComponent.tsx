@@ -1,44 +1,7 @@
 import React, { useState } from "react";
 import PropertyFinanceCard from "../finance/PropertyFinanceCard";
 
-type Condo = {
-    id: number;
-    condoFees: {
-      includes: [];
-      isPayed: boolean;
-      monthlyFee: string;
-    };
-    lockerId: string;
-    occupantInfo: {
-      contact: string;
-      name: string;
-    };
-    owner: string;
-    parkingSpotId: string;
-    size: string;
-    unitId: string;
-  };
-
 const FinanceComponent = ({ selectedProperty }: any) => {
-  const condo: Condo = {
-    id: -1,
-    condoFees: {
-      includes: [],
-      isPayed: false,
-      monthlyFee: "1",
-    },
-    lockerId: "",
-    occupantInfo: {
-      contact: "",
-      name: "",
-    },
-    owner: "",
-    parkingSpotId: "",
-    size: "",
-    unitId: "",
-  };
-  const [showCondoFinanceStatus, setShowCondoFinanceStatus] = useState(false);
-  const [currentCondo, setCurrentCondo] = useState(condo);
   console.log("Selected Property:");
   console.log(selectedProperty);
 
