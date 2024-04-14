@@ -80,14 +80,14 @@ const Page = () => {
             const condoUnit = new CondoUnitAdapter(
               condoId,
               {
-                includes: condoData.condoFees.includes,
-                isPayed: condoData.condoFees.isPayed,
-                monthlyFee: condoData.condoFees.monthlyFee,
+                includes: condoData?.condoFees?.includes,
+                isPayed: condoData?.condoFees?.isPayed,
+                monthlyFee: condoData?.condoFees?.monthlyFee,
               },
               condoData.lockerId,
               {
-                contact: condoData.occupantInfo.contact,
-                name: condoData.occupantInfo.name,
+                contact: condoData?.occupantInfo?.contact,
+                name: condoData?.occupantInfo?.name,
               },
               condoData.owner,
               condoData.parkingSpotId,
