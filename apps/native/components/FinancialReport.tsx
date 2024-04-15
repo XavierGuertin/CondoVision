@@ -12,7 +12,9 @@ interface CondoUnit {
 }
 
 interface Payment {
-    amount: number;
+    payment: {
+        amount: number;
+    }
 }
 
 interface FinancialData {
@@ -68,15 +70,15 @@ const FinancialReport: React.FC = () => {
                         const fees = Number(condoData.size) * Number(condoData.condoFees.monthlyFee);
                         totalFees += fees;
                     
-                        const paymentsQuery = query(collection(db, 'payments'), where('condoUnitId', '==', condoDoc.id));
+                        const paymentsQuery = query(collection(db, 'payments'), where('condoId', '==', condoDoc.id));
                         const paymentsSnapshot = await getDocs(paymentsQuery);
                         let totalPayments = 0;
                     
                         paymentsSnapshot.forEach(paymentDoc => {
-                            const paymentAmount = Number(paymentDoc.data().amount);  // Convert amount to a number
-                            if (!isNaN(paymentAmount)) {
-                                totalPayments += paymentAmount;
-                            }
+                            const paymentData = paymentDoc.data() as Payment;
+                            console.log(paymentData.payment.amount);
+                            const paymentAmount = paymentData.payment.amount; 
+                            totalPayments += paymentAmount;
                         });
                     
                         detailedReports.push({
