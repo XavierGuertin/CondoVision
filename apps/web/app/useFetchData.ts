@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@web/firebase';
-import CondoUnitAdapter from './../../native/components/CondoUnitAdapter';
 import PropertyAdapter from './../../native/components/PropertyAdapter';
+import { processCondoUnits } from './processCondoUnits';
 
 
 export const useFetchData = () => {
@@ -17,34 +17,11 @@ export const useFetchData = () => {
         const propertiesCollectionSnapshot = await getDocs(collection(db, 'properties'));
 
         propertiesCollectionSnapshot.forEach(async (propertyDoc) => {
-          const unitList: any[] = [];
           const condoUnitsSnapshot = await getDocs(collection(db, 'properties', propertyDoc.id, 'condoUnits'));
           const userUID = await localStorage.getItem('userUID');
           let propertyData = propertyDoc.data();
 
-          condoUnitsSnapshot.forEach((condoUnitDoc) => {
-            const condoData = condoUnitDoc.data();
-            const condoId = condoUnitDoc.id;
-
-            const condoUnit = new CondoUnitAdapter(
-              condoId,
-              {
-                includes: condoData?.condoFees?.includes,
-                isPayed: condoData?.condoFees?.isPayed,
-                monthlyFee: condoData?.condoFees?.monthlyFee,
-              },
-              condoData.lockerId,
-              {
-                contact: condoData?.occupantInfo?.contact,
-                name: condoData?.occupantInfo?.name,
-              },
-              condoData.owner,
-              condoData.parkingSpotId,
-              condoData.size,
-              condoData.unitId
-            );
-            unitList.push(condoUnit.toJSON());
-          });
+          let unitList = processCondoUnits(condoUnitsSnapshot);
 
           if (propertyData.owner === userUID) {
             const property = new PropertyAdapter(

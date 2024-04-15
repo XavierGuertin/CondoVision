@@ -15,7 +15,7 @@ import { db } from "../firebase";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import PropertyAdapter from "@native/components/PropertyAdapter";
-import CondoUnitAdapter from "@native/components/CondoUnitAdapter";
+import { processCondoUnits } from '../../web/app/processCondoUnits';
 
 const CondoProfileScreen = () => {
   const navigation = useNavigation();
@@ -33,36 +33,14 @@ const CondoProfileScreen = () => {
         );
 
         propertiesCollectionSnapshot.forEach(async (propertyDoc) => {
-          const unitList: Object[] = [];
           const condoUnitsSnapshot = await getDocs(
             collection(db, "properties", propertyDoc.id, "condoUnits")
           );
 
           const propertyData = propertyDoc.data();
 
-          condoUnitsSnapshot.forEach((condoUnitDoc) => {
-            const condoData = condoUnitDoc.data();
-            const condoId = condoUnitDoc.id;
+          let unitList = processCondoUnits(condoUnitsSnapshot);
 
-            const condoUnit = new CondoUnitAdapter(
-              condoId,
-              {
-                includes: condoData.condoFees.includes,
-                isPayed: condoData.condoFees.isPayed,
-                monthlyFee: condoData.condoFees.monthlyFee,
-              },
-              condoData.lockerId,
-              {
-                contact: condoData.occupantInfo.contact,
-                name: condoData.occupantInfo.name,
-              },
-              condoData.owner,
-              condoData.parkingSpotId,
-              condoData.size,
-              condoData.unitId
-            );
-            unitList.push(condoUnit.toJSON());
-          });
           if (propertyData.owner === userUID) {
             const property = new PropertyAdapter(
               propertyDoc.id,
