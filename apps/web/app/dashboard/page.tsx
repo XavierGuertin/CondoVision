@@ -6,6 +6,7 @@ import FinanceImg from "../../public/financeImage.jpg"
 
 const Page = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [active, setActive] = React.useState("Dashboard");
 
     let userRole: string|null;
     try {

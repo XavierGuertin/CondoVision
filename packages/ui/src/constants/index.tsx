@@ -6,6 +6,7 @@ export const navLinks = [
     createNavLink("contact", "Contact"),
 ];
 
+import {useState, useEffect} from 'react';
 import { IconBaseProps } from "react-icons";
 import { IoSettingsOutline, IoPerson, IoNotifications, IoAnalytics, IoHome } from "react-icons/io5";
 const createDashNavLink = (id: string, title: string, logo: { (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; }) => ({ id, title, logo });
