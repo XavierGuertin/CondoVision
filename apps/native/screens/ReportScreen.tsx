@@ -1,56 +1,27 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import FinancialReport from '@native/components/FinancialReport';
 
-const ReportScreen = ({navigation}: any) => {
+const ReportScreen = ({ navigation }: any) => {
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Reports</Text>
-        </View>
+        <ScrollView style={styles.container}>
+            <Text style={styles.title}>Annual Financial Report</Text>
+            <FinancialReport />
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
+        padding: 20,
         backgroundColor: '#f5f5f5',
-        marginBottom: 60,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
     },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginBottom: 20,
-    },
-    info: {
-        fontSize: 18,
-        marginBottom: 10,
-    },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
-        width: '80%',
-    },
-    logoutButton: {
-        padding: 0,
-        marginRight: -130,
-        marginLeft: 130,
-        marginBottom: 150,
-        marginTop: -150,
-    },
-    logoutButtonText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#2074df',
-    },
 });
 
-export default ReportScreen
+export default ReportScreen;
