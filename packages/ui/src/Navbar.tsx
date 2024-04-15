@@ -6,7 +6,7 @@ import { navLinks } from "./constants";
 import Image from "next/image";
 
 const Navbar = () => {
-    const [active, setActive] = useState("Home");
+    const [active, setActive] = useState("Dashboard");
     const [toggle, setToggle] = useState(false);
     const [authUser] = useAuthState(auth);
     const [username, setUsername] = useState("");

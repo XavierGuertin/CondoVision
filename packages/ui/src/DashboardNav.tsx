@@ -7,8 +7,6 @@ import UserProfileModal from './UserProfileModal';
 import NotificationsModal from "./NotificationsModal";
 import { collection, getDocs } from "firebase/firestore";
 import RequestsModal from "./Requests/RequestsModal";
-import FinancePage from "../../../apps/web/app/finance/page";
-import { useRouter } from 'next/router';
 
 const DashboardNav = () => {
     const [authUser] = useAuthState(auth);
@@ -23,13 +21,13 @@ const DashboardNav = () => {
     }
     const [active, setActive] = useState(() => {
         if (typeof window !== 'undefined') {
-            return window.localStorage.getItem('active') || 'Dashboard';
+            return window.localStorage.getItem('active') ?? 'Dashboard';
         }
         return 'Dashboard';
     });
     const [lastActive, setLastActive] = useState(() => {
         if (typeof window !== 'undefined') {
-            return window.localStorage.getItem('lastActive') || 'Dashboard';
+            return window.localStorage.getItem('lastActive') ?? 'Dashboard';
         }
         return 'Dashboard';
     });

@@ -29,8 +29,6 @@ type Payment = {
 
 
   const PropertyFinanceCard = ({ property }: Props) => {
-    const initialValue = [{}];
-  
     const [payments, setPayments] = useState(Array<Payment>);
     const [loading, setLoading] = useState(true);
   
@@ -77,8 +75,6 @@ type Payment = {
   
           paymentList.push(paymentObject);
         });
-        //let totalAmount = paymentList.reduce((total, paymentObj) => total + paymentObj.payment.amount, 0);
-        //console.log("Total Amount: " + {totalAmount});
         setBalance(totalBalance);
         console.log(totalBalance);
         setPayments(paymentList);
