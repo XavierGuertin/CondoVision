@@ -3,17 +3,13 @@ import React, { useEffect, useState } from "react";
 import { DashboardNav, DashboardCard } from "@ui/index";
 import PropertiesImg from "../../../../public/images/propertiesImage.jpg"
 import FinanceImg from "../../public/financeImage.jpg"
+import { getUserRole } from '../userRole';
 
 const Page = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [active, setActive] = React.useState("Dashboard");
 
-    let userRole: string|null;
-    try {
-        userRole = window.localStorage.getItem('userRole');
-    } catch (e) {
-        userRole = null;
-    }
+    let userRole = getUserRole();
 
         // Simulate data fetching
         const fetchData = async () => {
