@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
-name: Main Workflow
+name: SonarCloud
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
@@ -20,3 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=xavierguertin
+            -Dsonar.projectKey=CondoVision
