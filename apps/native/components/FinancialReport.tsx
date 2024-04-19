@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
 import { getAuth } from 'firebase/auth';
 import { db } from '@native/firebase'; // Ensure the correct path
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -112,7 +112,7 @@ const FinancialReport: React.FC = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text style={styles.title}>Overall Financial Report</Text>
             <Text style={styles.info}>Total Fees: ${financialData.totalFees}</Text>
             <Text style={styles.info}>Total Payments Made: ${financialData.totalPayments}</Text>
@@ -125,7 +125,7 @@ const FinancialReport: React.FC = () => {
                     <Text style={styles.unitInfo}>Payments Received: ${report.payments}</Text>
                 </View>
             ))}
-        </View>
+        </ScrollView>
     );
 };
 
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     container: {
         padding: 20,
         backgroundColor: '#fff',
+        marginBottom: 25,
     },
     title: {
         fontSize: 20,
