@@ -4,7 +4,7 @@ import { db } from '@web/firebase';
 import PropertyAdapter from './../../native/components/PropertyAdapter';
 import { processCondoUnits } from './processCondoUnits';
 
-
+//Function returns owned properties data from db and sets properties
 export const useFetchData = () => {
   const [ownedProperties, setOwnedProperties] = useState<any[]>([]);
   const [selectedProperty, setSelectedProperty] = useState<any | null>(null);

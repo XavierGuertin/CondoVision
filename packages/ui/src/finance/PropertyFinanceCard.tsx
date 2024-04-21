@@ -27,7 +27,7 @@ type Payment = {
     };
   };
 
-
+//Displays finance table, fetches payment data from payments db
   const PropertyFinanceCard = ({ property }: Props) => {
     const [payments, setPayments] = useState(Array<Payment>);
     const [loading, setLoading] = useState(true);

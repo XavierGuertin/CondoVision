@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropertyFinanceCard from "../finance/PropertyFinanceCard";
 
+//Displays the selected property's name, address... and loads its respective finance table (ProperyFinanceCard)
 const FinanceComponent = ({ selectedProperty }: any) => {
   console.log("Selected Property:");
   console.log(selectedProperty);

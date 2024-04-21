@@ -11,6 +11,7 @@ import {
 
 const DashboardNav = dynamic(() => import('../../../../packages/ui/src/DashboardNav'), { ssr: false });
 
+//Finance Page display... Uses useFetchData() function to obtain data on property, then loads dashboardnav, propertylistfinance and financecomponent
 const Page: React.FC = ({ user, onClose }: any) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const { ownedProperties, selectedProperty, isLoading, setSelectedProperty } = useFetchData();
