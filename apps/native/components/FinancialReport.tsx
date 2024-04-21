@@ -4,6 +4,7 @@ import { getAuth } from 'firebase/auth';
 import { db } from '@native/firebase'; // Ensure the correct path
 import { collection, query, where, getDocs } from 'firebase/firestore';
 
+// Interfaces
 interface CondoUnit {
     size: number;
     condoFees: {
@@ -36,7 +37,8 @@ const FinancialReport: React.FC = () => {
         loading: true
     });
     const [condoReports, setCondoReports] = useState<DetailedCondoReport[]>([]);
-
+    
+    // Auth to check the management company that is logged in
     useEffect(() => {
         const fetchFinancialData = async () => {
             const auth = getAuth();
@@ -62,18 +64,18 @@ const FinancialReport: React.FC = () => {
 
                     console.log(condoUnitsSnapshot);
                     
+                    // Fetch condo size and monthly fees for each condo. Multiplies and adds to counter to obtains the total fees
                     for (const condoDoc of condoUnitsSnapshot.docs) {
                         const condoData = condoDoc.data() as CondoUnit;
                         
-                        console.log(Number(condoData.size));
-                        console.log(Number(condoData.condoFees.monthlyFee));
                         const fees = Number(condoData.size) * Number(condoData.condoFees.monthlyFee);
                         totalFees += fees;
                     
                         const paymentsQuery = query(collection(db, 'payments'), where('condoId', '==', condoDoc.id));
                         const paymentsSnapshot = await getDocs(paymentsQuery);
                         let totalPayments = 0;
-                    
+                        
+                        // Fetches the payment amounts and adds it to total
                         paymentsSnapshot.forEach(paymentDoc => {
                             const paymentData = paymentDoc.data() as Payment;
                             console.log(paymentData.payment.amount);

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import FinancialReport from '@native/components/FinancialReport';
 
+//Generate the Report from the FinantialReport component
 const ReportScreen = ({ navigation }: any) => {
     return (
         <ScrollView style={styles.container}>
