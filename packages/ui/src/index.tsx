@@ -9,7 +9,9 @@ import { Button } from "./button";
 import DashboardNav from "./DashboardNav";
 import DashboardCard from "./dashboard/DashboardCard";
 import PropertyList from "./properties/PropertyList";
+import PropertyListFinance from "./properties/PropertyListFinance";
 import PropertyComponent from "./properties/PropertyComponent";
+import FinanceComponent from "./properties/FinanceComponent";
 import DefaultFinanceCard from "./finance/DefaultFinanceCard";
 import DefaultCondoFeeCalcCard from "./finance/DefaultCondoFeeCalcCard";
 import CreatePropertyModal from "./properties/CreatePropertyModal";
@@ -28,6 +30,8 @@ export {
     DashboardNav,
     DashboardCard,
     PropertyList,
+    PropertyListFinance,
+    FinanceComponent,
     PropertyComponent,
     DefaultFinanceCard,
     DefaultCondoFeeCalcCard,

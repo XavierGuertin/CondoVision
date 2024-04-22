@@ -27,27 +27,28 @@ const PropertyList = ({
           />
         </div>
       ) : null}
+      <div style={{display: 'flex', flexDirection: 'column'}}>
       {ownedProperties?.map((property: any) => {
         return (
-          <div
-            key={property.id}
-            className={`pl-2 py-4 border-b border-blue-500  ${selected == property.id ? "bg-blue-500" : "cursor-pointer"}`}
-            onClick={() => {
-              setSelected(property.id);
-              setSelectedProperty(property);
-              dispatchEvent(new Event("hideCondoFinanceStatus"));
-              dispatchEvent(new Event("hideCondoFeeCalcStatus"));
-            }}
+          <button 
+              key={property.id}
+              className={`pl-2 pr-10 py-4 border-b border-blue-500  ${selected == property.id ? 'bg-blue-500' : 'cursor-pointer'}`}
+              onClick={() => {
+                setSelected(property.id);
+                setSelectedProperty(property);
+                dispatchEvent(new Event("hideCondoFinanceStatus"));
+                dispatchEvent(new Event("hideCondoFeeCalcStatus"));
+              }}
           >
             <h1 className="font-bold text-xl capitalize">
               {property.propertyName}
             </h1>
             <p>{property.address}</p>
-          </div>
+          </button>
         );
       })}
+      </div>
     </div>
   );
 };
-
 export default PropertyList;
