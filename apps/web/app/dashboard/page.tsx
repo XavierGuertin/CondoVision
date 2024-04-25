@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { DashboardNav, DashboardCard } from "@ui/index";
 import PropertiesImg from "../../../../public/images/propertiesImage.jpg"
 import FinanceImg from "../../public/financeImage.jpg"
-import { getUserRole } from '../userRole';
+import { getUserRole } from '@ui/userRole';
 
 const Page = () => {
     const [isLoading, setIsLoading] = useState(true);

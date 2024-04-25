@@ -17,6 +17,8 @@ import DefaultCondoFeeCalcCard from "./finance/DefaultCondoFeeCalcCard";
 import CreatePropertyModal from "./properties/CreatePropertyModal";
 import CreateUnitModal from "./properties/CreateUnitModal";
 import FacilityBookingPage from "./properties/FacilityBookingPage";
+import CondoUnitAdapter from "./CondoUnitAdapter";
+import PropertyAdapter from "./PropertyAdapter";
 
 export {
     Navbar,
@@ -37,5 +39,7 @@ export {
     DefaultCondoFeeCalcCard,
     CreatePropertyModal,
     CreateUnitModal,
-    FacilityBookingPage
+    FacilityBookingPage,
+    CondoUnitAdapter,
+    PropertyAdapter
 };

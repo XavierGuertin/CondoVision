@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { db } from "@web/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { useFetchData } from '../useFetchData';
+import { useFetchData } from '@ui/useFetchData';
 
 import {
   DashboardNav,

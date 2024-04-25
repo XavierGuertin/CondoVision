@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from "react";
 import dynamic from 'next/dynamic';
-import { useFetchData } from '../useFetchData';
+import { useFetchData } from '@ui/useFetchData';
 
 
 import {

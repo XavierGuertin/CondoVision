@@ -8,9 +8,7 @@ module.exports = {
   webpack: (config) => {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
-      // Transform all direct `react-native` imports to `react-native-web`
       "react-native$": "react-native-web",
-      // Add custom aliases
       "@web": path.join(__dirname, '.'),
       "@native": path.join(__dirname, '../native'),
       "@ui": path.join(__dirname, '../../packages/ui/src'),
@@ -20,8 +18,17 @@ module.exports = {
       ".web.jsx",
       ".web.ts",
       ".web.tsx",
+      ".ts",
+      ".tsx",
       ...config.resolve.extensions,
     ];
+
+    config.module.rules.push({
+      test: /\.tsx?$/,
+      exclude: /node_modules/,
+      use: 'ts-loader',
+    });
+
     return config;
   },
 };

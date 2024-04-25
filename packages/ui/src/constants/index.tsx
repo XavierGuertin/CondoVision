@@ -7,7 +7,7 @@ export const navLinks = [
 ];
 
 import {useState, useEffect} from 'react';
-import { getUserRole } from '../../../../apps/web/app/userRole';
+import { getUserRole } from '../userRole';
 import { IconBaseProps } from "react-icons";
 import { IoSettingsOutline, IoPerson, IoNotifications, IoAnalytics, IoHome } from "react-icons/io5";
 const createDashNavLink = (id: string, title: string, logo: { (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; }) => ({ id, title, logo });
