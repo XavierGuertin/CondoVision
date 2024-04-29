@@ -1,5 +1,5 @@
 // processCondoUnits.ts
-import CondoUnitAdapter from './CondoUnitAdapter';
+import {CondoUnitAdapter} from './PropertyAdapter';
 
 //Function to intake condo units data from db and push to unitList
 export function processCondoUnits(condoUnitsSnapshot: any) {
