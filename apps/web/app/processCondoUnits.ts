@@ -1,5 +1,5 @@
 // processCondoUnits.ts
-import CondoUnitAdapter from '../../native/components/CondoUnitAdapter';
+import CondoUnitAdapter from './CondoUnitAdapter';
 
 //Function to intake condo units data from db and push to unitList
 export function processCondoUnits(condoUnitsSnapshot: any) {
