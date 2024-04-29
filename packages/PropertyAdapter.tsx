@@ -70,7 +70,7 @@ class PropertyAdapter {
   }
   
   export {PropertyAdapter};
-
+  
   interface CondoFees {
     includes: string[];
     isPayed: boolean;
