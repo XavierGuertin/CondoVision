@@ -16,8 +16,7 @@ const allDashNavLinks = [
     createDashNavLink("dashboard", "Dashboard", IoHome),
     createDashNavLink("notifications", "Notifications", IoNotifications),
     createDashNavLink("finance", "Finance", IoAnalytics),
-    createDashNavLink("userProfile", "Profile", IoPerson),
-    createDashNavLink("settings", "Settings", IoSettingsOutline),
+    createDashNavLink("userProfile", "Profile", IoPerson)
 ];
 
 let userRole = getUserRole();

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 //Displays owned properties as buttons, with their name and address. If clicked, it sets that property as the selectedProperty
-const PropertyListFinance = ({ ownedProperties, inView, setSelectedProperty, isModalOpen, setModalOpen }: any) => {
+const PropertyListFinance = ({ ownedProperties, inView, setSelectedProperty, isModalOpen, setModalOpen, showFees, setShowFees }: any) => {
     const [selected, setSelected] = useState<string>(ownedProperties?.length > 0 ? ownedProperties[0].id : '');
 
     return (
@@ -18,6 +18,8 @@ const PropertyListFinance = ({ ownedProperties, inView, setSelectedProperty, isM
                         onClick={() => {
                             setSelected(property.id);
                             setSelectedProperty(property);
+                            setShowFees(false);
+                            console.log(showFees);
                         }}
                     >
                         <h1 className="font-bold text-xl capitalize">

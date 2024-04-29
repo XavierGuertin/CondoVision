@@ -29,8 +29,6 @@ const Page = () => {
             <div className="grid grid-cols-2 justify-items-center items-center mx-20 h-[90%]">
                 <DashboardCard url="/properties" imageUrl={PropertiesImg} name="Properties" />
                 {userRole === 'Condo Management Company' && <DashboardCard url="/finance" imageUrl={FinanceImg} name="Finance"/>}
-                <DashboardCard url="/dashboard" imageUrl={PropertiesImg} name="Dashboard" />
-                <DashboardCard url="/dashboard" imageUrl={PropertiesImg} name="Dashboard" />
             </div>
         )}
         </div>

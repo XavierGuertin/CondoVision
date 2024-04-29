@@ -7,6 +7,8 @@ type Props = {
     property: {
       id: number;
     };
+    showFees: boolean;
+    setShowFees: React.Dispatch<React.SetStateAction<boolean>>;
   };
 
 
@@ -28,7 +30,7 @@ type Payment = {
   };
 
 //Displays finance table, fetches payment data from payments db
-  const PropertyFinanceCard = ({ property }: Props) => {
+  const PropertyFinanceCard = ({ property, showFees, setShowFees }: Props) => {
     const [payments, setPayments] = useState(Array<Payment>);
     const [loading, setLoading] = useState(true);
   
@@ -86,38 +88,65 @@ type Payment = {
       }, 200);
     }, [property.id]);
 
+      
+    // Calculate the total sum of all positive payments (sum will only contain condo unit monthly fees, as payouts for work done are negative)
+    let totalSum = payments.reduce((sum, paymentObj) => {
+      if(paymentObj.payment.amount>0){
+        return sum - paymentObj.payment.amount;
+      }
+      else{
+        return sum;
+      }
+    },0);
 
       return (
-        <div className="px-8 flex flex-col items-center w-[65vw] h-[20vh] rounded-lg bg-white">
+        <div className="px-8 pb-1 flex flex-col items-center w-[65vw] min-h-[10vh] rounded-lg bg-white">
           <table id="financeTable">
             <thead>
               <tr>
-                <th>Income/Expenses</th>
-                <th>Balance</th>
-                <th>Date</th>
+                <th style={{width: '200px', wordWrap: 'break-word'}}>Income/Expenses</th>
+                <th style={{width: '100px', wordWrap: 'break-word'}}>Balance</th>
+                <th style={{width: '100px', wordWrap: 'break-word'}}>Date</th>
               </tr>
             </thead>
             <tbody>
             {(() => {
-              let runningBalance = 0; //Create local variable for balance and initialize to 0, to not double everytime
+              // Start with the total sum of all payments
+              let runningBalance = totalSum;
+              
+              /*Sorts according to date of payment. If payment is not on time, no money comes in or goes out, hence no change to balance. 
+              Else it was paid fees / task work, money coming-in/going-out, affects balance*/
               return payments.length > 0 ? (
-                payments.map((paymentObj) => {
-                  runningBalance += paymentObj.payment.amount;
+                payments.toSorted((a, b) => a.payment.date.seconds - b.payment.date.seconds).map((paymentObj, index, self) => {
+                  if(paymentObj.payment.isOnTime == false){
+                    runningBalance = runningBalance;
+                  }
+                  else{
+                    runningBalance += paymentObj.payment.amount;
+                  }
+                  //If payment amount >0, check if payment is onTime, if false make transparent, if yes make green. If payment amount <0, make red 
                   return (
                     <tr key={paymentObj.id}>
                       <td>
-                        {paymentObj.payment.amount > 0 ? 
-                          <div className="bg-green-600">
-                            <span className="font-bold">{paymentObj.payment.amount}</span> -{paymentObj.payment.reason} from Unit {paymentObj.condoId}
+                        {paymentObj.payment.amount > 0 ? (
+                          paymentObj.payment.isOnTime == false ? (
+                            <div>
+                              <span className="font-bold">0$</span> -{paymentObj.payment.reason} from Unit {paymentObj.condoId}
+                            </div>
+                            ):(
+                            <div className="bg-green-500">
+                              <span className="font-bold">{paymentObj.payment.amount}$</span> -{paymentObj.payment.reason} from Unit {paymentObj.condoId}
+                            </div>
+                            )
+                          ):(
+                          <div className="bg-red-500">
+                            <span className="font-bold">{paymentObj.payment.amount}$</span> -{paymentObj.payment.reason} from Unit {paymentObj.condoId}
                           </div>
-                          :
-                          <div className="bg-red-600">
-                            <span className="font-bold">{paymentObj.payment.amount}</span> -{paymentObj.payment.reason} from Unit {paymentObj.condoId}
-                          </div>
+                          )
                         }
                       </td>
-                      <td>{runningBalance}</td>
-                      <td>{secondsToDate(paymentObj.payment.date.seconds)}</td>
+                      <td>{index === self.length - 1 ? <b>{runningBalance}$</b> : <span>{runningBalance}$</span>}</td>
+                      <td>{index === self.length - 1 ? <b>{secondsToDate(paymentObj.payment.date.seconds)}</b> : <span>{secondsToDate(paymentObj.payment.date.seconds)}</span>}</td>
                     </tr>
                   );
                 })
@@ -129,6 +158,22 @@ type Payment = {
             })()}
           </tbody>
           </table>
+          <button onClick={() => {
+            setShowFees(!showFees);
+          }}
+          style={{
+            backgroundColor: showFees ? 'lightblue' : 'initial',
+            color: 'initial'
+          }}
+          onMouseOver={(e) => {
+            (e.target as HTMLElement).style.color = 'blue';
+          }}
+          onMouseOut={(e) => {
+            (e.target as HTMLElement).style.color = 'initial';
+          }}
+          >
+            {showFees ? <div style={{marginTop: '20px'}}>Monthly Condo Fees: <span className="font-bold">{-totalSum}$</span> <br/> Yearly Condo Fees: <span className="font-bold">{-totalSum*12}$</span></div> : 'Show Fees'}
+          </button>
         </div>
       );
     };
