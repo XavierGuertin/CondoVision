@@ -1,3 +1,27 @@
+/*
+ * Financial Report Component
+ *
+ * This component is designed to display a condo management company's financial reports within a React application,
+ * leveraging Firebase for data storage and operations.
+ *
+ * User's financial data and Payments are fetched from Firestore and displayed in the Report screen of the native app.
+ *
+ * It makes use of React hooks for state management, including `useState` for local component state and `useEffect` for side effects.
+ *
+ * Key Functionalities:
+ * - Displays the key financial data to condo management companies
+ * - Makes calculations based on payment history and amounts owed 
+ * - Shows breakdown of payments and amounts owed based on the Condo Units 
+ *
+ * Dependencies:
+ * - React and React Icons for UI construction and iconography.
+ * - Firebase and Firestore for backend data management.
+ * 
+ * Usage:
+ * Import and include `<FinancialReport />` in your component tree to enable financial report displaying
+ * within your application.
+*/
+
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, ScrollView } from 'react-native';
 import { getAuth } from 'firebase/auth';
