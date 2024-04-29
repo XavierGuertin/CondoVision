@@ -40,7 +40,6 @@ const DefaultCondoFeeCalcCard = ({ condo }: Props) => {
                 unitSize: Number(condo.size),
                 monthlyFeePerSize: Number(condo.condoFees.monthlyFee),
                 parkingSpotCount: condo.parkingSpotId ? 1 : 0,
-                // TODO: fetch parking fee from newly created parkingFee field
                 parkingFeePerSpot: 4,
             };
             setCondoData(data);

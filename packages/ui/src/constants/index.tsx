@@ -6,16 +6,23 @@ export const navLinks = [
     createNavLink("contact", "Contact"),
 ];
 
+import {useState, useEffect} from 'react';
+import { getUserRole } from '../../../../apps/web/app/userRole';
 import { IconBaseProps } from "react-icons";
 import { IoSettingsOutline, IoPerson, IoNotifications, IoAnalytics, IoHome } from "react-icons/io5";
 const createDashNavLink = (id: string, title: string, logo: { (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; (props: IconBaseProps): JSX.Element; }) => ({ id, title, logo });
-export const dashNavLinks = [
+
+const allDashNavLinks = [
     createDashNavLink("dashboard", "Dashboard", IoHome),
     createDashNavLink("notifications", "Notifications", IoNotifications),
     createDashNavLink("finance", "Finance", IoAnalytics),
     createDashNavLink("userProfile", "Profile", IoPerson),
     createDashNavLink("settings", "Settings", IoSettingsOutline),
 ];
+
+let userRole = getUserRole();
+
+export const dashNavLinks = userRole === 'Condo Management Company' ? allDashNavLinks : allDashNavLinks.filter(link => link.id !== "finance");
 
 export const footerLinks = [
     {
