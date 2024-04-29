@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 //Displays owned properties as buttons, with their name and address. If clicked, it sets that property as the selectedProperty
-const PropertyList = ({ ownedProperties, inView, setSelectedProperty, isModalOpen, setModalOpen }: any) => {
+const PropertyListFinance = ({ ownedProperties, inView, setSelectedProperty, isModalOpen, setModalOpen }: any) => {
     const [selected, setSelected] = useState<string>(ownedProperties?.length > 0 ? ownedProperties[0].id : '');
 
     return (
@@ -32,4 +32,4 @@ const PropertyList = ({ ownedProperties, inView, setSelectedProperty, isModalOpe
     );
 };
 
-export default PropertyList;
+export default PropertyListFinance;

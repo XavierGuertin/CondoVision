@@ -14,7 +14,7 @@ import PropertyProfileComponent from "../components/PropertyProfileComponent";
 import { db } from "../firebase";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import PropertyAdapter from "@native/components/PropertyAdapter";
+import {PropertyAdapter} from "../../../packages/PropertyAdapter";
 import { processCondoUnits } from '../../web/app/processCondoUnits';
 
 const CondoProfileScreen = () => {

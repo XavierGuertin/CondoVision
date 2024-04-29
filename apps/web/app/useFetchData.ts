@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@web/firebase';
-import PropertyAdapter from './../../native/components/PropertyAdapter';
+import {PropertyAdapter} from '../../../packages/PropertyAdapter';
 import { processCondoUnits } from './processCondoUnits';
 
 //Function returns owned properties data from db and sets properties
