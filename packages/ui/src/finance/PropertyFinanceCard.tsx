@@ -118,8 +118,8 @@ type Payment = {
               Else it was paid fees / task work, money coming-in/going-out, affects balance*/
               return payments.length > 0 ? (
                 payments.toSorted((a, b) => a.payment.date.seconds - b.payment.date.seconds).map((paymentObj, index, self) => {
-                  if(paymentObj.payment.isOnTime == false){
-                    runningBalance = runningBalance;
+                  if(!paymentObj.payment.isOnTime){
+                    // Needed due to some payments not having isOnTime, so must have else to encompass all
                   }
                   else{
                     runningBalance += paymentObj.payment.amount;
@@ -171,6 +171,13 @@ type Payment = {
           onMouseOut={(e) => {
             (e.target as HTMLElement).style.color = 'initial';
           }}
+          onFocus={(e) => {
+            (e.target as HTMLElement).style.color = 'blue';
+          }}
+          onBlur={(e) => {
+            (e.target as HTMLElement).style.color = 'initial';
+          }}
+          
           >
             {showFees ? <div style={{marginTop: '20px'}}>Monthly Condo Fees: <span className="font-bold">{-totalSum}$</span> <br/> Yearly Condo Fees: <span className="font-bold">{-totalSum*12}$</span></div> : 'Show Fees'}
           </button>
