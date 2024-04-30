@@ -118,7 +118,7 @@ type Payment = {
               Else it was paid fees / task work, money coming-in/going-out, affects balance*/
               return payments.length > 0 ? (
                 payments.toSorted((a, b) => a.payment.date.seconds - b.payment.date.seconds).map((paymentObj, index, self) => {
-                  if(!paymentObj.payment.isOnTime){
+                  if(paymentObj.payment.isOnTime == false){
                     // Needed due to some payments not having isOnTime, so must have else to encompass all
                   }
                   else{
