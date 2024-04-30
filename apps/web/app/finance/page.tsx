@@ -15,14 +15,15 @@ const DashboardNav = dynamic(() => import('../../../../packages/ui/src/Dashboard
 const Page: React.FC = ({ user, onClose }: any) => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const { ownedProperties, selectedProperty, isLoading, setSelectedProperty } = useFetchData();
+    const [showFees, setShowFees] = useState(false);
 
 
     return (
         <div className="h-screen bg-gradient-to-r from-[#87A8FA] to-[#87CCFA] overflow-hidden">
             <DashboardNav />
             <div className="flex h-full">
-                {isLoading ? <h1>Loading...</h1> : <PropertyListFinance ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} setModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />}
-                {isLoading ? <h1>Loading...</h1> : <FinanceComponent selectedProperty={selectedProperty} />}
+                {isLoading ? <h1>Loading...</h1> : <PropertyListFinance ownedProperties={ownedProperties} setSelectedProperty={setSelectedProperty} setModalOpen={setIsModalOpen} isModalOpen={isModalOpen} showFees={showFees} setShowFees={setShowFees} />}
+                {isLoading ? <h1>Loading...</h1> : <FinanceComponent selectedProperty={selectedProperty} showFees={showFees} setShowFees={setShowFees}/>}
             </div>
         </div>
     );

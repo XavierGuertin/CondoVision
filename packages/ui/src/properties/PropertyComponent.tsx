@@ -98,7 +98,7 @@ const PropertyComponent = ({ selectedProperty, onBookFacilityClick }: any) => {
                 setShowCondoFinanceStatus(true);
               }}
             >
-              {condo.id}
+              {condo.unitId}
             </button>
           ))}
         </div>
