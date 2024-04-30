@@ -37,7 +37,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "../native/components/PropertyAdapter.tsx", "../native/components/processCondoUnits.ts"  ],
   "exclude": [
     "node_modules"
   ]

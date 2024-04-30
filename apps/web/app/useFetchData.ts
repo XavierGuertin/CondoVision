@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@web/firebase';
-import {PropertyAdapter} from '../../../packages/PropertyAdapter';
-import { processCondoUnits } from './processCondoUnits';
+import {PropertyAdapter} from '../../native/components/PropertyAdapter';
+import { processCondoUnits } from '../../native/components/processCondoUnits';
 
 //Function returns owned properties data from db and sets properties
 export const useFetchData = () => {
