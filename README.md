@@ -1,3 +1,5 @@
+# [TO KNOW HOW TO RUN THE DIFFERENT VERSIONS OF THE APP, CLICK HERE !](./HOWTORUN.md)
+
 # Condo Vision
 <img src="./public/logoBright.png" alt="drawing" width="300"/>
 
