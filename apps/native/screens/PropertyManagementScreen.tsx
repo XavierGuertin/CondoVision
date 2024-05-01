@@ -90,7 +90,7 @@ const CondoProfileScreen = () => {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>
-                    {userRole === "condo management company" ? "Condo Profiles" : "User Property Listing"}
+                    {userRole === "Condo Management Company" ? "Condo Profiles" : "User Property Listing"}
                 </Text>
                 <TouchableOpacity id={"mapBtn"} style={styles.mapButton} onPress={handleMapPress}>
                     <Text style={styles.mapText}>Map</Text>
