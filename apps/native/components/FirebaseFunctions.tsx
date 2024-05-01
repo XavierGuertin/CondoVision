@@ -7,7 +7,6 @@ export const fetchUserRole = async (uid: string) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        await AsyncStorage.setItem('userUID', docSnap.data().role);
         return docSnap.data().role;
     } else {
         // docSnap.data() will be undefined in this case
@@ -20,7 +19,6 @@ export const fetchUsername = async (uid: string) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        await AsyncStorage.setItem('userUID', docSnap.data().role);
         console.log("Document data:", docSnap.data());
         return docSnap.data().username;
     } else {
