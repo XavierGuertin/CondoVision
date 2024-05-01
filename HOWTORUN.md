@@ -12,7 +12,8 @@
 4. Run the app:  
 ``` npm run dev ```
 
-5. Open the Expo app on your phone and scan the QR code OR go to http://localhost:19006/ on your browser.
+5. Preferably, download and open the Expo app on your phone and scan the QR code. 
+OR go to http://localhost:19006/ on your browser.
 
 ## Web Version (NextJS) [condo-vision.vercel.app](https://condo-vision.vercel.app)
 1. Clone the repository:  
