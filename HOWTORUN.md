@@ -28,3 +28,9 @@ OR go to http://localhost:19006/ on your browser.
 5. Open http://localhost:3000/ on your browser.
 
 Note that both apps share the same Firebase database, so you can easily switch between them. Just make sure to be in the right directory (`CondoVision/apps/native` or `CondoVision/apps/web`) before running the app.
+
+
+
+### Mock Accounts to test:
+-- User: admin@condovision.com admin123
+-- Condo Management Company: condomana@gmail.com  condo123
