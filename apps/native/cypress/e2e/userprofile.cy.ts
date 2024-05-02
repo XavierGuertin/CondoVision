@@ -31,8 +31,9 @@
             cy.get("[id=phoneNumberInput]").clear()
             cy.get("[id=phoneNumberInput]", {timeout:200}).type(changedPhoneNumber, {force:true, delay:20})
             cy.get("[data-testid=saveBtn]").click()
+            cy.get("div").contains("Cancel").click()
             //Assertion
-            cy.get("[id=usernameText]").contains(changedUsername)
+            cy.get("[id=usernameText]", {timeout:500}).contains(changedUsername)
             cy.get("[id=userEmail]").contains(testUserEmail)
             cy.get("[id=phoneNumberText]").contains(changedPhoneNumber)
             cy.get("[id=roleText]").contains(testUserRole)

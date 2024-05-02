@@ -2,11 +2,11 @@
 // A custom navigation bar component for a React Native application.
 // It dynamically hides on specific screens such as Signup, Login, and Home for enhanced UX.
 
-import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import React from "react";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Ionicons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const Navbar = () => {
   const navigation = useNavigation();
@@ -21,7 +21,7 @@ const Navbar = () => {
   const currentRouteName = navigationState.routes[navigationState.index].name;
 
   // List of screens where the navbar should not be displayed.
-  const hideOnScreens = ['Signup', 'Login', 'Home'];
+  const hideOnScreens = ["Signup", "Login", "Home"];
 
   // Hide navbar on specified screens.
   if (hideOnScreens.includes(currentRouteName)) {
@@ -37,17 +37,23 @@ const Navbar = () => {
       >
         <Icon name="home" size={30} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
+      <TouchableOpacity
+        id="notificationScreenBtn"
+        onPress={() => navigation.navigate("Notifications")}
+      >
         <Icon name="notifications" size={30} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Report")}>
+      <TouchableOpacity
+        id="reportBtn"
+        onPress={() => navigation.navigate("Report")}
+      >
         <FontAwesome5 name="chart-line" solid size={30} color="#000" />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
-        <Icon name="person" size={30} />
+        <Icon testID="profile" name="person" size={30} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Settings")}>
-        <Icon name="settings" size={30} />
+        <Icon testID="settings" name="settings" size={30} />
       </TouchableOpacity>
     </View>
   );

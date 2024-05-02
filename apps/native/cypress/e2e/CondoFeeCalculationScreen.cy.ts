@@ -1,8 +1,7 @@
 {
-    const testUserEmail = "yasmine.hilout@gmail.com";
-    const testUserPassword = "123456";
-    const testUnitId = "JKupMQiPKUn4arGRTlEo";
-    const testPropertyId = "WAdrY3hQAAbQVet07XOD";
+    const testUserEmail = "liam.daigle@gmail.com";
+    const testUserPassword = "password";
+    const testUnitId = "zBQ0iKOOCIiKouTDLwVW";
 
     describe('Condo Fee Calculation Screen Tests', () => {
         beforeEach(() => {
@@ -12,7 +11,7 @@
             cy.get("[id=password]").type(testUserPassword, {force: true})
             cy.get("[id=loginBtn]").should('be.visible').click()
             cy.get("[id=propertyManagementBtn]").click()
-            cy.get(`[id=propertyTitle]`).contains("mybigPROPERTY").click()
+            cy.get(`[id=propertyTitle]`).contains("TestingProperty").click()
             cy.get(`[id=${testUnitId}]`).click()
             cy.get("[id=title]").contains(testUnitId)
         });

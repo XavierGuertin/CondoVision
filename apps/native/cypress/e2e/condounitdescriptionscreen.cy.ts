@@ -1,7 +1,7 @@
 {    
     const testUserEmail = "liam.daigle@gmail.com";
     const testUserPassword= "password";
-    const condoId = "qjCDy6jib5Ff1hHOiUhL"
+    const condoId = "zBQ0iKOOCIiKouTDLwVW"
 
     describe('Condo Unit Description Page Tests', () => {
         beforeEach(() => {
@@ -11,7 +11,7 @@
             cy.get("[id=password]").type(testUserPassword, {force: true})
             cy.get("[id=loginBtn]").click()
             cy.get("[id=propertyManagementBtn]").click()
-            cy.get(`[id=propertyTitle]`).contains("The helma").click()
+            cy.get(`[id=propertyTitle]`).contains("TestingProperty").first().click()
             cy.get(`[id=${condoId}]`).click()
         });
 
